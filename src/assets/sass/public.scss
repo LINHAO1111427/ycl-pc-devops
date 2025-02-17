@@ -1,0 +1,52 @@
+.secondary-color-text-1 {
+  color: $SecondaryColor-1 !important;
+  //
+}
+
+.cursor-pointer-style {
+  cursor: pointer;
+}
+
+.router-link {
+  text-decoration: underline;
+  color: $MainColor !important;
+}
+
+.hover-dropdown-select:hover {
+  background-color: #58968b;
+
+  .n-dropdown-option-body__label {
+    color: #fff !important;
+  }
+}
+
+.naiveui-text-14{
+	font-size:14px;
+}
+.naiveui-text-16{
+	font-size:16px;
+}
+
+.main-color-size {
+  color: $MainColor !important;
+}
+
+.text-size-16 {
+  font-weight: 500;
+  font-size: 16px;
+  color: #333333;
+}
+
+.naiveui-form-16 .n-form-item-label__text{
+	font-size: 16px;
+}
+
+.naiveui-button-16 .n-button__content{
+	font-size: 16px;
+}
+
+@mixin media-max-height-size($size) {
+  @media (max-height: $size) {
+    @content
+  }
+}
