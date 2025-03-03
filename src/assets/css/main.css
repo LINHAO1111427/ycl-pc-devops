@@ -1,8 +1,14 @@
 @import './base.css';
 
-#app {
+.home-main {
+    overflow: scroll;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
 }
 
+.home-main::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
 .wrapper {
     padding: 0 15px;
 }
@@ -241,8 +247,9 @@
 
 .part3 .container {
     height: 556px;
-    background: url(../img/Group24.png) no-repeat right center;
+    background: url(../img/home2x.png) no-repeat center center;
     padding: 40px 0 20px 40px;
+    background-size: 100%;
 }
 
 .part3 .title1 {
@@ -305,8 +312,9 @@
 
 .part3 .container {
     height: 556px;
-    background: url(../img/Group24.png) no-repeat right center;
+    background: url(../img/home2x.png) no-repeat center center;
     padding: 40px 0 20px 40px;
+    background-size: 100%;
 }
 
 .part3 .title1 {
@@ -365,12 +373,16 @@
 
 
 .part4 .container {
-    height: 638px;
-    background: url(../img/Group23.png) no-repeat right center;
+    height: 500px;
+    background: url(/src/assets/img/home4.png) no-repeat center center;
+    background-size: 100%;
     padding: 40px;
     display: flex;
     justify-content: space-between;
     color: #ffffff;
+    flex-direction: column;
+    margin-bottom: 100px;
+
 }
 
 .part4 .container .left {
@@ -435,9 +447,9 @@
 
 
 .part5 {
-    height: 774px;
-    background: url(../img/Rectangle6.png) no-repeat center;
-    margin: 80px 0;
+    height: 593px;
+    background: url(../img/home5.png) no-repeat center center;
+    background-size: 100%;
 	overflow: hidden;
 }
 

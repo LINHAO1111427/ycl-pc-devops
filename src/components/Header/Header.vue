@@ -8,7 +8,7 @@ const props = withDefaults(defineProps<{
     isWork: boolean,
     isLogin: boolean
   }>(), {
-    isHeaderNav: true,
+    isHeaderNav: false,
     isWork: true,
     isLogin: true,
   },

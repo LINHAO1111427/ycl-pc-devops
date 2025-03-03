@@ -34,7 +34,7 @@ const router = createRouter({
     {
       // 注册
       path: '/register',
-      name: 'register',
+      name: 'register1',
       component: () => import('../views/Register/Register.vue'),
     },
     // 找工作列表
