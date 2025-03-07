@@ -1,34 +1,49 @@
 <template>
-  <div class="page-container">
+  <div>
     <div class="logo">原创力</div>
-    <div class="card">
-      <n-icon size="24" class="back-icon" @click="goBack"><arrow-back /></n-icon>
-      <n-tabs v-model:value="activeTab" type="line" justify-content="center">
-        <n-tab-pane name="register" tab="我要招聘">
-          <n-input v-model:value="phone" placeholder="请输入手机号 / 邮箱" />
-          <div class="code-box">
-            <n-input v-model:value="code" placeholder="请输入验证码" />
-            <n-button text class="code-btn">获取验证码</n-button>
-          </div>
-          <n-input v-model:value="password" placeholder="请设置密码" type="password" />
-          <n-button type="primary" class="submit-btn">注册</n-button>
-        </n-tab-pane>
-        <n-tab-pane name="login" tab="手机登录">
-          <n-input v-model:value="phone" placeholder="请输入手机号" />
-          <n-input v-model:value="password" placeholder="请输入密码" type="password" />
-          <div class="extra-options">
-            <a href="#">忘记密码？</a>
-          </div>
-          <n-button type="primary" class="submit-btn">登录</n-button>
-          <div class="register-box">
-            <span>没有账号？</span> <a href="#" @click="activeTab = 'register'">去注册</a>
-          </div>
-        </n-tab-pane>
-      </n-tabs>
-      <n-button text class="wechat-btn">微信登录</n-button>
-      <div class="footer-text">
-        通过手机号、微信、QQ 注册，即表示您同意接受我们的
-        <a href="#">《用户服务协议》</a> 和 <a href="#">《隐私政策》</a>
+    <div class="page-container">
+      <div class="card">
+        <n-icon size="24" class="back-icon" @click="goBack">
+          <arrow-back/>
+        </n-icon>
+        <n-tabs v-model:value="activeTab" type="line" justify-content="center">
+          <n-tab-pane name="register" tab="我要找工作">
+            <n-input v-model:value="phone" placeholder="请输入手机号" class="verify-input"/>
+            <n-input v-model:value="code" placeholder="请输入验证码" class="verify-input">
+              <template #suffix>
+                <n-button text class="verify-button">获取验证码</n-button>
+              </template>
+            </n-input>
+            <n-input v-model:value="password" placeholder="请设置密码" type="password" class="verify-input"/>
+            <n-button type="primary" class="submit-btn" @click="register">注册</n-button>
+          </n-tab-pane>
+          <n-tab-pane name="login" tab="我要招人">
+            <n-input v-model:value="phone" placeholder="请输入手机号" class="verify-input"/>
+            <n-input v-model:value="code" placeholder="请输入验证码" class="verify-input">
+              <template #suffix>
+                <n-button text class="verify-button">获取验证码</n-button>
+              </template>
+            </n-input>
+            <n-input
+                v-model:value="password"
+                :type="showPassword ? 'text' : 'password'"
+                placeholder="请设置密码"
+                class="verify-input"
+            >
+              <template #suffix>
+                <n-icon @click="togglePassword" class="toggle-icon" style="font-size: 20px;cursor: pointer;">
+                  <component :is="showPassword ? EyeOutline : EyeOffOutline"/>
+                </n-icon>
+              </template>
+            </n-input>
+            <n-button type="primary" class="submit-btn" @click="register">注册</n-button>
+          </n-tab-pane>
+        </n-tabs>
+        <n-button text class="wechat-btn">微信登录</n-button>
+        <div class="footer-text">
+          通过手机号、微信、QQ 注册，即表示您同意接受我们的
+          <a href="#">《用户服务协议》</a> 和 <a href="#">《隐私政策》</a>
+        </div>
       </div>
     </div>
     <footer>
@@ -38,43 +53,97 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { NButton, NInput, NTabs, NTabPane, NIcon } from "naive-ui";
-import { ArrowBack } from "@vicons/ionicons5";
-import { useRouter } from "vue-router";
+import {ref} from "vue";
+import {NButton, NInput, NTabs, NTabPane, NIcon} from "naive-ui";
+import {ArrowBack} from "@vicons/ionicons5";
+import {useRouter} from "vue-router";
 
-const activeTab = ref("login");
+const activeTab = ref("register");
 const phone = ref("");
 const email = ref("");
-const password = ref("");
 const code = ref("");
 const router = useRouter();
+import {EyeOutline, EyeOffOutline} from "@vicons/ionicons5";
 
 const goBack = () => {
   router.back();
 };
+const password = ref("");
+const showPassword = ref(false);
+
+const togglePassword = () => {
+  showPassword.value = !showPassword.value;
+};
+
+function register() {
+  debugger
+  if (activeTab.value === 'register') {
+    router.push('/talents')
+  } else {
+    router.push('/client/index')
+  }
+}
 </script>
 
 <style scoped>
+::v-deep(.n-tabs-tab__label) {
+  display: flex;
+  align-items: center;
+  z-index: 1;
+  font-weight: 400;
+  font-size: 22px !important;
+  line-height: 30px;
+  text-align: left;
+  font-style: normal;
+}
+
+::v-deep(.n-tab-pane) {
+  padding-top: 24px !important;
+}
+
+::v-deep(.n-input) {
+  height: 54px !important;
+  line-height: 54px !important;
+}
+
+.verify-input {
+  margin-top: 16px;
+  background: #ebf1f6;
+  border-radius: 6px;
+  height: 54px;
+}
+
+:deep(.n-input__suffix) {
+  display: flex;
+  align-items: center;
+}
+
+.verify-button {
+  color: #53b1e6;
+  font-size: 14px;
+}
+
 .page-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   height: 100vh;
-  background: linear-gradient(to bottom, #ffffff, #f5f5f5);
+  margin: 0px 360px;
+  align-items: center;
 }
 
 .logo {
+  position: absolute;
+  margin: 32px 360px 0px;
+  width: 100%;
   font-size: 24px;
   color: #00b4aa;
-  margin-bottom: 20px;
   font-weight: bold;
 }
 
 .card {
-  width: 400px;
-  padding: 30px;
+  width: 520px;
+  padding: 40px 60px;
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -128,9 +197,14 @@ const goBack = () => {
 }
 
 .footer-text {
-  font-size: 12px;
+  height: 44px;
+  font-weight: 400;
+  font-size: 14px;
+  color: #999999;
+  line-height: 22px;
   text-align: center;
-  margin-top: 20px;
+  font-style: normal;
+  margin-top: 32px;
 }
 
 footer {
