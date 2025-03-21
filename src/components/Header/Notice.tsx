@@ -46,22 +46,30 @@ export const Notice = defineComponent({
 		   router.push(item.url)
 	   }
 	};
+
+
     return {onClickMsg,msgList}
   },
 
   render() {
-    return <NScrollbar style="max-height: 277px;"><div class="notice-container">
-      {
-        this.msgList.map((_, i) => {
-          return <div class="notice-container-item"  onClick={()=>this.onClickMsg(_)}>
-            <div class="notice-header">{_.title}</div>
-            <div class="notice-header-date">
-              {_.date}
+    return <div class="notice-dropdown">
+        <NScrollbar style="max-height: 277px;">
+            <div class="notice-container">
+                {
+                    this.msgList.map((item, i) => (
+                        <div class="notice-container-item" onClick={() => this.onClickMsg(item)}>
+                            <div class="notice-header">{item.title}</div>
+                            <div class="notice-header-date">{item.date}</div>
+                        </div>
+                    ))
+                }
             </div>
-          </div>
-        })
-      }
-    </div></NScrollbar>
+        </NScrollbar>
+        {/* 底部“查看全部”按钮 */}
+        <div class="notice-footer" onClick={this.onViewAll}>
+            查看所有消息
+        </div>
+    </div>
   },
 })
 

@@ -57,7 +57,11 @@
 	})
 	
 	const router = useRouter()
-	
+  const emit = defineEmits(["openVip"]);
+
+  const openVip = () => {
+    emit("openVip", "这是子组件的数据");
+  };
 	function handleUpdateValue(value){
 		router.push(`/talents?type=${value}`)
 	}
@@ -72,17 +76,20 @@
 
 <template>
 	<div class="resume-container">
+    <div style="margin-bottom: 20px;" @click="openVip">
+      <img src="../../assets/img/vip.png"/>
+    </div>
 		<div class="resume-search">
-			<n-input round placeholder="请输入..." @keyup.enter="search" style="width: 360px">
-				<template #prefix>
-					<n-flex align="center" class="search-box">
-						<span>光速匹配</span>
-						<n-switch size="small" />
-						<div class="icon">
-							<img src="@/assets/img/search.png" alt="" />
-						</div>
-					</n-flex>
-				</template>
+			<n-input  placeholder="请输入..." @keyup.enter="search" style="width: 100%">
+<!--				<template #prefix>-->
+<!--					<n-flex align="center" class="search-box">-->
+<!--						<span>光速匹配</span>-->
+<!--						<n-switch size="small" />-->
+<!--						<div class="icon">-->
+<!--							<img src="@/assets/img/search.png" alt="" />-->
+<!--						</div>-->
+<!--					</n-flex>-->
+<!--				</template>-->
 			</n-input>
 		</div>
 		<div class="resume-tabs-item">
@@ -151,7 +158,9 @@
 			gap: 20px;
 		}
 	}
-
+  ::v-deep(.n-input .n-input__input-el){
+    height: 50px !important;;
+  }
 	::v-deep(.n-drawer-header__main) {
 		width: 100%;
 	}

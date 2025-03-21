@@ -332,6 +332,7 @@ const charMessageShow = ref(false)
 </template>
 
 <style scoped lang="scss">
+
 .header_top {
   border-bottom: 1px solid #ededed;
 }

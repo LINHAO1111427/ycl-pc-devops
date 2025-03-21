@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { RenderIcon, IconCrown, IconYusuanzonge, IconJiangpai } from '@/components'
-import { CloseCircleOutline, ReturnDownBackSharp } from '@vicons/ionicons5'
-import { useRouter } from 'vue-router'
-import { createDiscreteApi } from 'naive-ui'
+import {ref} from 'vue'
+import {RenderIcon, IconCrown, IconYusuanzonge, IconJiangpai} from '@/components'
+import {CloseCircleOutline, ReturnDownBackSharp} from '@vicons/ionicons5'
+import {useRouter} from 'vue-router'
+import {createDiscreteApi} from 'naive-ui'
 
 const router = useRouter()
 
-const selectOptions = [{ label: '一周', value: 1 },{ label: '半个月', value: 2 },{ label: '一个月', value: 3 },{ label: '两个月', value: 4 },{ label: '三个月', value: 5 }]
+const selectOptions = [{label: '一周', value: 1}, {label: '半个月', value: 2}, {
+  label: '一个月',
+  value: 3
+}, {label: '两个月', value: 4}, {label: '三个月', value: 5}]
 
 const tagOptions = ['文件翻译', '译本', '普通话', '方言', '英译中文']
 
@@ -44,24 +47,30 @@ function add() {
   formValue.value.push({})
 }
 
-const { dialog } = createDiscreteApi(['dialog'])
-function submit(){
-	dialog.success({
-	  actionClass:'naiveui-dialog-action',
-	  showIcon: false,
-	  closable: false,
-	  // title:'提示信息',
-	  content: '恭喜您，该项目提交成功，您可以从“历史申请”查看更多详情',
-	  positiveText: '确定',
-	  maskClosable: false,
-	  positiveButtonProps:{
-		color:'#58968B'  
-	  },
-	  onPositiveClick: () => {
-		router.push('/application')
-	  }
-	})
+const {dialog} = createDiscreteApi(['dialog'])
+
+function submit() {
+  dialog.success({
+    actionClass: 'naiveui-dialog-action',
+    showIcon: false,
+    closable: false,
+    // title:'提示信息',
+    content: '恭喜您，该项目提交成功，您可以从“历史申请”查看更多详情',
+    positiveText: '确定',
+    maskClosable: false,
+    positiveButtonProps: {
+      color: '#58968B'
+    },
+    onPositiveClick: () => {
+      router.push('/application')
+    }
+  })
 }
+const emit = defineEmits(["openVip"]);
+const openVip = () => {
+  emit("openVip", "这是子组件的数据");
+};
+const showModal = ref(false);
 </script>
 
 <template>
@@ -70,52 +79,63 @@ function submit(){
       <n-flex :wrap="false">
         <div class="header-left">
           <div class="header-title">工作细节</div>
-          <div class="header-desc secondary-color-text-1">
-            发布于2024-09-09
-          </div>
+          <n-flex class="header-desc secondary-color-text-1">
+            <img src="../../../assets/img/anquan.png"/>付款已验证 ｜ 7小时前发布 ｜ 一次性任务 ｜ 广东
+          </n-flex>
+          <!--          <n-button round secondary color="#808080">技术文档翻译</n-button>-->
+          <!--          <div class="header-desc secondary-color-text-1">-->
+          <!--            中文翻译审核与更正-->
+          <!--          </div>-->
+
+          <n-flex vertical style="margin-bottom: 10px;">
+            <div style="font-size: 18px;">项目详情</div>
+            <div style="line-height: 16px;">
+              我们正在寻找一位技术娴熟，一丝不苟的基于Web和Word的中文演示文榜编辑加入我们充满活力的日队。理想的候选人将具备强大的中文能力和出色的辑技能，在创建、和优化网络内容和基于单词的演示文稿方面拥有丰富的经验。
+            </div>
+            <span style="color: #3BC8B4;cursor: pointer;" @click="">查看招聘信息</span>
+          </n-flex>
           <n-button round secondary color="#808080">技术文档翻译</n-button>
-          <div class="header-desc secondary-color-text-1">
-            中文翻译审核与更正
-          </div>
-          <div class="header-desc secondary-color-text-1" style="font-size: 14px">
-            翻译审查和更正，加强提供的信息。
-            <n-button text type="primary" style="text-decoration: underline">查看招聘信息</n-button>
-          </div>
+          <n-button round secondary color="#808080">中文翻译</n-button>
+          <n-button round secondary color="#808080">技术文档翻译</n-button>
+          <!--          <div class="header-desc secondary-color-text-1" style="font-size: 14px">-->
+          <!--            翻译审查和更正，加强提供的信息。-->
+          <!--            <n-button text type="primary" style="text-decoration: underline">查看招聘信息</n-button>-->
+          <!--          </div>-->
         </div>
-        <n-flex vertical align="center" class="header-right" justify="center" :size="40">
-          <n-flex class="header-icon-item" align="center">
-            <div class="icon">
-              <RenderIcon :icon="IconJiangpai" :size="30" fill="#808080" />
-            </div>
-            <n-flex vertical class="icon-item-text" :size="5">
-              <div class="text-title">
-                中等
-              </div>
-              <div class="secondary-color-text-1">
-                我正在寻找相关经验相对丰富的自由职业者
-              </div>
-            </n-flex>
-          </n-flex>
-          <n-flex class="header-icon-item" style="width:270px">
-            <div class="icon">
-              <RenderIcon :icon="IconYusuanzonge" :size="30" fill="#808080" />
-            </div>
-            <n-flex vertical class="icon-item-text" :size="5">
-              <div class="text-title">
-                150人民币
-              </div>
-              <div class="secondary-color-text-1">
-                固定价格
-              </div>
-            </n-flex>
-          </n-flex>
-        </n-flex>
+        <!--        <n-flex vertical align="center" class="header-right" justify="center" :size="40">-->
+        <!--          <n-flex class="header-icon-item" align="center">-->
+        <!--            <div class="icon">-->
+        <!--              <RenderIcon :icon="IconJiangpai" :size="30" fill="#808080" />-->
+        <!--            </div>-->
+        <!--            <n-flex vertical class="icon-item-text" :size="5">-->
+        <!--              <div class="text-title">-->
+        <!--                中等-->
+        <!--              </div>-->
+        <!--              <div class="secondary-color-text-1">-->
+        <!--                我正在寻找相关经验相对丰富的自由职业者-->
+        <!--              </div>-->
+        <!--            </n-flex>-->
+        <!--          </n-flex>-->
+        <!--          <n-flex class="header-icon-item" style="width:270px">-->
+        <!--            <div class="icon">-->
+        <!--              <RenderIcon :icon="IconYusuanzonge" :size="30" fill="#808080" />-->
+        <!--            </div>-->
+        <!--            <n-flex vertical class="icon-item-text" :size="5">-->
+        <!--              <div class="text-title">-->
+        <!--                150人民币-->
+        <!--              </div>-->
+        <!--              <div class="secondary-color-text-1">-->
+        <!--                固定价格-->
+        <!--              </div>-->
+        <!--            </n-flex>-->
+        <!--          </n-flex>-->
+        <!--        </n-flex>-->
       </n-flex>
       <div class="header-select">
         <div class="header-select-title">
           这个项目需要多长时间?
         </div>
-        <n-select :options="selectOptions" style="width: 222px" placeholder="选择持续时问" />
+        <n-select :options="selectOptions" style="width: 222px" placeholder="选择持续时问"/>
       </div>
     </div>
     <div class="professional" id="professional">
@@ -128,25 +148,25 @@ function submit(){
     </div>
     <div class="terms" id="terms">
       <div class="professional-title">条款</div>
-      <div class="terms-desc secondary-color-text-1">
-        服务费折扣20%降到15%;专属客服，以及其他竞争者的出价区间
-        <RouterLink to="/member">
-          <n-button type="primary" text>
-            开通原创力会员
-          </n-button>
-        </RouterLink>
-      </div>
+<!--      <div class="terms-desc secondary-color-text-1">-->
+<!--        服务费折扣20%降到15%;专属客服，以及其他竞争者的出价区间-->
+<!--        <RouterLink to="/member">-->
+<!--          <n-button type="primary" text>-->
+<!--            开通原创力会员-->
+<!--          </n-button>-->
+<!--        </RouterLink>-->
+<!--      </div>-->
       <div class="professional-title title-2">
         选择获得报酬的方式
       </div>
       <div class="terms-type">
         <div
-          :class="{
+            :class="{
           'terms-type-item':true,
           active:current === item.title
         }"
-          v-for="item in options"
-          @click="current = item.title"
+            v-for="item in options"
+            @click="current = item.title"
         >
           <div :class="{'terms-item-title':true}">
             {{ item.title }}
@@ -174,34 +194,34 @@ function submit(){
                   <span style="font-size: 14px">{{ index >= 10 ? index : '0' + (index + 1) }}</span>
                 </n-form-item-gi>
                 <n-form-item-gi label="描述" span="10">
-                  <n-input placeholder="请输入" />
+                  <n-input placeholder="请输入"/>
                 </n-form-item-gi>
                 <n-form-item-gi label="期限" span="7">
                   <n-date-picker
-                    style="width:100%"
-                    placeholder="请选择期限"
-                    value-format="yyyy-MM-dd"
-                    type="date"
-                    clearable
+                      style="width:100%"
+                      placeholder="请选择期限"
+                      value-format="yyyy-MM-dd"
+                      type="date"
+                      clearable
                   />
                 </n-form-item-gi>
                 <n-form-item-gi label="金额" span="6" style="position: relative">
                   <n-input
-                    style="width:100%"
-                    placeholder="0"
-                    clearable
-					default-value="200"
+                      style="width:100%"
+                      placeholder="0"
+                      clearable
+                      default-value="200"
                   >
                     <template #prefix>
                       ￥
                     </template>
                   </n-input>
                   <n-icon
-                    style="position: absolute;right: -30px"
-                    class="cursor-pointer-style"
-                    :size="20"
-                    v-if="index > 0"
-                    @click="formValue.splice(index,1)"
+                      style="position: absolute;right: -30px"
+                      class="cursor-pointer-style"
+                      :size="20"
+                      v-if="index > 0"
+                      @click="formValue.splice(index,1)"
                   >
                     <CloseCircleOutline></CloseCircleOutline>
                   </n-icon>
@@ -212,77 +232,96 @@ function submit(){
         </div>
         <n-divider></n-divider>
       </template>
-      <div class="secondary-color-text-1 server-desc">
-        扣除平台服务费20%;专属客服，
-        <RouterLink to="/member" class="router-link" style="font-size: 14px;">开通原创力会员</RouterLink>
-        尊享服务费折扣15%
-      </div>
+      <!--      <div class="secondary-color-text-1 server-desc">-->
+      <!--        扣除平台服务费20%;专属客服，-->
+      <!--        <RouterLink to="/member" class="router-link" style="font-size: 14px;">开通原创力会员</RouterLink>-->
+      <!--        尊享服务费折扣15%-->
+      <!--      </div>-->
+
       <div class="project-table">
-        <n-flex justify="space-between" align="center" class="project-table-item">
-          <n-flex vertical>
-            <div class="project-item-title">
-              {{current === '项目总价' ? '' : '出价'}}
-            </div>
-            <div class="project-item-desc">
-              {{current === '这包括所有里程碑，并且是您的套户将看到的金额' ? '' : '客户将在您的项目简历中看到的总金额'}}
-            </div>
-          </n-flex>
-          <div class="project-item-title">
-            <template v-if="current === '里程碑'">
-              ￥200
-            </template>
-            <template v-else>
-              <n-input default-value="200" align="right">
-                <template #prefix>
-                  ￥
+        <n-flex>
+          <n-flex style="margin-top: 30px;width: calc(100% - 240px);">
+            <n-flex justify="space-between" align="center" class="project-table-item">
+              <n-flex vertical>
+                <div class="project-item-title">
+                  {{ current === '项目总价' ? '' : '出价' }}
+                </div>
+                <div class="project-item-desc">
+                  {{
+                    current === '这包括所有里程碑，并且是您的套户将看到的金额' ? '' : '客户将在您的项目简历中看到的总金额'
+                  }}
+                </div>
+              </n-flex>
+              <div class="project-item-title">
+                <template v-if="current === '里程碑'">
+                  ￥200
                 </template>
-              </n-input>
-            </template>
-          </div>
-        </n-flex>
-        <n-flex justify="space-between" align="center" class="project-table-item">
-          <n-flex vertical>
-            <div class="project-item-title">
-              自由职业者服务费
-            </div>
-          </n-flex>
-          <div class="project-item-title secondary-color-text-1">
-            <template v-if="current === '里程碑'">
-              ￥40
-            </template>
-            <template v-else>
-              <n-input default-value="40" align="right" disabled>
-                <template #prefix>
-                  ￥
+                <template v-else>
+                  <n-input default-value="200" align="right">
+                    <template #prefix>
+                      ￥
+                    </template>
+                  </n-input>
                 </template>
-              </n-input>
-            </template>
-          </div>
-        </n-flex>
-
-        <n-flex justify="space-between" align="center" class="project-table-item">
-          <n-flex vertical>
-            <div class="project-item-title">
-              您将收到
-            </div>
-            <div class="project-item-desc">
-              您的预估付款(扣除服务费)
-            </div>
-          </n-flex>
-          <div class="project-item-title" style="font-weight:400">
-            <template v-if="current === '里程碑'">
-              ￥160
-            </template>
-            <template v-else>
-              <n-input default-value="160" align="right" disabled>
-                <template #prefix>
-                  ￥
+              </div>
+            </n-flex>
+            <n-flex justify="space-between" align="center" class="project-table-item">
+              <n-flex vertical>
+                <div class="project-item-title">
+                  自由职业者服务费
+                </div>
+                <div class="project-item-desc">
+                  服务费由平台收取包含开票税费及其他服务费
+                </div>
+              </n-flex>
+              <div class="project-item-title secondary-color-text-1">
+                <template v-if="current === '里程碑'">
+                  ￥40
                 </template>
-              </n-input>
-            </template>
-          </div>
+                <template v-else>
+                  <n-input default-value="40" align="right" disabled>
+                    <template #prefix>
+                      ￥
+                    </template>
+                  </n-input>
+                </template>
+              </div>
+            </n-flex>
+            <n-flex justify="space-between" align="center" class="project-table-item">
+              <n-flex vertical>
+                <div class="project-item-title">
+                  您将收到
+                </div>
+                <div class="project-item-desc">
+                  您的预估付款(扣除服务费)
+                </div>
+              </n-flex>
+              <div class="project-item-title" style="font-weight:400">
+                <template v-if="current === '里程碑'">
+                  ￥160
+                </template>
+                <template v-else>
+                  <n-input default-value="160" align="right" disabled>
+                    <template #prefix>
+                      ￥
+                    </template>
+                  </n-input>
+                </template>
+              </div>
+            </n-flex>
+          </n-flex>
+          <n-flex vertical justify="space-between">
+            <div class="viptitle">价格发布区间</div>
+            <n-flex vertical class="vipContent" justify="center" align="center">
+              <div class="content1">开通会员查看其他报价
+                助力您搞定客户
+              </div>
+              <div class="btn1" @click="openVip">
+                立即开通
+              </div>
+            </n-flex>
+          </n-flex>
         </n-flex>
-
         <div class="project-tip">
           包括原创力固定价格保护。
           <RouterLink to="#" class="router-link">
@@ -291,25 +330,30 @@ function submit(){
         </div>
       </div>
     </div>
-
     <div class="cover-letter" id="cover-letter">
       <div class="professional-title">求职信</div>
-      <div class="letter-header-title">
+      <n-flex justify="space-between" style="margin-bottom: 16px;font-size: 14px;">
         <div class="title-text">
           在你写求职信的时候得到个性化的提示。
         </div>
-        <n-space align="center">
-          <n-progress type="line" status="success" :percentage="textarea.length" :height="4" style="width: 200px">
-            {{ textarea.length > 100 ? 100 : textarea.length }}%完成度
-          </n-progress>
-          <n-button :type="textarea.length >100 ?'primary' : 'default' " secondary strong>获得提示</n-button>
-        </n-space>
-      </div>
-      <n-input v-model:value="textarea" type="textarea" style="height: 400px;" placeholder="请输入"></n-input>
+        <div class="btn11" @click="showModal = true">
+          查看示例
+        </div>
+        <!--        <div class="title-text">-->
+        <!--          在你写求职信的时候得到个性化的提示。-->
+        <!--        </div>-->
+        <!--        <n-space align="center">-->
+        <!--          <n-progress type="line" status="success" :percentage="textarea.length" :height="4" style="width: 200px">-->
+        <!--            {{ textarea.length > 100 ? 100 : textarea.length }}%完成度-->
+        <!--          </n-progress>-->
+        <!--          <n-button :type="textarea.length >100 ?'primary' : 'default' " secondary strong>获得提示</n-button>-->
+        <!--        </n-space>-->
+      </n-flex>
+      <n-input v-model:value="textarea" type="textarea" style="height: 200px;" placeholder="请输入"></n-input>
 
       <div class="annex">
         <div class="annex-title">附件</div>
-        <n-upload list-type="image-card" />
+        <n-upload list-type="image-card"/>
         <div class="annex-desc">
           拖动 或 点击 上传项目文件
         </div>
@@ -318,7 +362,6 @@ function submit(){
         </div>
       </div>
     </div>
-
     <div class="two-points" id="two-points">
       <div class="professional-title">简介亮点</div>
       <div class="secondary-color-text-1" style="font-size: 14px;margin-bottom: 20px">
@@ -326,10 +369,10 @@ function submit(){
       </div>
       <n-form-item label="添加原创力工作" size="large">
         <n-input
-          v-model:value="userInput.higInput"
-          placeholder="请输入标签"
-          style="width: 525px;"
-          @keydown.enter="onClickAdd"
+            v-model:value="userInput.higInput"
+            placeholder="请输入标签"
+            style="width: 525px;"
+            @keydown.enter="onClickAdd"
         >
           <template #suffix>
             <n-icon>
@@ -340,32 +383,72 @@ function submit(){
       </n-form-item>
       <n-flex class="tow-tag">
         <n-tag
-          round
-          class="secondary-color-text-1 cursor-pointer-style"
-          v-for="item in userInput.hig"
-          closable
-          @close="userInput.hig = userInput.hig.filter(value => value !== item)"
-          :key="item">
+            round
+            class="secondary-color-text-1 cursor-pointer-style"
+            v-for="item in userInput.hig"
+            closable
+            @close="userInput.hig = userInput.hig.filter(value => value !== item)"
+            :key="item">
           {{ item }}
         </n-tag>
       </n-flex>
       <n-form-item label="添加证书" size="large">
-		<n-upload :show-file-list="false">
-			<n-input readonly placeholder="您暂时还没有证书" style="width: 525px;"></n-input>
-		</n-upload>
+        <n-upload :show-file-list="false">
+          <n-input readonly placeholder="您暂时还没有证书" style="width: 525px;"></n-input>
+        </n-upload>
       </n-form-item>
     </div>
-
     <div class="tow-footer" style="padding: 20px 40px;margin-bottom: 77px">
       <n-flex justify="flex-end" :size="40">
         <n-button type="primary" text>取消</n-button>
         <n-button type="primary" @click="submit">确认提交项目申请</n-button>
       </n-flex>
     </div>
+    <n-modal v-model:show="showModal">
+      <n-card
+          style="width: 600px"
+          title="求职信示例"
+          closable
+          @close="showModal = false"
+      >
+        <p>尊敬的招聘负责人：</p>
+        <p>您好！</p>
+        <p>
+          我是李明，拥有5年互联网产品经验，曾主导某数据类App的创新开发。我热衷于数据分析、
+          用户调研及产品优化。希望能与贵公司团队共事，为产品创新贡献力量。
+        </p>
+        <p>希望能有机会与您深入交流，期待进一步沟通！</p>
+        <div class="btnDiv">
+          <div class="btn3" @click="showModal = false"> 知道了</div>
+        </div>
+
+      </n-card>
+    </n-modal>
   </div>
 </template>
 
 <style scoped lang="scss">
+.btnDiv {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  .btn3 {
+    width: 100px;
+    height: 30px;
+    background: #3BC8B4;
+    box-shadow: 0px 2px 4px 0px rgba(48, 145, 131, 0.2);
+    border-radius: 20px;
+    font-weight: 400;
+    color: #FFFFFF;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+  }
+}
+
 .work-details {
   width: 100%;
   display: flex;
@@ -381,7 +464,6 @@ function submit(){
 
     .header-left {
       width: 100%;
-      height: 180px;
       border-right: solid 1px #EDEDED;
       justify-content: space-around;
 
@@ -425,13 +507,64 @@ function submit(){
   }
 
 
-  .professional, .terms, .cover-letter, .two-points, .tow-footer {
+  :deep(.professional, .terms, .cover-letter, .two-points, .tow-footer) {
     padding: 40px;
     width: 100%;
     background: #FFFFFF;
     border: 1px solid #EDEDED;
     border-radius: 16px 16px 16px 16px;
     box-sizing: border-box;
+    .btn11 {
+      width: 110px;
+      height: 32px;
+      border-radius: 18px;
+      border: 1px solid #3BC8B4;
+      font-weight: 400;
+      font-size: 14px;
+      color: #3BC8B4;
+      line-height: 32px;
+      text-align: center;
+      cursor: pointer;
+    }
+  }
+
+  .viptitle {
+    font-weight: bold;
+    font-size: 18px;
+    color: #333333
+  }
+
+  .vipContent {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    backdrop-filter: blur(3px);
+    width: 220px;
+    height: 160px;
+
+    .content1 {
+      width: 140px;
+      height: 44px;
+      font-weight: 400;
+      font-size: 14px;
+      color: #FFFFFF;
+      line-height: 22px;
+      text-align: center;
+      font-style: normal;
+    }
+
+    .btn1 {
+      width: 69px;
+      height: 24px;
+      background: #180A04;
+      box-shadow: 0px 2px 4px 0px rgba(48, 145, 131, 0.2);
+      border-radius: 20px;
+      font-weight: 400;
+      font-size: 12px;
+      color: #FFB96C;
+      line-height: 24px;
+      text-align: center;
+      cursor: pointer;
+    }
   }
 
   .professional-title {
@@ -515,10 +648,13 @@ function submit(){
     margin-bottom: 10px;
   }
 
+  .project-table {
+    margin-top: 30px;
+  }
 
   .project-table-item {
     width: 100%;
-    height: 86px;
+    height: 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -601,6 +737,6 @@ function submit(){
   .tow-tag {
     margin-bottom: 20px;
   }
-  
+
 }
 </style>

@@ -66,8 +66,8 @@ const descOptions = [
 </script>
 
 <template>
+  <HeaderTop :is-login="false" :is-work="false" />
   <div class="member-pages">
-    <HeaderTop :is-login="false" :is-work="false" />
     <div class="member-pages_container">
       <div class="member-pages-header-title">原创力会员</div>
       <n-flex class="member-pages_send" align="center" justify="space-between">

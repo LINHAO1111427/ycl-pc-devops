@@ -31,8 +31,8 @@ const sortValue = ref('倒序')
 </script>
 
 <template>
+  <HeaderTop :is-login="false" :is-work="false" />
   <div class="historical-work">
-    <HeaderTop :is-login="false" :is-work="false" />
     <div class="container">
       <div class="work-container-header">
         <div class="title">

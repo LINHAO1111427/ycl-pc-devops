@@ -15,8 +15,8 @@ watchEffect(() => {
 </script>
 
 <template>
+  <HeaderClientTop :is-login="false" :is-client="true" :is-work="false" />
     <div class="talents">
-        <HeaderClientTop :is-login="false" :is-client="true" :is-work="false" />
         <div class="easy">
             <div class="easy-view">
                 <MemberStatistics />
@@ -33,7 +33,7 @@ watchEffect(() => {
 }
 
 .easy {
-    background-color: #F4FBFA;
+    background-color: white;
 }
 
 .easy-view {

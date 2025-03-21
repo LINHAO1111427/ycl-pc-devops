@@ -37,6 +37,12 @@ const router = createRouter({
       name: 'register1',
       component: () => import('../views/Register/Regjster1.vue'),
     },
+      {
+          // 注册后完善信息
+          path: '/userAuthentication/:type',
+          name: 'userAuthentication',
+          component: () => import('../views/Login/userAuthentication.vue'),
+      },
     // 找工作列表
     {
       path: '/talents',

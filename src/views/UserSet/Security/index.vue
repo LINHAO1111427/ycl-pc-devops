@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { RenderIcon, Text } from '@/components'
-import { CreateOutline } from '@vicons/ionicons5'
-import { ref } from 'vue'
+import {RenderIcon, Text} from '@/components'
+import {CreateOutline} from '@vicons/ionicons5'
+import {ref} from 'vue'
 import Problem from '@/views/UserSet/Security/component/Problem.vue'
 import ModifyProblem from '@/views/UserSet/Security/component/ModifyProblem.vue'
 import EditPassword from './component/EditPassword.vue'
@@ -42,10 +42,10 @@ function onMouseenter(key: string) {
   <div class="contact-container">
     <div class="contact-slider">
       <div
-        v-for="item in slider"
-        class="contact-slider-item"
-        :class="current === item.to && 'active'"
-        @click="onMouseenter(item.to)"
+          v-for="item in slider"
+          class="contact-slider-item"
+          :class="current === item.to && 'active'"
+          @click="onMouseenter(item.to)"
       >
         <Text color="#000" :size="16">
           {{ item.title }}
@@ -60,48 +60,48 @@ function onMouseenter(key: string) {
         </n-flex>
         <n-flex style="margin-top: 40px" align="center" justify="space-between">
           <n-space align="center">
-            <RenderIcon icon="icon-wancheng" fill="#58968B" size="20" />
+            <RenderIcon icon="icon-wancheng" fill="#58968B" size="20"/>
             <Text :size="20">密码</Text>
           </n-space>
           <n-icon :size="22" class="cursor-pointer-style main-color-size" @click="showEditPassword = true">
-            <CreateOutline />
+            <CreateOutline/>
           </n-icon>
         </n-flex>
         <Text
-          style="margin-left: 32px; margin-top: 10px"
-          class="secondary-color-text-1"
-          :size="16"
+            style="margin-left: 32px; margin-top: 10px"
+            class="secondary-color-text-1"
+            :size="16"
         >
           选择长度至少为8个字符的强唯一密码。
         </Text>
       </div>
-     <!-- <div class="user-contact-container" id="city">
-        <n-flex align="center" justify="space-between">
-          <Text color="#333333" :size="24">两步验证</Text>
-          <n-icon :size="22" class="cursor-pointer-style main-color-size">
-            <CreateOutline />
-          </n-icon>
-        </n-flex>
-        <Text color="#808080" :size="16" style="margin-top: 10px">
-          添加额外的安全层以阻止未经授权的访问并保护您的账户。
-        </Text>
-      </div> -->
+      <!-- <div class="user-contact-container" id="city">
+         <n-flex align="center" justify="space-between">
+           <Text color="#333333" :size="24">两步验证</Text>
+           <n-icon :size="22" class="cursor-pointer-style main-color-size">
+             <CreateOutline />
+           </n-icon>
+         </n-flex>
+         <Text color="#808080" :size="16" style="margin-top: 10px">
+           添加额外的安全层以阻止未经授权的访问并保护您的账户。
+         </Text>
+       </div> -->
       <n-flex class="user-contact-container" id="city" :size="40" vertical>
         <n-flex vertical>
           <Text color="#333333" :size="24">两步验证</Text>
-		  <Text color="#808080" :size="16">
-		    添加额外的安全层以阻止未经授权的访问并保护您的账户。
-		  </Text>
+          <Text color="#808080" :size="16">
+            添加额外的安全层以阻止未经授权的访问并保护您的账户。
+          </Text>
         </n-flex>
-        <n-flex align="center" justify="space-between">
-          <n-flex vertical>
-            <Text :size="16">移动应用提示</Text>
-            <Text :size="14" color="#808080">
-              从您的移动应用程序接受提示，以确认是您的身份。
-            </Text>
-          </n-flex>
-          <n-switch />
-        </n-flex>
+        <!--        <n-flex align="center" justify="space-between">-->
+        <!--          <n-flex vertical>-->
+        <!--            <Text :size="16">移动应用提示</Text>-->
+        <!--            <Text :size="14" color="#808080">-->
+        <!--              从您的移动应用程序接受提示，以确认是您的身份。-->
+        <!--            </Text>-->
+        <!--          </n-flex>-->
+        <!--          <n-switch />-->
+        <!--        </n-flex>-->
         <n-flex align="center" justify="space-between">
           <n-flex vertical>
             <Text :size="16">短信</Text>
@@ -109,31 +109,31 @@ function onMouseenter(key: string) {
               通过短信接收6位数验证码以确认身份。
             </Text>
           </n-flex>
-          <n-switch />
+          <n-switch/>
         </n-flex>
       </n-flex>
       <div
-        class="user-contact-container"
-        id="security"
-        style="margin-bottom: 158px"
+          class="user-contact-container"
+          id="security"
+          style="margin-bottom: 158px"
       >
         <n-flex align="center" justify="space-between">
           <n-space align="center">
-            <RenderIcon icon="icon-wancheng" fill="#58968B" size="20" />
+            <RenderIcon icon="icon-wancheng" fill="#58968B" size="20"/>
             <Text :size="20">安全问题</Text>
           </n-space>
           <n-icon
-            :size="22"
-            class="cursor-pointer-style main-color-size"
-            @click="showModal = true"
+              :size="22"
+              class="cursor-pointer-style main-color-size"
+              @click="showModal = true"
           >
-            <CreateOutline />
+            <CreateOutline/>
           </n-icon>
         </n-flex>
         <Text
-          style="margin-left: 32px; margin-top: 10px"
-          class="secondary-color-text-1"
-          :size="16"
+            style="margin-left: 32px; margin-top: 10px"
+            class="secondary-color-text-1"
+            :size="16"
         >
           回答您选择的问题以确认身份。
         </Text>
@@ -145,7 +145,7 @@ function onMouseenter(key: string) {
     <template v-else>
       <ModifyProblem v-model:show="showModal"></ModifyProblem>
     </template>
-	<EditPassword v-model:show="showEditPassword"></EditPassword>
+    <EditPassword v-model:show="showEditPassword"></EditPassword>
   </div>
 </template>
 

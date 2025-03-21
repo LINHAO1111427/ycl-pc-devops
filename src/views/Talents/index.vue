@@ -1,23 +1,24 @@
 <script setup lang="ts">
 import HeaderTop from '@/components/Header/HeaderTop.vue'
-import { Footer, Button as RButton } from '@/components'
+import {Footer, Button as RButton} from '@/components'
 import SliderUser from '@/components/Talents/SliderUser.vue'
 import Resume from '@/components/Talents/Resume.vue'
-import { ref, watchEffect } from 'vue'
-import { useRoute } from 'vue-router'
-
+import {ref, watchEffect} from 'vue'
+import {useRoute} from 'vue-router'
+import vipPage from '@/components/vipPage/index.vue'
 const route = useRoute()
 
 const type = ref(1)
 
 watchEffect(() => {
-	type.value = route.query.type
+  type.value = route.query.type
 })
+const showModal = ref(false);
 </script>
 
 <template>
+  <HeaderTop :is-login="false" :is-work="false"/>
   <div class="talents">
-	<HeaderTop :is-login="false" :is-work="false" />
     <div class="talents-container">
       <!-- <div class="talents-container-banner">
 		<n-flex vertical :size="20">
@@ -29,11 +30,12 @@ watchEffect(() => {
       </div> -->
       <div class="talents-container-information">
         <SliderUser></SliderUser>
-        <Resume :typeValue="type"></Resume>
+        <Resume :typeValue="type" @openVip="showModal=true"></Resume>
       </div>
     </div>
     <Footer></Footer>
   </div>
+  <vip-page v-model="showModal"></vip-page>
 </template>
 
 <style scoped lang="scss">
@@ -46,25 +48,25 @@ watchEffect(() => {
   width: 1360px;
   margin: 0 auto;
   padding: 20px 0;
-  max-width:100%;
+  max-width: 100%;
 
   .talents-container-banner {
     background-color: #F18B41;
     padding: 32px;
     border-radius: 13px;
-	position: relative;
+    position: relative;
 
     .banner-text {
       font-size: 30px;
       color: #FFFFFF;
     }
-	
-	& img {
-		width: 265px;
-		position: absolute;
-		bottom: 0;
-		right: 60px;
-	}
+
+    & img {
+      width: 265px;
+      position: absolute;
+      bottom: 0;
+      right: 60px;
+    }
   }
 }
 
@@ -75,8 +77,8 @@ watchEffect(() => {
 }
 
 @media (max-width: 1400px) {
-	.talents-container {
-		padding: 20px;
-	}
+  .talents-container {
+    padding: 20px;
+  }
 }
 </style>

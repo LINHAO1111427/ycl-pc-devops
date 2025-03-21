@@ -15,8 +15,8 @@ watchEffect(() => {
 </script>
 
 <template>
+  <HeaderClientTop :is-login="false" :is-client="true" :is-work="false" />
     <div class="submit-proposals">
-        <HeaderClientTop :is-login="false" :is-client="true" :is-work="false" />
         <EffectiveSubmit />
         <Footer></Footer>
     </div>

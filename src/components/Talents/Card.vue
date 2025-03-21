@@ -101,7 +101,6 @@ const charMessageShow = ref(false)
 
 <style scoped lang="scss">
 .cart-container {
-  border: solid 1px #58968B;
   box-sizing: border-box;
   border-radius: 15px;
   overflow: hidden;
@@ -109,7 +108,9 @@ const charMessageShow = ref(false)
   width: 100%;
   cursor: pointer;
   background-color: #ffffff;
-  
+  &:hover{
+    border: solid 1px #58968B;
+  }
   &:hover .cart-header-title{
 	  color: #58968B;
   }
@@ -122,13 +123,14 @@ const charMessageShow = ref(false)
   }
 
   .cart-container-left {
-    padding: 20px 5px 20px 20px;
+    padding: 20px 20px 20px 20px;
     box-sizing: border-box;
     flex: 1;
     width: calc(100% - 250px);
   }
 
   .cart-container-right {
+    display: none;
     clip-path: polygon(10% 0, 100% 0, 100% 100%, 0% 100%);
     background-color: #58968B;
     width: 250px;

@@ -376,7 +376,7 @@ const success_add = () => {
 <style scoped>
 .easy {
     width: 100%;
-    background-color: #F4FBFA;
+    background-color: white;
 }
 
 .talents-container {

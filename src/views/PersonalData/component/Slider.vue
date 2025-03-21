@@ -54,37 +54,45 @@ const educationList = ref([
 
 <template>
   <div class="personal-data-slider">
-    <div class="personal-data-slider-user">
-      <n-flex align="center" justify="space-between">
-        <div class="text-size-16">查看职业档案</div>
-        <n-icon :size="22" class="cursor-pointer-style main-color-size" v-if="edi"  @click="$router.push('/user-set/personal')">
-          <CreateOutline></CreateOutline>
-        </n-icon>
-      </n-flex>
-      <n-space vertical :size="15" style="margin-top: 15px">
-        <div class="secondary-color-text-1" style="font-size: 14px">设计师</div>
-        <div class="secondary-color-text-1" style="font-size: 14px">
-          所有工作
-        </div>
-      </n-space>
-    </div>
+<!--    <div class="personal-data-slider-user">-->
+<!--      <n-flex align="center" justify="space-between">-->
+<!--        <div class="text-size-16">查看职业档案</div>-->
+<!--        <n-icon :size="22" class="cursor-pointer-style main-color-size" v-if="edi"  @click="$router.push('/user-set/personal')">-->
+<!--          <CreateOutline></CreateOutline>-->
+<!--        </n-icon>-->
+<!--      </n-flex>-->
+<!--      <n-space vertical :size="15" style="margin-top: 15px">-->
+<!--        <div class="secondary-color-text-1" style="font-size: 14px">设计师</div>-->
+<!--        <div class="secondary-color-text-1" style="font-size: 14px">-->
+<!--          所有工作-->
+<!--        </div>-->
+<!--      </n-space>-->
+<!--    </div>-->
     <n-flex
       class="personal-data-slider-nums"
       align="center"
       justify="center"
+      :vertical="true"
       :size="20"
     >
+      <n-flex align="center"
+              justify="space-between" style="width: 100%;">
       <n-flex class="personal-data-slider-nums-item" vertical align="center">
         <div class="slider-nums-item-nums">124</div>
-        <div class="secondary-color-text-1">历史接单(单)</div>
+        <div class="secondary-color-text-1">历史接单</div>
       </n-flex>
       <n-flex class="personal-data-slider-nums-item" vertical align="center">
         <div class="slider-nums-item-nums">124000</div>
-        <div class="secondary-color-text-1">总收入(￥)</div>
+        <div class="secondary-color-text-1">总收入</div>
       </n-flex>
       <n-flex class="personal-data-slider-nums-item" vertical align="center">
         <div class="slider-nums-item-nums">4.9</div>
-        <div class="secondary-color-text-1">评分(5.0)</div>
+        <div class="secondary-color-text-1">评分</div>
+      </n-flex>
+      </n-flex>
+      <n-flex>
+        <div class="s-t1">完善你的职业档案</div>
+        <n-progress type="line"  color="#3BC8B4" :percentage="40" />
       </n-flex>
     </n-flex>
     <n-flex class="personal-data-slider-footer" vertical :size="20">
@@ -194,12 +202,24 @@ const educationList = ref([
 
 <style scoped lang="scss">
 .personal-data-slider {
-  width: 284px;
-  border: solid 1px #e7e7e7;
-  border-top: transparent;
+  width: 360px;
+  //border: solid 1px #e7e7e7;
+  //border-top: transparent;
   height: 100%;
   flex-shrink: 0;
-
+  .s-t1{
+    width: 280px;
+    height: 20px;
+    font-weight: 400;
+    font-size: 14px;
+    color: #3BC8B4;
+    line-height: 20px;
+    text-align: left;
+    font-style: normal;
+  }
+  :deep(.n-progress .n-progress-icon) {
+    //display: none;
+  }
   .personal-data-slider-user {
     height: 167px;
     background: #ffffff;
@@ -209,7 +229,12 @@ const educationList = ref([
   }
 
   .personal-data-slider-nums {
-    height: 94px;
+    padding: 20px;
+    margin: 20px 0px 0px 20px;
+    width: 320px;
+    height: 154px;
+    background: #F6F8FA;
+    border-radius: 20px;
     box-sizing: border-box;
     border-bottom: solid 1px #e7e7e7;
 

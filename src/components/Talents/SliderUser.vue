@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChevronForwardOutline } from '@vicons/ionicons5'
+import {ChevronForwardOutline} from '@vicons/ionicons5'
 import avatarUrl from '../../assets/img/avatar.png'
 </script>
 
@@ -8,9 +8,9 @@ import avatarUrl from '../../assets/img/avatar.png'
     <div class="slider-user-item">
       <n-flex align="center" :size="20">
         <n-avatar
-          :src="avatarUrl"
-          :size="64"
-          round />
+            :src="avatarUrl"
+            :size="64"
+            round/>
         <n-flex vertical :size="10">
           <div class="user-name">Jason Z</div>
           <div class="user-desc">
@@ -18,8 +18,12 @@ import avatarUrl from '../../assets/img/avatar.png'
           </div>
         </n-flex>
       </n-flex>
-      <div class="user-jie-sao">PS、Figma、AE、MasterGo</div>
-      <n-flex class="slider-user-date" justify="space-evenly">
+      <div class="user-jie-sao">
+        <div>sketch</div>
+        <div>ui/小程序</div>
+        <div>可视化</div>
+      </div>
+      <n-flex class="slider-user-date" justify="space-between">
         <n-flex vertical align="center">
           <div class="slider-user-item-nums">124</div>
           <div class="slider-user-item-text">历史接单(单)</div>
@@ -33,6 +37,10 @@ import avatarUrl from '../../assets/img/avatar.png'
           <div class="slider-user-item-text">评分(5.0)</div>
         </n-flex>
       </n-flex>
+      <n-flex style="margin-top: 25px;">
+        <div class="s-t1">完善你的个人资料</div>
+        <n-progress type="line" color="#3BC8B4" :percentage="40"/>
+      </n-flex>
     </div>
     <div class="slider-user-item padding-0">
       <div class="slider-user-cell" @click="$router.push('/member')">
@@ -40,7 +48,7 @@ import avatarUrl from '../../assets/img/avatar.png'
           会员权益
         </div>
         <n-icon :size="20">
-          <component :is="ChevronForwardOutline" />
+          <component :is="ChevronForwardOutline"/>
         </n-icon>
       </div>
       <div class="slider-user-cell" @click="$router.push('/application')">
@@ -48,24 +56,24 @@ import avatarUrl from '../../assets/img/avatar.png'
           历史申请
         </div>
         <n-icon :size="20">
-          <component :is="ChevronForwardOutline" />
+          <component :is="ChevronForwardOutline"/>
         </n-icon>
       </div>
     </div>
 
-   <n-flex class="slider-user-item padding-0" vertical>
-   <!--  <RouterLink to="/" class="slider-item-link">
-        原创力学院
-      </RouterLink>
-      <RouterLink to="/" class="slider-item-link">
-        获得报酬
-      </RouterLink>
-      <RouterLink to="/" class="slider-item-link">
-        社区与论坛
-      </RouterLink> -->
-      <RouterLink to="/" class="slider-item-link">
+    <n-flex class="slider-user-item padding-0" vertical>
+      <!--  <RouterLink to="/" class="slider-item-link">
+           原创力学院
+         </RouterLink>
+         <RouterLink to="/" class="slider-item-link">
+           获得报酬
+         </RouterLink>
+         <RouterLink to="/" class="slider-item-link">
+           社区与论坛
+         </RouterLink> -->
+      <span  class="slider-item-link">
         帮助中心
-      </RouterLink>
+      </span>
     </n-flex>
   </div>
 </template>
@@ -77,6 +85,13 @@ import avatarUrl from '../../assets/img/avatar.png'
   flex-direction: column;
   gap: 20px;
   flex-shrink: 0;
+
+  .s-t1 {
+    font-weight: 400;
+    font-size: 14px;
+    color: #3BC8B4;
+    line-height: 20px;
+  }
 
   .slider-user-item {
     padding: 32px 20px;
@@ -101,14 +116,23 @@ import avatarUrl from '../../assets/img/avatar.png'
   }
 
   .user-jie-sao {
-    margin-top: 30px;
+    display: flex;
+    margin-top: 14px;
     font-size: 16px;
     color: #a4a4a4;
     font-weight: 400 !important;
+
+    div {
+      background: #EEEEEE;
+      border-radius: 13px;
+      padding: 5px 12px;
+      margin-right: 15px;
+      font-size: 12px;
+    }
   }
 
   .slider-user-date {
-    margin-top: 40px;
+    margin-top: 20px;
   }
 
   .slider-user-item-nums {

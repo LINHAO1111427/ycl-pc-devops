@@ -2,9 +2,11 @@
 import HeaderTop from '@/components/Header/HeaderTop.vue'
 import { Footer } from '@/components'
 import WorkDetails from '@/views/SubmitProposals/component/WorkDetails.vue'
-
+import vipPage from '@/components/vipPage/index.vue'
+import {ref} from "vue";
+import Resume from "@/components/Talents/Resume.vue";
 const current = ref('工作细节')
-
+const showModal = ref(false);
 const options = [
   {
     title: '工作细节',
@@ -31,8 +33,8 @@ const options = [
 </script>
 
 <template>
+  <HeaderTop :is-login="false" :is-work="false" />
   <div class="submit-proposals">
-    <HeaderTop :is-login="false" :is-work="false" />
     <div class="container">
       <div class="slider">
         <a
@@ -42,16 +44,17 @@ const options = [
         </a>
       </div>
       <div class="container-body">
-        <WorkDetails></WorkDetails>
+        <WorkDetails  @openVip="showModal=true"></WorkDetails>
       </div>
     </div>
     <Footer />
   </div>
+  <vip-page v-model="showModal"></vip-page>
 </template>
 
 <style scoped lang="scss">
 .submit-proposals {
-  background-color: #f4fbfa;
+  background-color: #ffffff;
   height: 100%;
   overflow: auto;
 
@@ -68,7 +71,7 @@ const options = [
       flex-direction: column;
       width: 179px;
       height: 330px;
-      background: #FFFFFF;
+      background: #F6F8FA;
       border-radius: 16px 16px 16px 16px;
       padding: 10px;
       box-sizing: border-box;
@@ -82,7 +85,7 @@ const options = [
 
         &:hover, &.active {
           width: 159px;
-          background: #58968B;
+          background: #3BC8B4;
           border-radius: 8px 8px 8px 8px;
           color: #FFFFFF;
         }

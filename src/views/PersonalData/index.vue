@@ -46,26 +46,32 @@
 						</n-icon>
 					</n-flex>
 					<n-space align="center">
+<!--						<n-flex class="secondary-color-text-1" align="center" :size="5">-->
+<!--							<n-icon :size="16" class="main-color-size">-->
+<!--								<LocationOutline />-->
+<!--							</n-icon>-->
+<!--							天津-->
+<!--						</n-flex>-->
+            <n-flex class="secondary-color-text-1" align="center" :size="5">
+              <div class="creditScore">信用分：100</div>
+            </n-flex>
+            <n-flex class="secondary-color-text-1" align="center" :size="5">
+              <div class="disabilityCertification">残疾认证</div>
+            </n-flex>
 						<n-flex class="secondary-color-text-1" align="center" :size="5">
-							<n-icon :size="16" class="main-color-size">
-								<LocationOutline />
-							</n-icon>
-							天津
-						</n-flex>
-						<n-flex class="secondary-color-text-1" align="center" :size="5">
-							<n-icon :size="10" class="main-color-size">
-								<EllipseSharp />
-							</n-icon>
-							在线时间 9:00
-						</n-flex>
+<!--							<n-icon :size="10" class="main-color-size">-->
+<!--								<EllipseSharp />-->
+<!--							</n-icon>-->
+              在线时间：9:00  ｜   广东
+            </n-flex>
 					</n-space>
 				</n-flex>
 				<n-space style="margin-left:auto" :size="30" v-if="!isPreview">
-					<n-button type="primary" ghost size="large" style="width: 178px"
-						@click="onClickTo">
-						<span class="naiveui-text-14">个人资料预览</span>
-						</n-button>
-					<n-button type="primary" size="large" style="width: 178px" @click="$router.push('/user-set/personal')">
+<!--					<n-button type="primary" ghost size="large" style="width: 178px"-->
+<!--						@click="onClickTo">-->
+<!--						<span class="naiveui-text-14">个人资料预览</span>-->
+<!--						</n-button>-->
+					<n-button type="primary" size="large" style="width: 140px;background-color: #3BC8B4;border-radius: 20px;">
 						<span class="naiveui-text-14">资料修改</span>
 						</n-button>
 				</n-space>
@@ -81,6 +87,30 @@
 </template>
 
 <style scoped lang="scss">
+.creditScore{
+  padding: 0px 10px;
+  height: 22px;
+  background: linear-gradient(270deg, #6DE6DB 0%, #3BC8B4 100%);
+  border-radius: 2px;
+  font-weight: 400;
+  font-size: 12px;
+  color: #FFFFFF;
+  line-height: 22px;
+  text-align: left;
+  font-style: normal;
+}
+.disabilityCertification{
+  padding: 0px 10px;
+  height: 22px;
+  border-radius: 2px;
+  font-weight: 400;
+  font-size: 12px;
+  color: #FFFFFF;
+  line-height: 22px;
+  text-align: left;
+  font-style: normal;
+  background: linear-gradient( 270deg, #E6996D 0%, #C8683B 100%);
+}
 	.personal-data {
 		margin-top: 50px;
 		border-top-left-radius: 16px;
@@ -102,10 +132,10 @@
 				line-height: 23px;
 			}
 		}
-
-
 		.personal-data-container {
-			background: #FFFFFF;
+      border-bottom: 1px solid #EDEDED;
+      border-left: 1px solid #EDEDED;
+      background: #FFFFFF;
 		}
 	}
 </style>

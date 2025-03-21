@@ -30,6 +30,24 @@
     }
   }
 }
+.notice-footer {
+  text-align: center;
+  padding: 12px;
+  font-size: 14px;
+  color: #409eff;
+  cursor: pointer;
+  border-top: 1px solid #eee;
+  background: #f9f9f9;
+  transition: background 0.3s, color 0.3s;
+  font-weight: 500;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.notice-footer:hover {
+  background: #409eff;
+  color: white;
+}
 
 .CustomIcons {
   width: 245px;

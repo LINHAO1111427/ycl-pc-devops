@@ -57,7 +57,7 @@ import {ref} from "vue";
 import {NButton, NInput, NTabs, NTabPane, NIcon} from "naive-ui";
 import {ArrowBack} from "@vicons/ionicons5";
 import {useRouter} from "vue-router";
-
+import { addUser } from '@/api/user'
 const activeTab = ref("register");
 const phone = ref("");
 const email = ref("");
@@ -70,17 +70,39 @@ const goBack = () => {
 };
 const password = ref("");
 const showPassword = ref(false);
+const isUserAuthentication = ref(true);//是否填写了注册引导
 
 const togglePassword = () => {
   showPassword.value = !showPassword.value;
 };
 
-function register() {
+const register = async ()=> {
+
+  try {
+    const parem={
+      userType:'0',
+      mobile:'13580985387',
+      code:'123456',
+      scene:'1',
+      email:'1021246894@qq.com',
+      password:'123456'
+    }
+    const res = await addUser(parem)
+    console.log(res)
+  } catch (error) {
+    console.error('获取用户失败', error)
+  }
+
   debugger
-  if (activeTab.value === 'register') {
-    router.push('/talents')
+  if (isUserAuthentication) {
+    const type = ((activeTab.value === 'register') ? 1 : 2)
+    router.push(`/userAuthentication/${type}`)
   } else {
-    router.push('/client/index')
+    if (activeTab.value === 'register') {
+      router.push('/talents')
+    } else {
+      router.push('/client/index')
+    }
   }
 }
 </script>

@@ -89,7 +89,7 @@ function onClickUrl(){
 }
 .easy {
     width: 100%;
-    background-color: #F4FBFA;
+    background-color: white;
     position: relative;
 }
 

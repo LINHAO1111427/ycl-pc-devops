@@ -105,6 +105,7 @@ import {ref, watch, nextTick} from 'vue'
 const codeArray = ref(Array(6).fill('')) // 6位验证码
 const inputs = ref([]) // 绑定输入框
 const isCodeComplete = ref(false) // 验证码是否填满
+import { mobileLogin} from '@/api/user'
 // 监听输入框，判断是否填满
 watch(codeArray, (newVal) => {
   debugger
@@ -167,11 +168,21 @@ const nextTabFunc= (tabName) => {
   tabKey.value++; // 强制重新渲染 tabs
 };
 
-const login = () => {
-  if (activeTab.value === "register") {
-    router.push("/talents");
-  } else {
-    router.push("/client/index");
+const login = async () => {
+  try {
+    const parem={
+      mobile:'13580985387',
+      password:'123456'
+    }
+    const res=await mobileLogin(parem)
+    console.log(res)
+    if (activeTab.value === "register") {
+      router.push("/talents");
+    } else {
+      router.push("/client/index");
+    }
+  } catch (error) {
+    console.error('获取用户失败', error)
   }
 };
 </script>
