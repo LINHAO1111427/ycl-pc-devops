@@ -243,6 +243,7 @@ function onClickChecked(index){
 
 
 	.terms-type {
+    width: 50%;
 	  display: flex;
 	  gap: 20px;
 	  :deep(.n-checkbox){
@@ -252,7 +253,7 @@ function onClickChecked(index){
 	    border-radius: 100%;
 	  }
 	}
-	
+
 	.terms-type-item {
 	  padding: 15px;
 	  box-sizing: border-box;
@@ -262,18 +263,18 @@ function onClickChecked(index){
 	  width: 100%;
 	  cursor: pointer;
 	  user-select: none;
-	
+
 	  &.active {
 	    border: 1px solid #58968B;
 	    color: #58968B;
 	    // background: #BFE1DB;
 	  }
-	
+
 	  .terms-item-title {
 	    font-weight: bold;
 	    font-size: 18px;
 	  }
-	
+
 	  .terms-item-desc {
 	    font-weight: 500;
 	    font-size: 12px;

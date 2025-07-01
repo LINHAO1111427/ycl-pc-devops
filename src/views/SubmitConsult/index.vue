@@ -31,7 +31,7 @@ const charMessageShow = ref(false)
           </n-flex>
           <n-flex vertical>
 			  <Text :size="16">关于客户</Text>
-			  <Text :size="12" color="#808080">于2024-07-30加入原创力</Text>
+			  <Text :size="12" color="#808080">于2024-07-30加入单刻达</Text>
 			  <n-flex style="gap: 8px 5px;margin-top: 10px;">
 				  <RenderIcon :size="15" fill="#808080" :icon="IconWeiyanzheng" />
 				  <Text :size="12" color="#808080">付款方式未验证</Text>
@@ -88,11 +88,11 @@ const charMessageShow = ref(false)
 }
 @media (max-width: 1400px) {
 	.submit-proposals {
-		
+
 		.container {
 			padding: 20px;
 		}
-		
+
 	}
 }
 </style>

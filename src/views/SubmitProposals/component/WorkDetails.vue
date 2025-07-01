@@ -152,7 +152,7 @@ const showModal = ref(false);
 <!--        服务费折扣20%降到15%;专属客服，以及其他竞争者的出价区间-->
 <!--        <RouterLink to="/member">-->
 <!--          <n-button type="primary" text>-->
-<!--            开通原创力会员-->
+<!--            开通单刻达会员-->
 <!--          </n-button>-->
 <!--        </RouterLink>-->
 <!--      </div>-->
@@ -234,7 +234,7 @@ const showModal = ref(false);
       </template>
       <!--      <div class="secondary-color-text-1 server-desc">-->
       <!--        扣除平台服务费20%;专属客服，-->
-      <!--        <RouterLink to="/member" class="router-link" style="font-size: 14px;">开通原创力会员</RouterLink>-->
+      <!--        <RouterLink to="/member" class="router-link" style="font-size: 14px;">开通单刻达会员</RouterLink>-->
       <!--        尊享服务费折扣15%-->
       <!--      </div>-->
 
@@ -323,10 +323,7 @@ const showModal = ref(false);
           </n-flex>
         </n-flex>
         <div class="project-tip">
-          包括原创力固定价格保护。
-          <RouterLink to="#" class="router-link">
-            了解更多信息
-          </RouterLink>
+          包括单刻达固定价格保护。
         </div>
       </div>
     </div>
@@ -358,7 +355,7 @@ const showModal = ref(false);
           拖动 或 点击 上传项目文件
         </div>
         <div class="annex-value">
-          您最多可以附加10个大小为25 MB的文件。包括工作样本或其他文件来支持你的申请。不需要上传你的简历--你的原创力个人资料会随着你的提案自动转发给客户。
+          您最多可以附加10个大小为25 MB的文件。包括工作样本或其他文件来支持你的申请。不需要上传你的简历--你的单刻达个人资料会随着你的提案自动转发给客户。
         </div>
       </div>
     </div>
@@ -367,7 +364,7 @@ const showModal = ref(false);
       <div class="secondary-color-text-1" style="font-size: 14px;margin-bottom: 20px">
         突出显示您个人资料中最相关的项目，以展示您的经验和技能。您可以添加多达六个亮点总数。点击回车添加标签
       </div>
-      <n-form-item label="添加原创力工作" size="large">
+      <n-form-item label="添加单刻达工作" size="large">
         <n-input
             v-model:value="userInput.higInput"
             placeholder="请输入标签"
@@ -590,6 +587,7 @@ const showModal = ref(false);
   }
 
   .terms-type {
+    width: 50%;
     display: flex;
     gap: 20px;
   }

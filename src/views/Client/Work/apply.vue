@@ -18,7 +18,7 @@ watchEffect(() => {
   <HeaderClientTop :is-login="false" :is-client="true" :is-work="false" />
     <div class="talents">
         <div class="application">
-            <WorkApply />
+            <WorkApply :status="2"/>
         </div>
         <Footer></Footer>
     </div>

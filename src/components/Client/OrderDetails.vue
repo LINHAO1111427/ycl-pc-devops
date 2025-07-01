@@ -28,7 +28,7 @@
 							window.open(routeData.href, '_blank')
 						},
 					},
-					{ default: () => '原创力平台订单取消协议' }),
+					{ default: () => '单刻达平台订单取消协议' }),
 			]),
 			positiveText: '是',
 			negativeText: '否',

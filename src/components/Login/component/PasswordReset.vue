@@ -19,7 +19,7 @@ function reset(){
       <div class="password_header-back" @click="onClickBack">
         <img src="../../../assets/img/back-image.png" alt="" /> 返回
       </div>
-      <div class="password_header-logo">原创力</div>
+      <div class="password_header-logo">单刻达</div>
     </n-flex>
     <div class="container-box-data">
       <div class="password_body_header">

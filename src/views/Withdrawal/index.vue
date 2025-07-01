@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import Layout from '@/components/Layout/Layout.vue'
-import { Text } from '@/components'
+import {Text} from '@/components'
 import HeaderTop from '@/components/Header/HeaderTop.vue'
-import { h } from 'vue'
-import { createDiscreteApi } from 'naive-ui'
+import {h, ref} from 'vue'
+import {createDiscreteApi} from 'naive-ui'
 
 const options = [
   {
@@ -25,25 +25,34 @@ function renderLabel(options) {
     },
   }, options.label)
 }
+
 const money = ref(null)
-function onClickAll(){
-	money.value = 1200
+
+function onClickAll() {
+  money.value = 1200
 }
-const { dialog } = createDiscreteApi(['dialog'])
-function onClickSubmit(){
-	dialog.warning({
-		actionClass: 'naiveui-dialog-action',
-		showIcon: false,
-		closable: false,
-		title: '提现受理成功',
-		content:'稍后可到提现银行APP查询到账金额',
-		positiveText: '确认',
-		maskClosable: false,
-		positiveButtonProps: {
-			color: '#58968B'
-		},
-	})
+
+const {dialog} = createDiscreteApi(['dialog'])
+
+function onClickSubmit() {
+  dialog.warning({
+    actionClass: 'naiveui-dialog-action',
+    showIcon: false,
+    closable: false,
+    title: '提现受理成功',
+    content: '稍后可到提现银行APP查询到账金额',
+    positiveText: '确认',
+    maskClosable: false,
+    positiveButtonProps: {
+      color: '#58968B'
+    },
+  })
 }
+const withdrawType=ref(null)
+const withdrawOptions = [
+  { label: '余额提现', value: 'balance' },
+  { label: '奖励提现', value: 'reward' }
+]
 </script>
 
 <template>
@@ -52,6 +61,11 @@ function onClickSubmit(){
     <div class="withdrawal-body">
       <Text :size="36">提现金额</Text>
       <n-flex vertical :size="16">
+        <n-select style="width: 130px;"
+                  v-model:value="withdrawType"
+                  :options="withdrawOptions"
+                  placeholder="请选择提现类型"
+        />
         <div class="withdrawal-input-container">
           <n-input v-model:value="money" placeholder="请输入提现金额">
             <template #prefix>
@@ -62,17 +76,20 @@ function onClickSubmit(){
         </div>
         <Text :size="16" class="secondary-color-text-1">
           当前可提现1200元
-          <n-button type="primary" text class="router-link" style="font-size:16px" @click="onClickAll">全部提现</n-button>
+          <n-button type="primary" text class="router-link" style="font-size:16px" @click="onClickAll">全部提现
+          </n-button>
         </Text>
-
+        <Text :size="12" class="secondary-color-text-1">
+          每日体现金额不能大于7万（元）
+        </Text>
         <n-flex class="withdrawal-footer-recommend" align="center" justify="space-between">
           <Text :size="20">提现至</Text>
           <n-flex align="flex-end" justify="flex-end" vertical style="min-width:300px">
             <n-select
-              :options="options"
-              size="large"
-              placeholder="请选择提现方式"
-              :render-label="renderLabel"
+                :options="options"
+                size="large"
+                placeholder="请选择提现方式"
+                :render-label="renderLabel"
             />
             <Text class="secondary-color-text-1" style="margin-right: 10px">预计两小时内到账</Text>
           </n-flex>
@@ -90,11 +107,11 @@ function onClickSubmit(){
   padding-top: 40px;
 
   .withdrawal-input-container {
-    height: 152px;
+    //height: 152px;
     background: #FFFFFF;
     border-radius: 12px 12px 12px 12px;
-    margin-top: 20px;
-    padding: 50px 25px;
+    //margin-top: 20px;
+    //padding: 50px 25px;
   }
 
   ::v-deep(.n-input-wrapper) {
@@ -123,7 +140,7 @@ function onClickSubmit(){
 
 .withdrawal-footer-recommend {
   width: 1326px;
-  max-width:100%;
+  max-width: 100%;
   height: 101px;
   background: #FFFFFF;
   border-radius: 12px 12px 12px 12px;

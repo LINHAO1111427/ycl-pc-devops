@@ -89,7 +89,7 @@
 						顺祝商祺
 					</Text>
 					<Text :size="20" color="#666666">
-						原创力团队
+						单刻达团队
 					</Text>
 				</n-flex>
 			</div>

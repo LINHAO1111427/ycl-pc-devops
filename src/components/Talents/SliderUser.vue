@@ -1,6 +1,43 @@
 <script setup lang="ts">
 import {ChevronForwardOutline} from '@vicons/ionicons5'
 import avatarUrl from '../../assets/img/avatar.png'
+import { ref,watch } from 'vue'
+
+const emit = defineEmits(["openCharMessageShow"]);
+
+const openCharMessageShow = () => {
+  emit("openCharMessageShow", "这是子组件的数据");
+};
+const skillList = ref([])
+
+const props = defineProps({
+  userData: {
+    type: Object,
+    default: {
+      userId: "20297", //用户id
+      avatar: "", //头像
+      name: "", //真实名字
+      expectedPosition: "", //职位
+      skill: "", //技能和专业知识 格式：翻译,编程,法务,
+      orderCount: 1, //历史接单总数
+      totalIncome: 1, //总收入
+      score: 1, //评分
+      dataCompletionRate: 1, //完善你的个人资料
+      isMatch: 1, //是否开启极速匹配（0是1否）
+      isConsulting: 1, //是否开启商业咨询（0是1否）
+      isMember: 1 //是否为会员（0是1否）
+    },
+  }
+})
+watch(
+    () => props.userData?.skill,
+    (newVal) => {
+      if (newVal) {
+        skillList.value = newVal.split(',').map(item => item.trim())
+      }
+    },
+    { immediate: true }
+)
 </script>
 
 <template>
@@ -8,38 +45,38 @@ import avatarUrl from '../../assets/img/avatar.png'
     <div class="slider-user-item">
       <n-flex align="center" :size="20">
         <n-avatar
-            :src="avatarUrl"
+            :src="props.userData.avatar"
             :size="64"
             round/>
         <n-flex vertical :size="10">
-          <div class="user-name">Jason Z</div>
+          <div class="user-name">{{ props.userData.name }}</div>
           <div class="user-desc">
-            设计师
+            {{ props.userData.expectedPosition }}
           </div>
         </n-flex>
       </n-flex>
       <div class="user-jie-sao">
-        <div>sketch</div>
-        <div>ui/小程序</div>
-        <div>可视化</div>
+        <div v-for="item in skillList" :key="item">
+          {{ item }}
+        </div>
       </div>
       <n-flex class="slider-user-date" justify="space-between">
         <n-flex vertical align="center">
-          <div class="slider-user-item-nums">124</div>
+          <div class="slider-user-item-nums">{{ props.userData.orderCount }}</div>
           <div class="slider-user-item-text">历史接单(单)</div>
         </n-flex>
         <n-flex vertical align="center">
-          <div class="slider-user-item-nums">124000</div>
+          <div class="slider-user-item-nums">{{ props.userData.totalIncome }}</div>
           <div class="slider-user-item-text">总收入(￥)</div>
         </n-flex>
         <n-flex vertical align="center">
-          <div class="slider-user-item-nums">4.9</div>
+          <div class="slider-user-item-nums">{{ props.userData.score }}</div>
           <div class="slider-user-item-text">评分(5.0)</div>
         </n-flex>
       </n-flex>
       <n-flex style="margin-top: 25px;">
         <div class="s-t1">完善你的个人资料</div>
-        <n-progress type="line" color="#3BC8B4" :percentage="40"/>
+        <n-progress type="line" color="#3BC8B4" :percentage="props.userData.dataCompletionRate"/>
       </n-flex>
     </div>
     <div class="slider-user-item padding-0">
@@ -63,7 +100,7 @@ import avatarUrl from '../../assets/img/avatar.png'
 
     <n-flex class="slider-user-item padding-0" vertical>
       <!--  <RouterLink to="/" class="slider-item-link">
-           原创力学院
+           单刻达学院
          </RouterLink>
          <RouterLink to="/" class="slider-item-link">
            获得报酬
@@ -71,7 +108,7 @@ import avatarUrl from '../../assets/img/avatar.png'
          <RouterLink to="/" class="slider-item-link">
            社区与论坛
          </RouterLink> -->
-      <span  class="slider-item-link">
+      <span class="slider-item-link" @click="openCharMessageShow">
         帮助中心
       </span>
     </n-flex>

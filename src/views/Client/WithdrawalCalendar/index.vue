@@ -43,7 +43,7 @@
 				</div>
 				<div>
 					<Text :size="20" color="#808080">
-						每笔提现稅率6%
+						每笔提现稅率1%
 					</Text>
 				</div>
 			</div>
@@ -75,18 +75,18 @@
 					</n-radio>
 				</n-flex>
 			</div>
-			<div style="margin-top:40px;">
-				<div>
-					<Text :size="24" color="#333333">
-						下次提款(根据您的时间表）
-					</Text>
-				</div>
-				<div>
-					<Text :size="20" color="#808080">
-						2024-07-18（周二）
-					</Text>
-				</div>
-			</div>
+<!--			<div style="margin-top:40px;">-->
+<!--				<div>-->
+<!--					<Text :size="24" color="#333333">-->
+<!--						下次提款(根据您的时间表）-->
+<!--					</Text>-->
+<!--				</div>-->
+<!--				<div>-->
+<!--					<Text :size="20" color="#808080">-->
+<!--						2024-07-18（周二）-->
+<!--					</Text>-->
+<!--				</div>-->
+<!--			</div>-->
 			<n-flex justify="end" size="large" style="margin-top: 128px;">
 				<n-button type="tertiary" size="large" class="naiveui-button-16" style="width: 178px">取消</n-button>
 				<n-button type="primary" size="large" class="naiveui-button-16" style="width: 178px">保存</n-button>

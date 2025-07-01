@@ -78,7 +78,7 @@
 					<n-flex vertical align="center" class="cursor-pointer-style">
 						<img src="../../assets/img/nav3.jpg"
 							class="talents-image" alt="" />
-						<span class="talents-text">AIAI与机器学习</span>
+						<span class="talents-text">法律服务</span>
 					</n-flex>
 				</n-flex>
 			</template>
@@ -164,5 +164,5 @@
 			padding-left:20px;
 			padding-right:20px;
 		}
-	}	
+	}
 </style>

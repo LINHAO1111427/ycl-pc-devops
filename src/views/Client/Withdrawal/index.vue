@@ -2,7 +2,7 @@
 import Layout from '@/components/Layout/Layout.vue'
 import { Text } from '@/components'
 import HeaderTop from '@/components/Header/HeaderClientTop.vue'
-import { h } from 'vue'
+import {h, ref} from 'vue'
 import { createDiscreteApi } from 'naive-ui'
 
 const options = [
@@ -44,6 +44,11 @@ function onClickSubmit(){
 		},
 	})
 }
+const withdrawType=ref(null)
+const withdrawOptions = [
+  { label: '余额提现', value: 'balance' },
+  { label: '奖励提现', value: 'reward' }
+]
 </script>
 
 <template>
@@ -52,6 +57,11 @@ function onClickSubmit(){
     <div class="withdrawal-body">
       <Text :size="36">提现金额</Text>
       <n-flex vertical :size="16">
+        <n-select style="width: 130px;"
+                  v-model:value="withdrawType"
+                  :options="withdrawOptions"
+                  placeholder="请选择提现类型"
+        />
         <div class="withdrawal-input-container">
           <n-input v-model:value="money" placeholder="请输入提现金额">
             <template #prefix>
@@ -90,11 +100,11 @@ function onClickSubmit(){
   padding-top: 40px;
 
   .withdrawal-input-container {
-    height: 152px;
+    //height: 152px;
     background: #FFFFFF;
     border-radius: 12px 12px 12px 12px;
-    margin-top: 20px;
-    padding: 50px 25px;
+    //margin-top: 20px;
+    //padding: 50px 25px;
   }
 
   ::v-deep(.n-input-wrapper) {

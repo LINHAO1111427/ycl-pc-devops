@@ -161,12 +161,12 @@ function onClickSubmit(type){
           </n-flex>
         </n-flex>
       </n-flex>
-      <div class="header-select">
-        <div class="header-select-title">
-          这个项目需要多长时间?
-        </div>
-        <Text size="14" color="#808080">3个月</Text>
-      </div>
+<!--      <div class="header-select">-->
+<!--        <div class="header-select-title">-->
+<!--          这个项目需要多长时间?-->
+<!--        </div>-->
+<!--        <Text size="14" color="#808080">3个月</Text>-->
+<!--      </div>-->
     </div>
     <div class="terms">
       <div class="professional-title">合同细节</div>
@@ -174,7 +174,7 @@ function onClickSubmit(type){
         服务费折扣20%降到15%;专属客服，以及其他竞争者的出价区间
         <RouterLink to="/member">
           <n-button type="primary" text>
-            开通原创力会员
+            开通单刻达会员
           </n-button>
         </RouterLink>
       </div>
@@ -190,7 +190,7 @@ function onClickSubmit(type){
 			}"
 			   v-if="type == item.type"
 			>
-			
+
 			  <div :class="{'terms-item-title':true}">
 				{{ item.title }}
 			  </div>
@@ -287,7 +287,7 @@ function onClickSubmit(type){
 	  </template>
       <div class="secondary-color-text-1 server-desc">
         扣除平台服务费20%;专属客服，
-        <RouterLink to="/member" class="router-link" style="font-size: 14px;">开通原创力会员</RouterLink>
+        <RouterLink to="/member" class="router-link" style="font-size: 14px;">开通单刻达会员</RouterLink>
         尊享服务费折扣15%
       </div>
       <div class="project-table">
@@ -330,10 +330,7 @@ function onClickSubmit(type){
         </n-flex>
 
         <div class="project-tip">
-          包括原创力固定价格保护。
-          <RouterLink to="#" class="router-link">
-            了解更多信息
-          </RouterLink>
+          包括单刻达固定价格保护。
         </div>
       </div>
     </div>
@@ -457,6 +454,7 @@ function onClickSubmit(type){
   }
 
   .terms-type {
+    width: 50%;
     display: flex;
     gap: 20px;
   }

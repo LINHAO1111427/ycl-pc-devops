@@ -32,9 +32,11 @@ withDefaults(
   defineProps<{
     isWork: boolean
     isLogin: boolean,
+    isView: boolean,
     headerOptions?: Options
   }>(),
   {
+    isView:false,
     isWork: true,
     isLogin: false,
   },
@@ -202,7 +204,7 @@ const charMessageShow = ref(false)
                 </n-icon>
               </div>
               <div class="nav-container-item" @mouseleave="onMouseout" @mouseenter="onMouseenter('College')">
-                <span :class="key === 'College' && visual ? 'active' : ''">原创力学院</span>
+                <span :class="key === 'College' && visual ? 'active' : ''">单刻达学院</span>
                 <n-icon :class="{
                     'nav-arrow': true,
                     active: key === 'College' && visual,
@@ -210,8 +212,8 @@ const charMessageShow = ref(false)
                   <ChevronDown></ChevronDown>
                 </n-icon>
               </div>
-              <div class="nav-container-item">专业领域</div>
-              <div class="nav-container-item">联系我们</div>
+<!--              <div class="nav-container-item">专业领域</div>-->
+              <div class="nav-container-item">单刻达在线客服中心</div>
             </template>
             <template v-else>
               <HeaderClient :options="headerOptions" />
@@ -220,7 +222,7 @@ const charMessageShow = ref(false)
         </div>
         <n-flex align="center" class="right">
           <n-space>
-            <n-input round v-model:value="keyword" placeholder="请输入.." size="large" style="width: 300px"
+            <n-input v-if="isView" round v-model:value="keyword" placeholder="请输入.." size="large" style="width: 300px"
               @keyup.enter="search">
               <template #prefix>
                 <div class="icon">

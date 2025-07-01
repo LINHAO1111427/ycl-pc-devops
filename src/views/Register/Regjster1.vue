@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="logo">原创力</div>
+    <div v-if="!isMobileByWidth()" class="logo">单刻达</div>
     <div class="page-container">
       <div class="card">
-        <n-icon size="24" class="back-icon" @click="goBack">
+        <n-icon v-if="!isMobileByWidth()" size="24" class="back-icon" @click="goBack">
           <arrow-back/>
         </n-icon>
         <n-tabs v-model:value="activeTab" type="line" justify-content="center">
@@ -11,19 +11,44 @@
             <n-input v-model:value="phone" placeholder="请输入手机号" class="verify-input"/>
             <n-input v-model:value="code" placeholder="请输入验证码" class="verify-input">
               <template #suffix>
-                <n-button text class="verify-button">获取验证码</n-button>
+                <n-button
+                    text
+                    class="verify-button"
+                    @click="sendCodeFunc"
+                    :disabled="phone==='' || countdown > 0">
+                  {{ countdown > 0 ? countdown + '秒后重试' : '获取验证码' }}
+                </n-button>
               </template>
             </n-input>
-            <n-input v-model:value="password" placeholder="请设置密码" type="password" class="verify-input"/>
+
+            <n-input
+                v-model:value="password"
+                :type="showPassword ? 'text' : 'password'"
+                placeholder="请设置密码"
+                class="verify-input"
+            >
+              <template #suffix>
+                <n-icon @click="togglePassword" class="toggle-icon" style="font-size: 20px;cursor: pointer;">
+                  <component :is="showPassword ? EyeOutline : EyeOffOutline"/>
+                </n-icon>
+              </template>
+            </n-input>
             <n-button type="primary" class="submit-btn" @click="register">注册</n-button>
           </n-tab-pane>
           <n-tab-pane name="login" tab="我要招人">
             <n-input v-model:value="phone" placeholder="请输入手机号" class="verify-input"/>
             <n-input v-model:value="code" placeholder="请输入验证码" class="verify-input">
               <template #suffix>
-                <n-button text class="verify-button">获取验证码</n-button>
+                <n-button
+                    text
+                    class="verify-button"
+                    @click="sendCodeFunc"
+                    :disabled="phone==='' || countdown > 0">
+                  {{ countdown > 0 ? countdown + '秒后重试' : '获取验证码' }}
+                </n-button>
               </template>
             </n-input>
+
             <n-input
                 v-model:value="password"
                 :type="showPassword ? 'text' : 'password'"
@@ -39,15 +64,15 @@
             <n-button type="primary" class="submit-btn" @click="register">注册</n-button>
           </n-tab-pane>
         </n-tabs>
-        <n-button text class="wechat-btn">微信登录</n-button>
+<!--        <n-button text class="wechat-btn">微信登录</n-button>-->
         <div class="footer-text">
-          通过手机号、微信、QQ 注册，即表示您同意接受我们的
+          通过手机注册，即表示您同意接受我们的
           <a href="#">《用户服务协议》</a> 和 <a href="#">《隐私政策》</a>
         </div>
       </div>
     </div>
-    <footer>
-      原创力 © 2024 京ICP备18053355号-2 京公网安备 11010420247559号 版权声明 问题反馈 在线沟通
+    <footer v-if="!isMobileByWidth()">
+      单刻达 © 2024 京ICP备18053355号-2 京公网安备 11010420247559号 版权声明 问题反馈 在线沟通
     </footer>
   </div>
 </template>
@@ -57,7 +82,11 @@ import {ref} from "vue";
 import {NButton, NInput, NTabs, NTabPane, NIcon} from "naive-ui";
 import {ArrowBack} from "@vicons/ionicons5";
 import {useRouter} from "vue-router";
-import { addUser } from '@/api/user'
+import {addUser, mobileLogin, sendCode} from '@/api/user'
+import {useMessage} from 'naive-ui'
+
+// 创建 message 实例
+const message = useMessage()
 const activeTab = ref("register");
 const phone = ref("");
 const email = ref("");
@@ -65,44 +94,103 @@ const code = ref("");
 const router = useRouter();
 import {EyeOutline, EyeOffOutline} from "@vicons/ionicons5";
 
+const isMobileByWidth = () => {
+  return window.innerWidth < 768
+}
 const goBack = () => {
   router.back();
 };
 const password = ref("");
 const showPassword = ref(false);
-const isUserAuthentication = ref(true);//是否填写了注册引导
 
 const togglePassword = () => {
   showPassword.value = !showPassword.value;
 };
+const sendCodeFunc = async () => {
+  if (phone.value === '') {
+    message.warning('请输入手机号')
+    return
+  }
+  try {
+    const parem = {
+      mobile: phone.value,
+      scene: 0
+    }
+    const res = await sendCode(parem)
+    if (res.code === 0) {
+      message.success('验证码已发送！')
+    } else {
+      message.error(res.msg)
+    }
+  } catch (error) {
+    message.error('验证发送失败')
+  }
+  // 这里写实际的发送验证码逻辑
+  startCountdown()
+}
 
-const register = async ()=> {
+// 60秒倒计时逻辑
+const countdown = ref(0)
+let timer = null
+
+const startCountdown = () => {
+  countdown.value = 60
+  timer = setInterval(() => {
+    countdown.value--
+    if (countdown.value <= 0) {
+      clearInterval(timer)
+      timer = null
+    }
+  }, 1000)
+}
+const login = async () => {
+  // if (activeTab.value === "register") {
+  try {
+    const parem = {
+      userType:(activeTab.value === "register"?1:0),
+      mobile: phone.value,
+      password: password.value
+    }
+    const res = await mobileLogin(parem)
+    if (res.code === 0) {
+      localStorage.setItem('LoginData', JSON.stringify({userType: res.data.userType, isLogin: true}))
+      localStorage.setItem('token', res.data.accessToken)
+      localStorage.setItem('userId', res.data.userId)
+      message.success('注册成功')
+      router.push(`/userAuthentication/${res.data.userType}`)
+    } else {
+      message.error(res.msg)
+    }
+  } catch (error) {
+    message.error('登录失败')
+  }
+  // } else {
+  //   router.push("/client/index");
+  // }
+};
+
+const register = async () => {
 
   try {
-    const parem={
-      userType:'0',
-      mobile:'13580985387',
-      code:'123456',
-      scene:'1',
-      email:'1021246894@qq.com',
-      password:'123456'
+    const parem = {
+      userType: ((activeTab.value === 'register') ? 1 : 0),
+      mobile: phone.value,
+      code: code.value,
+      scene: 0,
+      email: '',
+      password: password.value
     }
     const res = await addUser(parem)
+    if (res.code === 0) {
+      await login()
+    } else {
+      message.error(res.msg)
+    }
+    console.log(res)
+
     console.log(res)
   } catch (error) {
     console.error('获取用户失败', error)
-  }
-
-  debugger
-  if (isUserAuthentication) {
-    const type = ((activeTab.value === 'register') ? 1 : 2)
-    router.push(`/userAuthentication/${type}`)
-  } else {
-    if (activeTab.value === 'register') {
-      router.push('/talents')
-    } else {
-      router.push('/client/index')
-    }
   }
 }
 </script>
@@ -150,7 +238,7 @@ const register = async ()=> {
   flex-direction: column;
   justify-content: center;
   height: 100vh;
-  margin: 0px 360px;
+  //margin: 0px 360px;
   align-items: center;
 }
 
@@ -236,5 +324,16 @@ footer {
   text-align: center;
   font-size: 12px;
   color: #666;
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 100%;
+    padding: 40px 60px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px white;
+    position: relative;
+  }
 }
 </style>

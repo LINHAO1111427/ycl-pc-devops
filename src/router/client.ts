@@ -122,6 +122,13 @@ export default [
           component: () => import('../views/Client/Member/contact.vue'),
           name: 'client-member-contact',
         },
+          {
+              path: 'tax',
+              component: () => import('../views/UserSet/Tax/index.vue'),
+              name: 'tax',
+          },
+
+
         {
           path: 'member-withdrawal',
           component: () => import('../views/Client/Member/withdrawal.vue'),
@@ -193,4 +200,3 @@ export default [
 	  component: () => import('../views/Client/MemberDetail/index.vue'),
 	},
   ]
-  

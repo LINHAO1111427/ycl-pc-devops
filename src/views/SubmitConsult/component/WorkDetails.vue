@@ -1,34 +1,34 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { RenderIcon, IconCrown, Text, IconLink } from '@/components'
-import { CloseCircleOutline, ReturnDownBackSharp } from '@vicons/ionicons5'
-import { createDiscreteApi } from 'naive-ui'
+import {ref} from 'vue'
+import {RenderIcon, IconCrown, Text, IconLink} from '@/components'
+import {CloseCircleOutline, ReturnDownBackSharp} from '@vicons/ionicons5'
+import {createDiscreteApi} from 'naive-ui'
 
 const props = defineProps({
   status: {
-	type: Boolean,
-	default: 0,
+    type: Boolean,
+    default: 0,
   },
 })
 
-const { dialog } = createDiscreteApi(['dialog'])
+const {dialog} = createDiscreteApi(['dialog'])
 
-function submit(){
-	dialog.success({
-	  actionClass:'naiveui-dialog-action',
-	  showIcon: false,
-	  closable: false,
-	  // title:'提示信息',
-	  content: '您的咨询项目已经提交成功，谢谢',
-	  positiveText: '确定',
-	  maskClosable: false,
-	  positiveButtonProps:{
-		color:'#58968B'  
-	  },
-	  onPositiveClick: () => {
-		  
-	  }
-	})
+function submit() {
+  dialog.success({
+    actionClass: 'naiveui-dialog-action',
+    showIcon: false,
+    closable: false,
+    // title:'提示信息',
+    content: '您的咨询项目已经提交成功，谢谢',
+    positiveText: '确定',
+    maskClosable: false,
+    positiveButtonProps: {
+      color: '#58968B'
+    },
+    onPositiveClick: () => {
+
+    }
+  })
 }
 </script>
 
@@ -40,97 +40,95 @@ function submit(){
         <Text :size="20" color="#808080">王杰与乔安娜的商业咨询</Text>
         <Text :size="18" weight="600">咨询时长</Text>
         <Text :size="16" color="#808080">30分钟</Text>
-		<Text :size="18" weight="600">咨询金额</Text>
-		<Text :size="16" color="#808080">¥150</Text>
+        <Text :size="18" weight="600">咨询金额</Text>
+        <Text :size="16" color="#808080">¥150</Text>
       </n-flex>
     </div>
-	<div class="project-described">
-		<n-flex vertical :size="20">
-		  <Text :size="24">附件</Text>
-		  <n-space>
-			<n-upload :show-file-list="false" :disabled="status != 0">
-				<n-input placeholder="" readonly :disabled="status != 0" style="width:300px">
-				  <template #prefix>
-					<RenderIcon fill="#58968B" :icon="IconLink"></RenderIcon>
-				  </template>
-				</n-input>
-			</n-upload>
-			<n-upload :show-file-list="false" :disabled="status != 0">
-				<n-input placeholder="" readonly :disabled="status != 0" style="width:300px">
-				  <template #prefix>
-					<RenderIcon fill="#58968B" :icon="IconLink"></RenderIcon>
-				  </template>
-				</n-input>
-			</n-upload>
-		  </n-space>
-		</n-flex>
-	</div>
+    <div class="project-described">
+      <n-flex vertical :size="20">
+        <Text :size="24">附件</Text>
+        <n-space>
+          <n-upload :show-file-list="false" :disabled="status != 0">
+            <n-input placeholder="" readonly :disabled="status != 0" style="width:300px">
+              <template #prefix>
+                <RenderIcon fill="#58968B" :icon="IconLink"></RenderIcon>
+              </template>
+            </n-input>
+          </n-upload>
+          <n-upload :show-file-list="false" :disabled="status != 0">
+            <n-input placeholder="" readonly :disabled="status != 0" style="width:300px">
+              <template #prefix>
+                <RenderIcon fill="#58968B" :icon="IconLink"></RenderIcon>
+              </template>
+            </n-input>
+          </n-upload>
+        </n-space>
+
+      </n-flex>
+    </div>
     <div class="terms">
-	  <div class="professional-title">留言板</div>
-	  <div class="content-textarea">
-		  <n-input placeholder="请输入" type="textarea" style="height:400px;" :disabled="status != 0" />
-	  </div>
-	  <div class="contract-detail">
-		  <div class="professional-title">合同细节</div>
-		  <!-- <div class="terms-desc secondary-color-text-1">
-			服务费折扣20%降到15%;专属客服，以及其他竞争者的出价区间
-			<RouterLink to="/member">
-			  <n-button type="primary" text>
-				开通会员
-			  </n-button>
-			</RouterLink>
-		  </div> -->
-		  <div class="secondary-color-text-1 ">
-			扣除平台服务费20%;专属客服，
-			<RouterLink to="/member" class="router-link" style="font-size: 14px;">开通原创力会员</RouterLink>
-			尊享服务费折扣15%
-		  </div>
-		  <div class="project-table">
-			<n-flex justify="space-between" align="center" class="project-table-item">
-			  <n-flex vertical>
-				<div class="project-item-title">
-				  出价
-				</div>
-				<div class="project-item-desc">
-				  客户将在您的项目简历中看到的总金额
-				</div>
-			  </n-flex>
-			  <div class="project-item-title">
-				￥200
-			  </div>
-			</n-flex>
-			<n-flex justify="space-between" align="center" class="project-table-item">
-			  <n-flex vertical>
-				<div class="project-item-title">
-				  自由职业者服务费
-				</div>
-			  </n-flex>
-			  <div class="project-item-title secondary-color-text-1">
-				￥40
-			  </div>
-			</n-flex>
+      <div class="professional-title">留言板</div>
+      <div class="content-textarea">
+        <n-input placeholder="请输入" type="textarea" style="height:400px;" :disabled="status != 0"/>
+      </div>
+      <div class="contract-detail">
+        <div class="professional-title">合同细节</div>
+        <!-- <div class="terms-desc secondary-color-text-1">
+        服务费折扣20%降到15%;专属客服，以及其他竞争者的出价区间
+        <RouterLink to="/member">
+          <n-button type="primary" text>
+          开通会员
+          </n-button>
+        </RouterLink>
+        </div> -->
+        <div class="secondary-color-text-1 ">
+          扣除平台服务费20%;专属客服，
+          <RouterLink to="/member" class="router-link" style="font-size: 14px;">开通单刻达会员</RouterLink>
+          尊享服务费折扣15%
+        </div>
+        <div class="project-table">
+          <n-flex justify="space-between" align="center" class="project-table-item">
+            <n-flex vertical>
+              <div class="project-item-title">
+                出价
+              </div>
+              <div class="project-item-desc">
+                客户将在您的项目简历中看到的总金额
+              </div>
+            </n-flex>
+            <div class="project-item-title">
+              ￥200
+            </div>
+          </n-flex>
+          <n-flex justify="space-between" align="center" class="project-table-item">
+            <n-flex vertical>
+              <div class="project-item-title">
+                自由职业者服务费
+              </div>
+            </n-flex>
+            <div class="project-item-title secondary-color-text-1">
+              ￥40
+            </div>
+          </n-flex>
 
-			<n-flex justify="space-between" align="center" class="project-table-item">
-			  <n-flex vertical>
-				<div class="project-item-title">
-				  您将收到
-				</div>
-				<div class="project-item-desc">
-				  您的预估收款(扣除服务费)
-				</div>
-			  </n-flex>
-			  <div class="project-item-title" style="font-weight:400">
-				￥160
-			  </div>
-			</n-flex>
+          <n-flex justify="space-between" align="center" class="project-table-item">
+            <n-flex vertical>
+              <div class="project-item-title">
+                您将收到
+              </div>
+              <div class="project-item-desc">
+                您的预估收款(扣除服务费)
+              </div>
+            </n-flex>
+            <div class="project-item-title" style="font-weight:400">
+              ￥160
+            </div>
+          </n-flex>
 
-			<div class="project-tip">
-			  包括原创力固定价格保护。
-			  <RouterLink to="/article-detail" target="_blank" class="router-link">
-				了解更多信息
-			  </RouterLink>
-			</div>
-		</div>
+          <div class="project-tip">
+            包括单刻达固定价格保护。
+          </div>
+        </div>
       </div>
     </div>
     <div class="tow-footer" v-if="status == 0">
@@ -148,7 +146,7 @@ function submit(){
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding-bottom:140px;
+  padding-bottom: 140px;
 
   .project-described {
     padding: 40px;
@@ -217,7 +215,7 @@ function submit(){
     border: 1px solid #EDEDED;
     border-radius: 16px 16px 16px 16px;
     box-sizing: border-box;
-	padding: 20px 40px;
+    padding: 20px 40px;
   }
 
   .professional-title {
@@ -231,9 +229,9 @@ function submit(){
       font-weight: 400;
     }
   }
-  
-  .content-textarea{
-	  margin-bottom: 20px;
+
+  .content-textarea {
+    margin-bottom: 20px;
   }
 
   .terms-desc {
@@ -247,6 +245,7 @@ function submit(){
   }
 
   .terms-type {
+    width: 50%;
     display: flex;
     gap: 20px;
   }
@@ -391,11 +390,11 @@ function submit(){
   .tow-tag {
     margin-bottom: 20px;
   }
-  
-  .contract-detail{
-	  padding:40px;
-	  border: 1px solid #EDEDED;
-	  border-radius: 16px 16px 16px 16px;
+
+  .contract-detail {
+    padding: 40px;
+    border: 1px solid #EDEDED;
+    border-radius: 16px 16px 16px 16px;
   }
 }
 </style>

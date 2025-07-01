@@ -33,7 +33,7 @@
 							window.open(routeData.href, '_blank')
 						},
 					},
-					{ default: () => '原创力平台订单取消协议' }),
+					{ default: () => '单刻达平台订单取消协议' }),
 			]),
 			positiveText: '是',
 			negativeText: '否',
@@ -207,7 +207,7 @@
 				            <span>2024-07-10</span>
 				        </n-space>
 				    </n-flex>
-				
+
 				    <div class="application-desc-text">
 				        我们正在寻找一位技术娴熟，一丝不苟的基于Web和Word的中文演示文榜编辑加入我们充满活力的日队。理想的候选人将具备强大的中文能力和出色的辑技能，在创建、和优化网络内容和基于单词的演示文稿方面拥有丰富的经验，这个角色需要的不仅仅是语言能力:候选人必须对中国文化有深入的了解，以确保内容不仅在语言上准确，而且在文化上具有相关性和吸引力。将文化畑微差别无缝整合到内容中的能力至关重要，因为这将与我们的目标受众产生共鸣并保持真实性。
 				        <br />
@@ -266,7 +266,7 @@
             font-size: 34px;
             color: #333333;
         }
-		
+
 		.hide_input{
 			position: relative;
 			::v-deep(.n-date-picker){

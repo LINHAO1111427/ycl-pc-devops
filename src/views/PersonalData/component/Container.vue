@@ -50,8 +50,8 @@ const handleUpload = (options) => {
 <template>
   <div class="personal-data-container-body">
     <div class="personal-profile">
-      <n-tabs type="line" animated>
-        <n-tab-pane name="oasis" tab="在线简历1">
+<!--      <n-tabs type="line" animated>-->
+<!--        <n-tab-pane name="oasis" tab="在线简历1">-->
           <n-flex align="center" style="height: 30px">
             <Text :size="22" weight="600">自我简介</Text>
             <n-icon :size="22" class="cursor-pointer-style main-color-size" v-if="edi"
@@ -63,34 +63,34 @@ const handleUpload = (options) => {
             CET4/6 TEM4/8 我在我的大学通过了，TEM8是我国的最高级别，代表英语学习者可以像母语人士一样与外国人交流，在我的国家，我做过翻译，为外国客户翻译论文和其他东西，我有很强的学习新事物的能力，如果你雇用我，
             我绝对不会让你失望的！
           </Text>
-        </n-tab-pane>
-        <n-tab-pane name="the beatles" tab="在线简历2">
-          <n-flex align="center" style="height: 30px">
-            <Text :size="22" weight="600">自我简介</Text>
-            <n-icon :size="22" class="cursor-pointer-style main-color-size" v-if="edi"
-                    @click="showEditIntroduction = true">
-              <CreateOutline></CreateOutline>
-            </n-icon>
-          </n-flex>
-          <Text :size="14" class="secondary-color-text-1">
-            CET4/6 TEM4/8 我在我的大学通过了，TEM8是我国的最高级别，代表英语学习者可以像母语人士一样与外国人交流，在我的国家，我做过翻译，为外国客户翻译论文和其他东西，我有很强的学习新事物的能力，如果你雇用我，
-            我绝对不会让你失望的！
-          </Text>
-        </n-tab-pane>
-        <n-tab-pane name="jay chou" tab="在线简历3">
-          <n-flex align="center" style="height: 30px">
-            <Text :size="22" weight="600">自我简介</Text>
-            <n-icon :size="22" class="cursor-pointer-style main-color-size" v-if="edi"
-                    @click="showEditIntroduction = true">
-              <CreateOutline></CreateOutline>
-            </n-icon>
-          </n-flex>
-          <Text :size="14" class="secondary-color-text-1">
-            CET4/6 TEM4/8 我在我的大学通过了，TEM8是我国的最高级别，代表英语学习者可以像母语人士一样与外国人交流，在我的国家，我做过翻译，为外国客户翻译论文和其他东西，我有很强的学习新事物的能力，如果你雇用我，
-            我绝对不会让你失望的！
-          </Text>
-        </n-tab-pane>
-      </n-tabs>
+<!--        </n-tab-pane>-->
+<!--        <n-tab-pane name="the beatles" tab="在线简历2">-->
+<!--          <n-flex align="center" style="height: 30px">-->
+<!--            <Text :size="22" weight="600">自我简介</Text>-->
+<!--            <n-icon :size="22" class="cursor-pointer-style main-color-size" v-if="edi"-->
+<!--                    @click="showEditIntroduction = true">-->
+<!--              <CreateOutline></CreateOutline>-->
+<!--            </n-icon>-->
+<!--          </n-flex>-->
+<!--          <Text :size="14" class="secondary-color-text-1">-->
+<!--            CET4/6 TEM4/8 我在我的大学通过了，TEM8是我国的最高级别，代表英语学习者可以像母语人士一样与外国人交流，在我的国家，我做过翻译，为外国客户翻译论文和其他东西，我有很强的学习新事物的能力，如果你雇用我，-->
+<!--            我绝对不会让你失望的！-->
+<!--          </Text>-->
+<!--        </n-tab-pane>-->
+<!--        <n-tab-pane name="jay chou" tab="在线简历3">-->
+<!--          <n-flex align="center" style="height: 30px">-->
+<!--            <Text :size="22" weight="600">自我简介</Text>-->
+<!--            <n-icon :size="22" class="cursor-pointer-style main-color-size" v-if="edi"-->
+<!--                    @click="showEditIntroduction = true">-->
+<!--              <CreateOutline></CreateOutline>-->
+<!--            </n-icon>-->
+<!--          </n-flex>-->
+<!--          <Text :size="14" class="secondary-color-text-1">-->
+<!--            CET4/6 TEM4/8 我在我的大学通过了，TEM8是我国的最高级别，代表英语学习者可以像母语人士一样与外国人交流，在我的国家，我做过翻译，为外国客户翻译论文和其他东西，我有很强的学习新事物的能力，如果你雇用我，-->
+<!--            我绝对不会让你失望的！-->
+<!--          </Text>-->
+<!--        </n-tab-pane>-->
+<!--      </n-tabs>-->
     </div>
 <!--    <div class="personal-work-experience">-->
 <!--      <n-flex align="center" style="height: 30px;margin-bottom: 30px">-->
@@ -220,7 +220,7 @@ const handleUpload = (options) => {
 <!--      <div>-->
 <!--        <Text :size="26" weight="600">商业咨询项目展示</Text>-->
 <!--        <Text :size="14" color="#808080" v-if="edi">-->
-<!--          项目是一种在原创力上赚钱的新方式，可帮助您做更多您喜欢做的工作。创建项目产品，突出您的优势并吸引更多客户-->
+<!--          项目是一种在单刻达上赚钱的新方式，可帮助您做更多您喜欢做的工作。创建项目产品，突出您的优势并吸引更多客户-->
 <!--        </Text>-->
 <!--        <template v-else>-->
 <!--          <n-flex style="margin-top: 20px">-->

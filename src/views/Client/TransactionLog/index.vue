@@ -8,30 +8,30 @@
 			title: '日期',
 			key: 'date',
 		},
-		{
-			title: '类型',
-			key: 'type',
-			className: 'hui'
-		},
+		// {
+		// 	title: '类型',
+		// 	key: 'type',
+		// 	className: 'hui'
+		// },
 		{
 			title: '描述',
 			key: 'description',
 			className: 'hui'
 		},
-		{
-			title: '客户',
-			key: 'customer',
-		},
+		// {
+		// 	title: '客户',
+		// 	key: 'customer',
+		// },
 		{
 			title: '数量',
 			key: 'num',
 			className: 'hui'
 		},
-		{
-			title: 'ID',
-			key: 'id',
-			className: 'lv'
-		},
+		// {
+		// 	title: 'ID',
+		// 	key: 'id',
+		// 	className: 'lv'
+		// },
 	]
 
 	const data = ref([{

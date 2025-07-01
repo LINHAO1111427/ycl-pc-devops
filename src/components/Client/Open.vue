@@ -6,7 +6,7 @@
             </div>
             <h1>欢迎，郑颖！ </h1>
             <h1>让我们开始发布你的第一个工作吧</h1>
-            <div class="open-cn">原创力平台有各种领域的专业人才，随时随地高质量的交付工作成果！</div>
+            <div class="open-cn">单刻达平台有各种领域的专业人才，随时随地高质量的交付工作成果！</div>
             <n-button type="primary" class="open-btn" size="large">
                 开始发布
             </n-button>

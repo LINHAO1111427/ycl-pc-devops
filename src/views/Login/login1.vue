@@ -1,17 +1,17 @@
 <template>
   <div>
-    <div class="logo">原创力</div>
+    <div v-if="!isMobileByWidth()" class="logo">单刻达</div>
     <div class="page-container">
       <div class="card">
-        <n-icon size="24" class="back-icon" @click="goBack(false)">
+        <n-icon v-if="!isMobileByWidth()" size="24" class="back-icon" @click="goBack(false)">
           <arrow-back/>
         </n-icon>
         <!-- 绑定 key，tabType 变化时强制重新渲染 -->
         <n-tabs v-model:value="activeTab" :key="tabKey" type="line" justify-content="center">
           <n-tab-pane name="setPassword" tab="设置密码" v-if="tabType === 4">
-            <n-input v-model:value="phone" placeholder="请输入密码" class="verify-input"/>
-            <n-input v-model:value="password" placeholder="请再次输入密码" type="password" class="verify-input"/>
-            <n-button type="primary" class="submit-btn" @click="login">确认</n-button>
+            <n-input v-model:value="password" placeholder="请输入密码" type="password" class="verify-input"/>
+            <n-input v-model:value="newPassword" placeholder="请再次输入密码" type="password" class="verify-input"/>
+            <n-button type="primary" class="submit-btn" @click="updatePassword">确认</n-button>
             <div class="restPassword" style="margin-bottom: 40px;">
               想起密码了？
               <span class="register-link" @click="goBack(true)">去登录</span>
@@ -52,7 +52,7 @@
               <span class="register-link" @click="goBack(true)">去登录</span>
             </div>
           </n-tab-pane>
-          <n-tab-pane name="register" tab="手机登录" v-if="tabType === 1">
+          <n-tab-pane name="register" tab="自由职业者" v-if="tabType === 1">
             <n-input v-model:value="phone" placeholder="请输入手机号" class="verify-input"/>
             <n-input v-model:value="password" placeholder="请输入密码" type="password" class="verify-input"/>
             <div class="restPassword" @click="nextTabFunc('recoverPassword')">忘记密码？</div>
@@ -62,8 +62,8 @@
               <RouterLink to="/register" class="register-link">去注册</RouterLink>
             </div>
           </n-tab-pane>
-          <n-tab-pane name="login" tab="邮箱登录" v-if="tabType === 1">
-            <n-input v-model:value="email" placeholder="请输入邮箱" class="verify-input"/>
+          <n-tab-pane name="login" tab="企业" v-if="tabType === 1">
+            <n-input v-model:value="phone" placeholder="请输入手机号" class="verify-input"/>
             <n-input v-model:value="password" placeholder="请输入密码" type="password" class="verify-input"/>
             <div class="restPassword" @click="nextTabFunc('recoverPassword')">忘记密码？</div>
             <n-button type="primary" class="submit-btn" @click="login">登录</n-button>
@@ -73,15 +73,15 @@
             </div>
           </n-tab-pane>
         </n-tabs>
-        <n-button text class="wechat-btn" v-if="tabType === 1">微信登录</n-button>
+<!--        <n-button text class="wechat-btn" v-if="tabType === 1">微信登录</n-button>-->
         <div class="footer-text" v-if="tabType === 1">
-          通过手机号、微信、QQ 注册，即表示您同意接受我们的
+          通过手机注册，即表示您同意接受我们的
           <a href="#">《用户服务协议》</a> 和 <a href="#">《隐私政策》</a>
         </div>
       </div>
     </div>
-    <footer>
-      原创力 © 2024 京ICP备18053355号-2 京公网安备 11010420247559号 版权声明 问题反馈 在线沟通
+    <footer v-if="!isMobileByWidth()">
+      单刻达 © 2024 京ICP备18053355号-2 京公网安备 11010420247559号 版权声明 问题反馈 在线沟通
     </footer>
   </div>
 </template>
@@ -98,19 +98,36 @@ const backActiveTab = ref("");
 const phone = ref("");
 const email = ref("");
 const password = ref("");
+const newPassword = ref("");
 const tabType = ref(1);
 const tabKey = ref(0); // 关键点：每次切换 tabType 都更新 tabKey
 import {ref, watch, nextTick} from 'vue'
 
-const codeArray = ref(Array(6).fill('')) // 6位验证码
+const codeArray = ref(Array(4).fill('')) // 6位验证码
 const inputs = ref([]) // 绑定输入框
 const isCodeComplete = ref(false) // 验证码是否填满
-import { mobileLogin} from '@/api/user'
+const userType= ref(1)
+
+watch(activeTab, (newVal, oldVal) => {
+  if(newVal==='register'){
+    userType.value=1
+  }
+  if(newVal==='login'){
+    userType.value=0
+  }
+})
+import {mobileLogin, isMobile, sendCode, validateSmsCode, updatePasswordSms} from '@/api/user'
+import {useMessage} from 'naive-ui'
+// 创建 message 实例
+const message = useMessage()
 // 监听输入框，判断是否填满
+localStorage.clear();
 watch(codeArray, (newVal) => {
-  debugger
   isCodeComplete.value = newVal.every((char) => char !== '')
 })
+const isMobileByWidth = () => {
+  return window.innerWidth < 768
+}
 
 // 输入后自动跳转
 const handleInput = (index) => {
@@ -128,7 +145,7 @@ const handleBackspace = (index) => {
 
 // 支持粘贴验证码
 const handlePaste = (event) => {
-  const pasteData = event.clipboardData.getData('text').slice(0, 6).split('')
+  const pasteData = event.clipboardData.getData('text').slice(0, 4).split('')
   pasteData.forEach((char, index) => {
     if (inputs.value[index]) codeArray.value[index] = char
   })
@@ -145,11 +162,11 @@ const resendCode = () => {
 }
 const goBack = (type) => {
   if (tabType.value !== 1) {
-    if (tabType.value === 2||type) {
+    if (tabType.value === 2 || type) {
       activeTab.value = backActiveTab.value
-      tabType.value=1
+      tabType.value = 1
     } else {
-      activeTab.value = ["recoverPassword", "sendCode","setPassword"][tabType.value  - 3]
+      activeTab.value = ["recoverPassword", "sendCode", "setPassword"][tabType.value - 3]
       tabType.value--
     }
     tabKey.value++
@@ -159,31 +176,101 @@ const goBack = (type) => {
 };
 
 // 切换 tabType 并更新 key，强制 tabs 重新渲染
-const nextTabFunc= (tabName) => {
-  if(tabType.value===1){
+const nextTabFunc = async (tabName) => {
+  if (tabType.value === 1) {
     backActiveTab.value = activeTab.value
+  }
+  if (tabName === 'sendCode') {
+    try {
+      const res = await isMobile({mobile: phone.value})
+      if (res.code !== 0) {
+        message.error(res.msg)
+        return
+      }
+      const res1 = await sendCode({
+        mobile: phone.value,
+        scene: 0
+      })
+      if (res1.code === 0) {
+        message.success('验证码已发送！')
+      } else {
+        message.error(res1.msg)
+        // return
+      }
+    } catch (error) {
+      message.error('系统异常')
+      return
+    }
+  }
+  if (tabName === 'setPassword') {
+    try {
+      const res = await validateSmsCode({
+        mobile: phone.value,
+        scene: 2,
+        code: codeArray.value.join('')
+      })
+      if (res.code !== 0) {
+        message.error(res1.msg)
+        return
+      }
+    } catch (error) {
+      message.error('系统异常')
+      return
+    }
   }
   tabType.value++;
   activeTab.value = tabName; // 关键点：确保 activeTab 与 tabType 一致
   tabKey.value++; // 强制重新渲染 tabs
 };
-
-const login = async () => {
+const updatePassword = async () => {
   try {
-    const parem={
-      mobile:'13580985387',
-      password:'123456'
+    const parem = {
+      newPassword: newPassword.value,
+      mobile: phone.value,
+      password: password.value
     }
-    const res=await mobileLogin(parem)
-    console.log(res)
-    if (activeTab.value === "register") {
-      router.push("/talents");
+    const res = await updatePasswordSms(parem)
+    if (res.code === 0) {
+      await login()
+      // router.push("/talents");
     } else {
-      router.push("/client/index");
+      message.error(res.msg)
     }
   } catch (error) {
-    console.error('获取用户失败', error)
+    message.error('系统异常')
   }
+}
+const login = async () => {
+  // if (activeTab.value === "register") {
+  try {
+    const parem = {
+      userType:userType.value,
+      mobile: phone.value,
+      password: password.value
+    }
+    const res = await mobileLogin(parem)
+    if (res.code === 0) {
+      localStorage.setItem('LoginData', JSON.stringify({userType: res.data.userType, isLogin: true}))
+      localStorage.setItem('token', res.data.accessToken)
+      localStorage.setItem('userId', res.data.userId)
+      if(res.data.isGuideStatus===1){
+        router.push(`/userAuthentication/${res.data.userType}`)
+        return
+      }
+      if (res.data.userType === 1) {
+        router.push("/talents");
+      } else {
+        router.push("/client/index");
+      }
+    } else {
+      message.error(res.msg)
+    }
+  } catch (error) {
+    message.error('登录失败')
+  }
+  // } else {
+  //   router.push("/client/index");
+  // }
 };
 </script>
 
@@ -205,7 +292,7 @@ const login = async () => {
   display: flex;
   gap: 10px;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-evenly;
 }
 
 .verify-input1 {
@@ -283,7 +370,7 @@ const login = async () => {
   flex-direction: column;
   justify-content: center;
   height: 100vh;
-  margin: 0 360px;
+  //margin: 0 360px;
   align-items: center;
 }
 
@@ -346,5 +433,16 @@ footer {
   text-align: center;
   font-size: 12px;
   color: #666;
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 100%;
+    padding: 40px 60px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px white;
+    position: relative;
+  }
 }
 </style>

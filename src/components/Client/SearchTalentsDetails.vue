@@ -14,7 +14,9 @@ const tagOptions = ['文件翻译', '译本', '普通话', '方言', '英译中�
 
 
 const emit = defineEmits(['click'])
-
+function onClickUrl(){
+  emit("click", "1");
+}
 const isActive = ref(false)
 
 const isActive2 = ref(false)

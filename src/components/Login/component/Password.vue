@@ -36,7 +36,7 @@ function onClickBack() {
 	  <div class="password_header-back" @click="onClickBack">
 	    <img src="../../../assets/img/back-image.png" alt="" /> 返回
 	  </div>
-	  <div class="password_header-logo">原创力</div>
+	  <div class="password_header-logo">单刻达</div>
 	</n-flex>
     <div class="container-box-data">
       <div class="password_body_header">
@@ -54,7 +54,7 @@ function onClickBack() {
         </n-form>
 		<n-flex vertical :size="33">
 		  <n-checkbox>
-		    <span class="secondary-color-text-1">我理解并同意原创力</span>
+		    <span class="secondary-color-text-1">我理解并同意单刻达</span>
 		    <n-button text type="primary" class="router-link">
 		      <span>服务条款</span>
 		    </n-button>

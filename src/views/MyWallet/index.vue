@@ -1,7 +1,24 @@
 <script setup lang="ts">
 import HeaderTop from '@/components/Header/HeaderTop.vue'
-import { IconCashLine, RenderIcon, Footer } from '@/components'
-import { SettingsOutline } from '@vicons/ionicons5'
+import {IconCashLine, RenderIcon, Footer} from '@/components'
+import {SettingsOutline} from '@vicons/ionicons5'
+
+const showModal = ref(false)
+const creditScore = ref(50)
+
+const formData = ref({
+  depositAmount: '',
+  withdrawAmount: ''
+})
+const submitDeposit = () => {
+  console.log('缴纳保证金额：', formData.value.depositAmount)
+  // 可以在这里添加实际的提交逻辑
+}
+
+const submitWithdraw = () => {
+  console.log('体现保证金额：', formData.value.withdrawAmount)
+  // 可以在这里添加实际的提交逻辑
+}
 </script>
 
 <template>
@@ -14,17 +31,27 @@ import { SettingsOutline } from '@vicons/ionicons5'
       <n-flex class="wallet-amount" justify="space-between">
         <div class="wallet-amount-slider">
           <div class="wallet-amount-slider-title">
-            ¥120420.00
+            预期总收入 ¥1000
           </div>
           <div class="wallet-amount-slider-desc">
-            可用余额
+            可提现余额 ¥100
+          </div>
+          <div class="wallet-amount-slider-desc">
+            奖励金额 ¥100
+          </div>
+          <div class="wallet-amount-slider-desc">
+            保证金额 ¥0
           </div>
         </div>
-        <div class="wallet-slider-button">
+        <div class="wallet-slider-button" style="display: flex;flex-direction: column;justify-content: space-around;">
           <n-button size="large" style="width: 178px;" type="primary" @click="$router.push('/withdrawals')">
-			  <span class="naiveui-text-16">提现</span>
-		  </n-button>
+            <span class="naiveui-text-16">提现</span>
+          </n-button>
+          <n-button size="large" style="width: 178px;" type="primary" @click="showModal = true">
+            <span class="naiveui-text-16">保证金额</span>
+          </n-button>
         </div>
+
       </n-flex>
 
       <n-flex class="waller-list-container" :size="24">
@@ -49,11 +76,13 @@ import { SettingsOutline } from '@vicons/ionicons5'
             <div class="details-title">
               直拨至本地银行 （CNY） - 账户末尾地址为 4536
             </div>
-            <n-button color="#EFFEFA" text-color="#28806F" size="large" block strong type="primary">每周（06-07 下一期）</n-button>
+            <n-button color="#EFFEFA" text-color="#28806F" size="large" block strong type="primary">每周（06-07 下一期）
+            </n-button>
           </n-flex>
-          <n-button ghost color="#58968B" size="large" text-color="#58968B" style="height: 48px;" @click="$router.push('/withdrawal-calendar')">
-			  <span class="naiveui-text-16">查看付款日历</span>
-		  </n-button>
+          <n-button ghost color="#58968B" size="large" text-color="#58968B" style="height: 48px;"
+                    @click="$router.push('/withdrawal-calendar')">
+            <span class="naiveui-text-16">查看付款日历</span>
+          </n-button>
         </n-flex>
         <n-flex class="wallet-container-item" :sie="20" vertical justify="space-between">
           <n-flex class="wallet-container-item-header" justify="space-between">
@@ -68,16 +97,35 @@ import { SettingsOutline } from '@vicons/ionicons5'
             <div class="details-title">
               ¥47.01 直接到本地银行 （CNY） - 账户以 4536 结尾
             </div>
-            <n-button  color="#EFFEFA" text-color="#28806F" size="large" block strong type="primary">2024-06-22</n-button>
+            <n-button color="#EFFEFA" text-color="#28806F" size="large" block strong type="primary">2024-06-22
+            </n-button>
           </n-flex>
-          <n-button ghost color="#58968B" size="large" text-color="#58968B" style="height: 48px;" @click="$router.push('/transaction-log')">
-			  <span class="naiveui-text-16">查看交易记录</span>
-		  </n-button>
+          <n-button ghost color="#58968B" size="large" text-color="#58968B" style="height: 48px;"
+                    @click="$router.push('/transaction-log')">
+            <span class="naiveui-text-16">查看交易记录</span>
+          </n-button>
         </n-flex>
       </n-flex>
     </div>
     <Footer></Footer>
   </div>
+  <n-modal v-model:show="showModal" title="用户信用信息" preset="dialog">
+    <n-space vertical size="large" >
+      <div>用户当前信用分：{{ creditScore }}</div>
+
+      <n-form :model="formData" label-placement="top">
+        <n-form-item label="缴纳保证金额">
+          <n-input v-model:value="formData.depositAmount" placeholder="请输入保证金额"  style="flex: 1; margin-right: 8px;" />
+          <n-button type="primary" @click="submitDeposit" style="margin-top: 8px;">确定</n-button>
+        </n-form-item>
+
+        <n-form-item label="体现保证金额">
+          <n-input v-model:value="formData.withdrawAmount" placeholder="请输入体现金额" style="flex: 1; margin-right: 8px;" />
+          <n-button type="primary" @click="submitWithdraw" style="margin-top: 8px;">确定</n-button>
+        </n-form-item>
+      </n-form>
+    </n-space>
+  </n-modal>
 </template>
 
 <style scoped lang="scss">
@@ -89,7 +137,7 @@ import { SettingsOutline } from '@vicons/ionicons5'
   .wallet {
     width: 1326px;
     margin: auto;
-	max-width: 100%;
+    max-width: 100%;
   }
 
   .wallet-header-title {
@@ -101,7 +149,7 @@ import { SettingsOutline } from '@vicons/ionicons5'
 
   .wallet-amount-slider-title {
     font-weight: 600;
-    font-size: 42px;
+    font-size: 24px;
     color: #000000;
   }
 
@@ -150,11 +198,12 @@ import { SettingsOutline } from '@vicons/ionicons5'
     }
   }
 }
+
 @media (max-width: 1400px) {
-	.my-wallet {
-	  .wallet {
-		  padding:0 20px;
-	  }
-	}
+  .my-wallet {
+    .wallet {
+      padding: 0 20px;
+    }
+  }
 }
 </style>

@@ -1,44 +1,59 @@
 <script setup lang="ts">
 import {NButton} from "naive-ui";
-import {ref, onMounted} from "vue";
+import {ref, onMounted, computed} from "vue";
 import {ArchiveOutline as ArchiveIcon, ReturnDownBackSharp} from '@vicons/ionicons5'
 
 const images = import.meta.glob('@/assets/img/*.png', {eager: true});
 import {useRouter, useRoute} from "vue-router";
 import {Text} from "@/components";
-
+import {
+  guideUserInfo,
+  setTitle,
+  setDescribe,
+  setPreferredQualification,
+  setExperienceLevel,
+  setBudget
+} from '@/api/user'
+import {useMessage} from 'naive-ui'
+// 创建 message 实例
+const message = useMessage()
 const router = useRouter();
 const levels = [
   {
-    key: "beginner",
+    key: "1",
     label: "入门级",
     description: "我在这个领域还是新手",
     img: images['/src/assets/img/uac1.png'].default
   },
   {
-    key: "intermediate",
+    key: "2",
     label: "中级",
     description: "我在这个领域有丰富的经验",
     img: images['/src/assets/img/uac2.png'].default
   },
   {
-    key: "expert",
+    key: "3",
     label: "专家",
     description: "我在这个领域有全面和专业知识",
     img: images['/src/assets/img/uac3.png'].default
   }
 ];
+const options = [
+  {label: 'java', value: 'java'},
+  {label: 'vue', value: 'vue'},
+  {label: 'c++', value: 'c++'}
+]
 const levels1 = [
   {
     key: "beginner1",
     label: "赚取主要收入",
-    description: "原创力平台作为主要收入来源，每天都会在平台找项目赚收益",
+    description: "单刻达平台作为主要收入来源，每天都会在平台找项目赚收益",
     img: images['/src/assets/img/uac3.png'].default
   },
   {
     key: "intermediate1",
     label: "作为副业",
-    description: "原创力平台作为副业源，空闲时候回来接单，提高自己的收入水平。",
+    description: "单刻达平台作为副业源，空闲时候回来接单，提高自己的收入水平。",
     img: images['/src/assets/img/uac4.png'].default
   },
   {
@@ -54,30 +69,80 @@ const levels1 = [
     img: images['/src/assets/img/uac5.png'].default
   }
 ];
-const userType =ref( parseInt(useRoute().params.type.toString()))
+const userType = ref(parseInt(useRoute().params.type.toString()))
 console.log('==============')
-console.log(userType)
+console.log(userType.value)
 console.log('==============')
-const tags = ref(['教师', '程序员']);
 const formRef = ref(null);
+const skill1 = ref([])
+const form = ref({
+  userId: localStorage.getItem('userId'),
+  avatar: "",
+  name: "",
+  birthday: new Date(),
+  participateWorkDate: new Date(),
+  sex: 1,
+  mark: "",
+  skill: "java,vue,c++",
+  videoUrl: "",
+  qualificationList: [
+    {
+      schoolName: "",
+      educationSystem: "",
+      degree: "",
+      major: "",
+      graduationDate: new Date(),
+      certificatePhotoUrl: ""
+    }
+  ],
+  card: "",
+  cardUrl: "www.baidu.com",
+  workList: [
+    {
+      workName: "",
+      department: "",
+      industry: "",
+      position: "",
+      employmentPeriod: new Date(),
+      jobDescription: ""
+    }
+  ],
+  target: "",
+  jobList: [
+    {
+      expectedPosition: "",
+      weeklyWorkHours: "",
+      expectedIndustry: "",
+      expectedSalary: "",
+      expectedCity: ""
+    }
+  ],
+  grade: ""
+});
+
+const selectLevel = (label, type, key) => {
+  if (type === 0) {
+    form.value.grade = label
+  }
+  if (type === 1) {
+    form.value.target = label
+  }
+  if (type === 2) {
+    formData.value.experienceLevel = key
+  }
+}
+
 const formData = ref({
-  name: '',
-  dob: null,
-  workTime: '',
-  gender: null,
-  bio: '',
-  companyName: '',
-  department: '',
-  industry: '',
-  position: '',
-  dob1: null,
-  realName: '',
-  iDCard: ''
+  title: '',
+  description: '',
+  preferredQualification: '',
+  experienceLevel: '',
+  totalBudget: '',
 });
 
 const genderOptions = [
-  {label: '男', value: 'male'},
-  {label: '女', value: 'female'}
+  {label: '男', value: 1},
+  {label: '女', value: 2}
 ];
 
 const rules = {
@@ -86,24 +151,63 @@ const rules = {
   workTime: {required: true, message: '请输入参加工作时间', trigger: 'blur'},
   gender: {required: true, message: '请选择性别', trigger: 'change'}
 };
-const nextFlag=ref(true)
+const nextFlag = ref(true)
 const stage = ref(1);
-const nextFunc = () => {
+const projectId = ref(true)
+const nextFunc = async () => {
   stage.value++;
-  if(userType===1){
-    if(stage.value===8){
-      nextFlag.value=false
+  if (userType.value === 1) {
+    if (stage.value === 8) {
+      try {
+        form.value.skill = skill1.value.join(',')
+        const res = await guideUserInfo(form.value)
+        if (res.code === 0) {
+          console.log(stage.value)
+          nextFlag.value = false
+        } else {
+          message.error(res.msg)
+        }
+      } catch (error) {
+        console.error('获取用户失败', error)
+      }
     }
-  }else{
-    if(stage.value===6){
-      nextFlag.value=false
+  } else {
+    if (stage.value === 6) {
+      try {
+        const res = await setTitle({title: formData.value.title})
+        if (res.code === 0) {
+          projectId.value = res.data
+          await setDescribe({
+            id: projectId.value,
+            description: formData.value.description
+          })
+          await setPreferredQualification({
+            id: projectId.value,
+            preferredQualification: formData.value.preferredQualification
+          })
+          await setExperienceLevel({
+            id: projectId.value,
+            experienceLevel: formData.value.experienceLevel
+          })
+          await setBudget({
+            id: projectId.value,
+            totalBudget: formData.value.totalBudget
+          })
+          nextFlag.value = false
+
+        } else {
+          message.error(res.msg)
+        }
+      } catch (error) {
+        console.error('系统异常', error)
+      }
     }
   }
 };
 const backFunc = () => {
   stage.value--
-  if(stage.value===0){
-    stage.value=1
+  if (stage.value === 0) {
+    stage.value = 1
   }
 };
 
@@ -114,14 +218,18 @@ const userInfo = {
 };
 
 const goToOrders = () => {
+
+  localStorage.setItem('LoginData', JSON.stringify({userType: userType.value, isLogin: true}))
   if (userType.value === 1) {
     router.push('/talents')
   } else {
-    router.push('/client/index')
+    localStorage.setItem('userForm', JSON.stringify(formData.value))
+    router.push('/client/addclient')
+    // router.push('/client/index')
   }
+
   console.log("跳转到接单页面");
 };
-
 const goToProfile = () => {
   if (userType.value === 1) {
     router.push('/personal-data')
@@ -139,10 +247,27 @@ const userInput = ref({
   hig: ['英文翻译'],
   higInput: '',
 })
+
 function onClickAdd() {
-  userInput.value.hig.push(userInput.value.higInput)
+  skillArray.value.push(userInput.value.higInput)
+  form.value.skill = skillArray.value.join(', ')
   userInput.value.higInput = ''
 }
+
+// 计算属性：将 skill 字符串变为数组
+const skillArray = computed(() => {
+  return form.value.skill
+      ? form.value.skill.split(',').map(item => item.trim()).filter(item => item !== '')
+      : []
+})
+
+// 删除方法：从数组中删掉对应项，并更新 form.skill
+const removeSkill = (index) => {
+  const arr = [...skillArray.value]
+  arr.splice(index, 1)
+  form.value.skill = arr.join(', ')
+}
+
 </script>
 
 <template>
@@ -157,15 +282,22 @@ function onClickAdd() {
         <span
             style="margin-top: 37px;margin-bottom: 49px;color: #666666;font-size: 16px;">我们需要了解你是否做过自由职业者，便于为你匹配精准客户。</span>
         <div class="nCard">
-          <div v-for="level in levels" :key="level.key" class="cardItem">
+          <div
+              v-for="level in levels"
+              :key="level.key"
+              class="cardItem"
+              :class="{ selected: form.grade === level.label }"
+              @click="selectLevel(level.label,0,level.key)"
+          >
             <div class="cardItemText">
               <img :src="level.img"/>
               <div style="height: 56px;">
                 <div style="font-size: 28px;">{{ level.label }}</div>
-                <div>{{ level.description }}</div>
+                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                  {{ level.description }}
+                </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -174,7 +306,13 @@ function onClickAdd() {
         <span
             style="margin-top: 37px;margin-bottom: 49px;color: #666666;font-size: 16px;">我们希望突出最符合你的目标机会，同时像你推送更精准的客户。</span>
         <div class="nCard">
-          <div v-for="level in levels1" :key="level.key" class="cardItem">
+          <div
+              v-for="level in levels1"
+              :key="level.key"
+              class="cardItem"
+              :class="{ selected: form.target === level.label }"
+              @click="selectLevel(level.label,1,level.key)"
+          >
             <div class="cardItemText">
               <img :src="level.img"/>
               <div style="height: 56px;">
@@ -182,156 +320,200 @@ function onClickAdd() {
                 <div style="line-height: 16px">{{ level.description }}</div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
       <div v-show="stage===3" class="stageClass">
         <h2>请填写自己的个人信息</h2>
         <span style="margin-top: 37px;margin-bottom: 49px;color: #666666;font-size: 16px;">我们需要了解你的教育、经验和技能。完成后可以在个人资料进行编辑。</span>
-        <n-form ref="formRef" :model="formData" :rules="rules" label-width="80px">
+        <n-form ref="formRef" :model="form" :rules="rules" label-width="80px">
           <n-grid :cols="2" :x-gap="24">
             <n-gi>
-              <n-input v-model:value="formData.name" placeholder="请输入姓名"/>
+              <n-input v-model:value="form.name" placeholder="请输入姓名"/>
             </n-gi>
             <n-gi>
-              <n-date-picker v-model:value="formData.dob" type="date" placeholder="请选择出生日期"
+              <n-date-picker v-model:value="form.birthday" type="date" placeholder="请选择出生日期"
                              :style="{'--n-input-height': '50px'}"/>
             </n-gi>
             <n-gi>
-              <n-input v-model:value="formData.workTime" placeholder="请输入参加工作时间"/>
+              <n-date-picker v-model:value="form.participateWorkDate" type="date" placeholder="请输入参加工作时间"
+                             :style="{'--n-input-height': '50px'}"/>
             </n-gi>
             <n-gi>
-              <n-select class="custom-select" v-model:value="formData.gender" :options="genderOptions"
+              <n-select class="custom-select" v-model:value="form.sex" :options="genderOptions"
                         placeholder="请选择性别" style="height: 50px;"/>
             </n-gi>
           </n-grid>
-          <n-input v-model:value="formData.bio" type="textarea" placeholder="请输入自我介绍"
+          <n-input v-model:value="form.mark" type="textarea" placeholder="请输入自我介绍"
                    style="width: 100%;height: 130px;"/>
         </n-form>
       </div>
       <div v-show="stage===4" class="stageClass">
         <h2>请填写工作经历</h2>
         <span style="margin-top: 37px;margin-bottom: 49px;color: #666666;font-size: 16px;">我们需要了解你的教育、经验和技能。完成后可以在个人资料进行编辑。</span>
-        <n-form ref="formRef" :model="formData" :rules="rules" label-width="80px">
+        <n-form ref="formRef" :model="form.workList" :rules="rules" label-width="80px">
           <n-grid :cols="2" :x-gap="24">
             <n-gi>
-              <n-input v-model:value="formData.companyName" placeholder="请输入公司名称"/>
+              <n-input v-model:value="form.workList[0].workName" placeholder="请输入公司名称"/>
             </n-gi>
             <n-gi>
-              <n-input v-model:value="formData.department" placeholder="请输入所属部门"/>
+              <n-input v-model:value="form.workList[0].department" placeholder="请输入所属部门"/>
             </n-gi>
             <n-gi>
-              <n-input v-model:value="formData.industry" placeholder="请输入所属行业"/>
+              <n-input v-model:value="form.workList[0].industry" placeholder="请输入所属行业"/>
             </n-gi>
             <n-gi>
-              <n-input v-model:value="formData.position" placeholder="请输入职位"/>
+              <n-input v-model:value="form.workList[0].position" placeholder="请输入职位"/>
             </n-gi>
             <n-gi>
-              <n-date-picker v-model:value="formData.dob1" type="date" placeholder="请选择在职时间"
+              <n-date-picker v-model:value="form.workList[0].employmentPeriod" type="date" placeholder="请选择在职时间"
                              :style="{'--n-input-height': '50px'}"/>
             </n-gi>
           </n-grid>
-          <n-input v-model:value="formData.bio" type="textarea" placeholder="请输入自我介绍"
+          <n-input v-model:value="form.workList[0].jobDescription" type="textarea" placeholder="请输入工作内容"
                    style="width: 100%;height: 130px;"/>
         </n-form>
       </div>
       <div v-show="stage===5" class="stageClass">
         <h2>请进行身份证验证</h2>
         <span style="margin-top: 37px;margin-bottom: 49px;color: #666666;font-size: 16px;">我们需要了解你的教育、经验和技能。完成后可以在个人资料进行编辑。</span>
-        <n-form ref="formRef" :model="formData" :rules="rules" label-width="80px">
+        <n-form ref="formRef" :model="form" :rules="rules" label-width="80px">
           <n-grid :cols="2" :x-gap="24">
             <n-gi>
-              <n-input v-model:value="formData.realName" placeholder="真实姓名"/>
+              <n-input v-model:value="form.name" placeholder="真实姓名"/>
             </n-gi>
             <n-gi>
-              <n-input v-model:value="formData.iDCard" placeholder="身份证号"/>
+              <n-input v-model:value="form.card" placeholder="身份证号"/>
             </n-gi>
           </n-grid>
         </n-form>
-        <n-upload
-            multiple
-            directory-dnd
-            action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f"
-            :max="5"
-        >
-          <n-upload-dragger style="height: 248px;width: 248px;">
-            <div style="margin-bottom: 12px">
-              <n-icon size="48" :depth="3">
-                <ArchiveIcon/>
-              </n-icon>
-            </div>
-            <div>上传身份证</div>
-          </n-upload-dragger>
-        </n-upload>
+        <n-flex style="flex-direction: row;" vertical>
+          <n-upload
+              multiple
+              directory-dnd
+              action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f"
+              list-type="image-card"
+              :max="1"
+          >
+            <n-upload-dragger style="height: 248px;width: 248px;">
+              <div style="margin-bottom: 12px">
+                <n-icon size="48" :depth="3">
+                  <ArchiveIcon/>
+                </n-icon>
+              </div>
+              <div>上传身份证正面</div>
+            </n-upload-dragger>
+          </n-upload>
+          <n-upload
+              multiple
+              directory-dnd
+              action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f"
+              list-type="image-card"
+              :max="1"
+          >
+            <n-upload-dragger style="height: 248px;width: 248px;">
+              <div style="margin-bottom: 12px">
+                <n-icon size="48" :depth="3">
+                  <ArchiveIcon/>
+                </n-icon>
+              </div>
+              <div>上传身份证反面</div>
+            </n-upload-dragger>
+          </n-upload>
+        </n-flex>
+
       </div>
       <div v-show="stage===6" class="stageClass">
         <h2>请进行学历认证</h2>
         <span style="margin-top: 37px;margin-bottom: 49px;color: #666666;font-size: 16px;">我们需要了解你的教育、经验和技能。完成后可以在个人资料进行编辑。</span>
-        <n-form ref="formRef" :model="formData" :rules="rules" label-width="80px">
+        <n-form ref="formRef" :model="form.qualificationList" :rules="rules" label-width="80px">
           <n-grid :cols="2" :x-gap="24">
             <n-gi>
-              <n-input v-model:value="formData.realName" placeholder="请输入学校名称"/>
+              <n-input v-model:value="form.qualificationList[0].schoolName" placeholder="请输入学校名称"/>
             </n-gi>
             <n-gi>
-              <n-input v-model:value="formData.iDCard" placeholder="请选择学制类型"/>
+              <n-input v-model:value="form.qualificationList[0].educationSystem" placeholder="请选择学制类型"/>
             </n-gi>
             <n-gi>
-              <n-input v-model:value="formData.realName" placeholder="请输入学历"/>
+              <n-input v-model:value="form.qualificationList[0].degree" placeholder="请输入学历"/>
             </n-gi>
             <n-gi>
-              <n-input v-model:value="formData.iDCard" placeholder="请输入专业"/>
+              <n-input v-model:value="form.qualificationList[0].major" placeholder="请输入专业"/>
             </n-gi>
             <n-gi>
-              <n-date-picker v-model:value="formData.dob1" type="date" placeholder="请选择时间"
+              <n-date-picker v-model:value="form.qualificationList[0].graduationDate" type="date"
+                             placeholder="请选择时间"
                              :style="{'--n-input-height': '50px'}"/>
             </n-gi>
           </n-grid>
         </n-form>
-        <n-upload
-            multiple
-            directory-dnd
-            action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f"
-            :max="5"
-        >
-          <n-upload-dragger style="height: 248px;width: 248px;">
-            <div style="margin-bottom: 12px">
-              <n-icon size="48" :depth="3">
-                <ArchiveIcon/>
-              </n-icon>
-            </div>
-            <div>上传毕业证</div>
-          </n-upload-dragger>
-        </n-upload>
+        <n-flex style="flex-direction: row;" vertical>
+          <n-upload
+              multiple
+              directory-dnd
+              action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f"
+              list-type="image-card"
+              :max="1"
+          >
+            <n-upload-dragger style="height: 248px;width: 248px;">
+              <div style="margin-bottom: 12px">
+                <n-icon size="48" :depth="3">
+                  <ArchiveIcon/>
+                </n-icon>
+              </div>
+              <div>上传毕业证</div>
+            </n-upload-dragger>
+          </n-upload>
+          <n-upload
+              multiple
+              directory-dnd
+              action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f"
+              list-type="image-card"
+              :max="1"
+          >
+            <n-upload-dragger style="height: 248px;width: 248px;">
+              <div style="margin-bottom: 12px">
+                <n-icon size="48" :depth="3">
+                  <ArchiveIcon/>
+                </n-icon>
+              </div>
+              <div>技能证书</div>
+            </n-upload-dragger>
+          </n-upload>
+        </n-flex>
+
       </div>
       <div v-show="stage===7" class="stageClass">
         <h2 style="width: 1024px">其他信息完善</h2>
         <span style="margin-top: 37px;margin-bottom: 49px;color: #666666;font-size: 16px;">我们需要了解你的教育、经验和技能。完成后可以在个人资料进行编辑。</span>
         <n-flex class="personal-skills-container" vertical :size="20" style="margin-bottom: 50px;">
           <Text :size="26" weight="600">技能和专业知识</Text>
-          <n-input
-              v-model:value="userInput.higInput"
-              placeholder="请输入标签"
-              style="width: 525px;margin-bottom: 0px;"
-              @keydown.enter="onClickAdd"
-          >
-            <template #suffix>
-              <n-icon>
-                <ReturnDownBackSharp></ReturnDownBackSharp>
-              </n-icon>
-            </template>
-          </n-input>
-          <n-flex>
-            <n-tag
-                round
-                class="cursor-pointer-style"
-                v-for="item in userInput.hig"
-                closable
-                @close="userInput.hig = userInput.hig.filter(value => value !== item)"
-                :key="item">
-              {{ item }}
-            </n-tag>
-          </n-flex>
+          <n-select v-model:value="skill1" multiple :options="options"/>
+
+          <!--          <n-input-->
+          <!--              v-model:value="userInput.higInput"-->
+          <!--              placeholder="请输入标签"-->
+          <!--              style="width: 525px;margin-bottom: 0px;"-->
+          <!--              @keydown.enter="onClickAdd"-->
+          <!--          >-->
+          <!--            <template #suffix>-->
+          <!--              <n-icon>-->
+          <!--                <ReturnDownBackSharp></ReturnDownBackSharp>-->
+          <!--              </n-icon>-->
+          <!--            </template>-->
+          <!--          </n-input>-->
+          <!--          <n-flex>-->
+          <!--            <n-tag-->
+          <!--                round-->
+          <!--                class="cursor-pointer-style"-->
+          <!--                v-for="(item, index) in skillArray"-->
+          <!--                :key="index"-->
+          <!--                closable-->
+          <!--                @close="removeSkill(index)"-->
+          <!--            >-->
+          <!--              {{ item }}-->
+          <!--            </n-tag>-->
+          <!--          </n-flex>-->
         </n-flex>
         <n-upload
             multiple
@@ -352,16 +534,16 @@ function onClickAdd() {
       <div v-show="stage===8" class="stageClass">
         <div class="container1">
           <h1 class="title">个人信息完成成功</h1>
-          <NCard class="user-card">
-            <div class="user-info">
-              <img :src="userInfo.avatar" class="avatar" alt="头像"/>
-              <div class="text-info">
-                <h2>{{ userInfo.name }}</h2>
-                <p>{{ userInfo.job }}</p>
-              </div>
-              <div class="success-icon">✔️</div>
-            </div>
-          </NCard>
+          <!--          <NCard class="user-card">-->
+          <!--            <div class="user-info">-->
+          <!--              <img :src="userInfo.avatar" class="avatar" alt="头像"/>-->
+          <!--              <div class="text-info">-->
+          <!--                <h2>{{ userInfo.name }}</h2>-->
+          <!--                <p>{{ userInfo.job }}</p>-->
+          <!--              </div>-->
+          <!--              <div class="success-icon">✔️</div>-->
+          <!--            </div>-->
+          <!--          </NCard>-->
           <div class="button-group">
             <NButton type="primary" @click="goToOrders">立即接单</NButton>
             <NButton secondary @click="goToProfile">返回个人中心</NButton>
@@ -383,14 +565,14 @@ function onClickAdd() {
         <h2>请简单描述您需要解决的工作标题</h2>
         <span
             style="margin-top: 37px;margin-bottom: 49px;color: #666666;font-size: 16px;">我们需要了解您的基本情况，便于为你匹配精准人才。</span>
-        <n-input v-model:value="formData.bio"  placeholder="请输入标题"
+        <n-input v-model:value="formData.title" placeholder="请输入标题"
                  style="width: 100%;"/>
       </div>
       <div v-show="stage===2" class="stageClass">
         <h2 style="width: 1024px;">请简单描述您需要解决的工作内容</h2>
         <span
             style="margin-top: 37px;margin-bottom: 49px;color: #666666;font-size: 16px;">我们希望突出最符合你的目标机会，同时像你推送更精准的客户。</span>
-        <n-input v-model:value="formData.bio" type="textarea" placeholder="例如：
+        <n-input v-model:value="formData.description" type="textarea" placeholder="例如：
 本项目目标是打造一个数字文旅体验，核心在于利用3D建模技术和Unity3D开发经验。
 实现建筑、景观、文物的数字化呈现。项目将采用视界AR技术，将虚拟模型与现实环境相结合。"
                  style="width: 100%;height: 130px;"/>
@@ -399,7 +581,7 @@ function onClickAdd() {
         <h2 style="width: 1024px;">请简单描述您需要人才的首选资格</h2>
         <span
             style="margin-top: 37px;margin-bottom: 49px;color: #666666;font-size: 16px;">我们需要了解您的基本情况，便于为你匹配精准人才。</span>
-        <n-input v-model:value="formData.bio" type="textarea"
+        <n-input v-model:value="formData.preferredQualification" type="textarea"
                  placeholder="请输入首选资格要求
            例：出色的市场分析能力，能洞察用户需求与竞争环境。优秀的沟通与协作能力
            能与技术、设计、运营等多部门高效合作。"
@@ -410,12 +592,20 @@ function onClickAdd() {
         <span
             style="margin-top: 37px;margin-bottom: 49px;color: #666666;font-size: 16px;">我们需要了解您的基本情况，便于为你匹配精准人才。</span>
         <div class="nCard">
-          <div v-for="level in levels" :key="level.key" class="cardItem">
+          <div
+              v-for="level in levels"
+              :key="level.key"
+              class="cardItem"
+              :class="{ selected: formData.experienceLevel === level.key }"
+              @click="selectLevel(level.label,2,level.key)"
+          >
             <div class="cardItemText">
               <img :src="level.img"/>
               <div style="height: 56px;">
                 <div style="font-size: 28px;">{{ level.label }}</div>
-                <div>{{ level.description }}</div>
+                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                  {{ level.description }}
+                </div>
               </div>
             </div>
           </div>
@@ -425,24 +615,24 @@ function onClickAdd() {
         <h2 style="width: 1024px;">请填写项目预算</h2>
         <span
             style="margin-top: 37px;margin-bottom: 49px;color: #666666;font-size: 16px;">我们需要了解您的基本情况，便于为你匹配精准人才。</span>
-        <n-input v-model:value="formData.bio"  placeholder="请输入价格"
+        <n-input v-model:value="formData.totalBudget" placeholder="请输入价格"
                  style="width: 100%;"/>
       </div>
       <div v-show="stage===6" class="stageClass">
         <div class="container1">
           <h1 class="title">项目基本信息已完成</h1>
-          <NCard class="user-card">
-            <div class="user-info">
-              <img :src="userInfo.avatar" class="avatar" alt="头像"/>
-              <div class="text-info">
-                <h2>{{ userInfo.name }}</h2>
-                <p>{{ userInfo.job }}</p>
-              </div>
-              <div class="success-icon">✔️</div>
-            </div>
-          </NCard>
+          <!--          <NCard class="user-card">-->
+          <!--            <div class="user-info">-->
+          <!--              <img :src="userInfo.avatar" class="avatar" alt="头像"/>-->
+          <!--              <div class="text-info">-->
+          <!--                <h2>{{ userInfo.name }}</h2>-->
+          <!--                <p>{{ userInfo.job }}</p>-->
+          <!--              </div>-->
+          <!--              <div class="success-icon">✔️</div>-->
+          <!--            </div>-->
+          <!--          </NCard>-->
           <div class="button-group">
-            <NButton type="primary" @click="goToOrders">立即接单</NButton>
+            <NButton type="primary" @click="goToOrders">立即发单</NButton>
             <NButton secondary @click="goToProfile">返回个人中心</NButton>
           </div>
         </div>
@@ -457,6 +647,17 @@ function onClickAdd() {
 </template>
 
 <style scoped>
+:deep(.n-upload-file-list .n-upload-file.n-upload-file--image-card-type) {
+  position: relative;
+  width: 248px;
+  height: 248px;
+}
+
+:deep(.n-upload-trigger.n-upload-trigger--image-card) {
+  width: 248px;
+  height: 248px;
+}
+
 .container1 {
   text-align: center;
   margin-top: 50px;
@@ -464,7 +665,7 @@ function onClickAdd() {
   .title {
     font-size: 52px;
     font-weight: bold;
-    margin-bottom: 40px;
+    margin-bottom: 80px;
   }
 
   .user-card {
@@ -654,5 +855,55 @@ h2 {
   height: 56px;
   background: #F7F7F7;
   border-radius: 24px;
+}
+
+@media (max-width: 768px) {
+  h2 {
+    font-size: 22px;
+  }
+
+  .containerTitle {
+    margin-bottom: 20px;
+  }
+
+  .nCard {
+    margin-top: 40px;
+    width: 100%;
+    overflow-x: scroll;
+  }
+
+  .cardItem {
+    width: auto;
+    height: auto;
+  }
+
+  .n-button {
+    width: 150px;
+    height: 40px;
+    border-radius: 20px;
+  }
+
+  .skip-button {
+    width: 60px;
+    height: 40px;
+    background: #F7F7F7;
+    border-radius: 40px;
+  }
+
+  .stageClass {
+    height: calc(100% - 100px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+  }
+
+  .container[data-v-63e9195a] {
+    height: 100%;
+    display: flex;
+    padding: 0px;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 </style>

@@ -40,7 +40,7 @@ const letterShow = ref(false)
           <Empty size="200px"/>
         </div>
         <Text :size="22" color="#000" align="center">
-          通过原创力客户推荐展示您的技能
+          通过单刻达客户推荐展示您的技能
         </Text>
         <n-button type="primary"
                   size="large"
@@ -190,7 +190,7 @@ const letterShow = ref(false)
       <div>
         <Text :size="26" weight="600">商业咨询项目展示</Text>
         <Text :size="14" color="#808080" v-if="edi">
-          项目是一种在原创力上赚钱的新方式，可帮助您做更多您喜欢做的工作。创建项目产品，突出您的优势并吸引更多客户
+          项目是一种在单刻达上赚钱的新方式，可帮助您做更多您喜欢做的工作。创建项目产品，突出您的优势并吸引更多客户
         </Text>
         <template v-else>
           <n-flex style="margin-top: 20px">

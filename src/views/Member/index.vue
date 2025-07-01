@@ -10,7 +10,7 @@ import {
   IconCheckBox,
   IconClose,
 } from '@/components'
-import { ref } from 'vue'
+import {ref} from 'vue'
 
 import avatarUrl from '../../assets/img/avatar.png'
 
@@ -25,7 +25,7 @@ const options = [
     title: '连续包月',
     tip: '首月',
     price: '19.9',
-    price1: '29.9',
+    price1: '199',
   },
   {
     title: '连续包季',
@@ -54,8 +54,8 @@ const descOptions = [
   },
   {
     icon: IconDiscount,
-    title: '服务费折扣',
-    desc: '20%折扣到15%<br/>&nbsp;',
+    title: '专属服务费折扣',
+    desc: '<br/>&nbsp;',
   },
   {
     icon: IconService1,
@@ -66,18 +66,18 @@ const descOptions = [
 </script>
 
 <template>
-  <HeaderTop :is-login="false" :is-work="false" />
+  <HeaderTop :is-login="false" :is-work="false"/>
   <div class="member-pages">
     <div class="member-pages_container">
-      <div class="member-pages-header-title">原创力会员</div>
-      <n-flex class="member-pages_send" align="center" justify="space-between">
+      <div class="member-pages-header-title">单刻达会员</div>
+      <n-flex class="member-pages_send" align="flex-start" justify="space-between">
         <n-flex class="member-pages_avatar">
           <n-flex justify="space-around" vertical>
             <n-flex align="center" class="avatar_user">
               <n-avatar
-                :src="avatarUrl"
-                round
-                :size="80"
+                  :src="avatarUrl"
+                  round
+                  :size="80"
               />
               <n-flex justify="space-evenly" vertical>
                 <div class="avatar-title">Jason Z.</div>
@@ -85,24 +85,24 @@ const descOptions = [
               </n-flex>
             </n-flex>
             <span style="margin-top: 20px;">
-              默认为自动续费，需要在会员到期前一天，前往
+<!--              默认为自动续费，需要在会员到期前一天，前往-->
               <n-button type="primary" text>
-                <span style="text-decoration: underline">订阅页面</span>
+                <span style="text-decoration: underline"></span>
               </n-button>
-              退订
+              <!--              退订-->
             </span>
           </n-flex>
         </n-flex>
         <n-flex>
           <n-flex
-            justify="space-evenly"
-            :class="[
+              justify="space-evenly"
+              :class="[
               'member-pages-select',
               currentSelect === item.title ? 'active' : '',
             ]"
-            vertical
-            v-for="item in options"
-            @click="currentSelect = item.title"
+              vertical
+              v-for="item in options"
+              @click="currentSelect = item.title"
           >
             <div class="member-pages-select-title">{{ item.title }}</div>
             <n-flex align="flex-end" justify="center" :size="5">
@@ -124,28 +124,28 @@ const descOptions = [
         </n-flex>
         <n-flex vertical class="button-footer" justify="center">
           <n-button type="primary" size="large" @click="showPay = true">
-			  <span class="naiveui-text-16">立即开通</span>
-		  </n-button>
-          <n-button type="primary" ghost size="large">
-			  <span class="naiveui-text-16">关联订阅</span>
-		  </n-button>
+            <span class="naiveui-text-16">立即开通</span>
+          </n-button>
+          <!--          <n-button type="primary" ghost size="large">-->
+          <!--			  <span class="naiveui-text-16">关联订阅</span>-->
+          <!--		  </n-button>-->
           <div class="secondary-color-text-1">关联订阅后享首月、首季折扣</div>
         </n-flex>
       </n-flex>
 
       <n-flex
-        class="member-pages-desc-container"
-        justify="space-around"
-        align="center"
+          class="member-pages-desc-container"
+          justify="space-around"
+          align="center"
       >
         <n-flex
-          class="member-pages-desc-item"
-          vertical
-          v-for="item in descOptions"
-          align="center"
-          :size="20"
+            class="member-pages-desc-item"
+            vertical
+            v-for="item in descOptions"
+            align="center"
+            :size="20"
         >
-          <RenderIcon :icon="item.icon" :size="60" fill="#F18C43" />
+          <RenderIcon :icon="item.icon" :size="60" fill="#F18C43"/>
           <div class="member-pages-desc-item-title">
             {{ item.title }}
           </div>
@@ -170,19 +170,19 @@ const descOptions = [
           <div>每日签到积分</div>
         </n-flex>
         <n-flex class="positions-skills-container-price-item" vertical align="center" :size="40">
-          <RenderIcon :icon="IconClose" fill="#BFC0C0" size="22" v-for="item in 3" />
-          <RenderIcon :icon="IconCheckBox" stroke="#3A665E" size="22" is-stroke />
-          <RenderIcon :icon="IconClose" fill="#BFC0C0" size="22" v-for="item in 2" />
-		  <RenderIcon :icon="IconCheckBox" stroke="#3A665E" size="22" is-stroke />
+          <RenderIcon :icon="IconClose" fill="#BFC0C0" size="22" v-for="item in 3"/>
+          <RenderIcon :icon="IconCheckBox" stroke="#3A665E" size="22" is-stroke/>
+          <RenderIcon :icon="IconClose" fill="#BFC0C0" size="22" v-for="item in 2"/>
+          <RenderIcon :icon="IconCheckBox" stroke="#3A665E" size="22" is-stroke/>
         </n-flex>
         <n-flex class="positions-skills-container-price-item" vertical align="center" :size="40">
-          <RenderIcon :icon="IconCheckBox" stroke="#3A665E" size="22" is-stroke v-for="item in 7" />
+          <RenderIcon :icon="IconCheckBox" stroke="#3A665E" size="22" is-stroke v-for="item in 7"/>
         </n-flex>
       </div>
     </div>
-    <Footer />
+    <Footer/>
   </div>
-  <Pay v-model:show="showPay" />
+  <Pay v-model:show="showPay"/>
 </template>
 
 <style scoped lang="scss">
@@ -194,9 +194,12 @@ const descOptions = [
   .member-pages_container {
     width: 1326px;
     margin: 0 auto;
-	max-width:100%;
+    max-width: 100%;
 
     .member-pages-header-title {
+      background: linear-gradient(0deg, #FBDCBB 0%, #E3A8B2 52%, #A6AEEB 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       font-size: 52px;
       color: #333333;
       margin: 40px 0;
@@ -374,18 +377,21 @@ const descOptions = [
     }
   }
 }
+
 @media (max-width: 1400px) {
-	.member-pages {
-	  .member-pages_container {
-		  padding:0 20px;
-	  }
-	  .member-pages_avatar{
-	      padding: 10px 18px;
-	  }
-	  .member-pages-select {
-	      width: 170px;
-	      height: 150px;
-	 }
-	}
+  .member-pages {
+    .member-pages_container {
+      padding: 0 20px;
+    }
+
+    .member-pages_avatar {
+      padding: 10px 18px;
+    }
+
+    .member-pages-select {
+      width: 170px;
+      height: 150px;
+    }
+  }
 }
 </style>

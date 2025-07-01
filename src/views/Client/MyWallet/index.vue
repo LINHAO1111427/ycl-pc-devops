@@ -13,11 +13,14 @@ import { SettingsOutline } from '@vicons/ionicons5'
       </div>
       <n-flex class="wallet-amount" justify="space-between">
         <div class="wallet-amount-slider">
-          <div class="wallet-amount-slider-title">
-            ¥120420.00
+<!--          <div class="wallet-amount-slider-title">-->
+<!--            ¥120420.00-->
+<!--          </div>-->
+          <div class="wallet-amount-slider-desc">
+            可用余额 ¥120420.00
           </div>
           <div class="wallet-amount-slider-desc">
-            可用余额
+            奖金金额 ¥100
           </div>
         </div>
         <div class="wallet-slider-button">

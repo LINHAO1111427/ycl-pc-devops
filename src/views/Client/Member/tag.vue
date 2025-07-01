@@ -20,6 +20,10 @@ const options = [
     value: '/client/member-contact',
   },
   {
+    label: '税务信息',
+    value: '/client/tax',
+  },
+  {
     label: '账单和付款',
     value: '/client/member-withdrawal',
   },

@@ -7,7 +7,7 @@ const { dialog } = createDiscreteApi(['dialog'])
 const isShowViewText = ref(false)
 const job = ref(1)
 const type = ref(1)
-
+const showModal = ref(false)
 const options = [
     {
         title: '里程碑',
@@ -35,7 +35,13 @@ const ProjectRate = defineAsyncComponent(() => import('./ProjectRate.vue'))
 const open_rete = ref(false)
 
 const checkedValue = ref(1)
-
+function closeDlag(){
+  showModal.value = false
+  open_pay.value=false
+}
+function fkFunc() {
+  showModal.value = true
+}
 function handleChange(e) {
 	checkedValue.value = e.target.value
 }
@@ -87,117 +93,125 @@ function onClickSubmit(type){
 </script>
 <template>
     <div class="container">
-        <div class="slider-avatar">
-            <n-flex :size="20" style="padding:0 20px ;">
-                <n-avatar :size="60" round :src="avatarUrl"></n-avatar>
-                <n-flex vertical :size="5 ">
-                    <n-space align="center">
-                        <Text :size="20">乔安娜</Text>
-                        <RenderIcon :icon="IconMessage" :size="20" fill="#58968B"></RenderIcon>
-                    </n-space>
-                    <Text :size="14" class="secondary-color-text-1">Joanna</Text>
-                </n-flex>
-            </n-flex>
-            <n-flex :size="0" class="personal-data-container" :wrap="false">
-                <div class="personal-data-slider">
-                    <div class="personal-data-slider-user">
-                        <n-flex align="center" justify="space-between">
-                            <div class="text-size-16">查看职业档案</div>
-                        </n-flex>
-                        <n-space vertical :size="15" style="margin-top: 15px">
-                            <div class="secondary-color-text-1" style="font-size: 14px">设计师</div>
-                            <div class="secondary-color-text-1" style="font-size: 14px">家装设计师</div>
-                            <div class="secondary-color-text-1" style="font-size: 14px">
-                                所有工作
-                            </div>
-                        </n-space>
-                    </div>
+<!--        <div class="slider-avatar">-->
+<!--            <n-flex :size="20" style="padding:0 20px ;">-->
+<!--                <n-avatar :size="60" round :src="avatarUrl"></n-avatar>-->
+<!--                <n-flex vertical :size="5 ">-->
+<!--                    <n-space align="center">-->
+<!--                        <Text :size="20">乔安娜</Text>-->
+<!--                        <RenderIcon :icon="IconMessage" :size="20" fill="#58968B"></RenderIcon>-->
+<!--                    </n-space>-->
+<!--                    <Text :size="14" class="secondary-color-text-1">Joanna</Text>-->
+<!--                </n-flex>-->
+<!--            </n-flex>-->
+<!--            <n-flex :size="0" class="personal-data-container" :wrap="false">-->
+<!--                <div class="personal-data-slider">-->
+<!--                    <div class="personal-data-slider-user">-->
+<!--                        <n-flex align="center" justify="space-between">-->
+<!--                            <div class="text-size-16">查看职业档案</div>-->
+<!--                        </n-flex>-->
+<!--                        <n-space vertical :size="15" style="margin-top: 15px">-->
+<!--                            <div class="secondary-color-text-1" style="font-size: 14px">设计师</div>-->
+<!--                            <div class="secondary-color-text-1" style="font-size: 14px">家装设计师</div>-->
+<!--                            <div class="secondary-color-text-1" style="font-size: 14px">-->
+<!--                                所有工作-->
+<!--                            </div>-->
+<!--                        </n-space>-->
+<!--                    </div>-->
 
-                    <n-flex class="personal-data-slider-nums" align="center" justify="center" :size="20">
-                        <n-flex class="personal-data-slider-nums-item" vertical align="center">
-                            <div class="slider-nums-item-nums">124</div>
-                            <div class="secondary-color-text-1">历史接单(单)</div>
-                        </n-flex>
-                        <n-flex class="personal-data-slider-nums-item" vertical align="center">
-                            <div class="slider-nums-item-nums">124000</div>
-                            <div class="secondary-color-text-1">总收入(￥)</div>
-                        </n-flex>
-                        <n-flex class="personal-data-slider-nums-item" vertical align="center">
-                            <div class="slider-nums-item-nums">4.9</div>
-                            <div class="secondary-color-text-1">评分(5.0)</div>
-                        </n-flex>
-                    </n-flex>
-                </div>
-            </n-flex>
-            <n-flex align="center" justify="space-between" style="padding:20px">
-                <n-space vertical>
-                    <span style="font-size: 14px">每周小时数量</span>
-                    <n-flex vertical :size="10">
-                        <span style="font-size: 11px;color:#808080" class="secondary-color-text-1">
-                            超过40小时/周
-                        </span>
-                    </n-flex>
-                </n-space>
+<!--                    <n-flex class="personal-data-slider-nums" align="center" justify="center" :size="20">-->
+<!--                        <n-flex class="personal-data-slider-nums-item" vertical align="center">-->
+<!--                            <div class="slider-nums-item-nums">124</div>-->
+<!--                            <div class="secondary-color-text-1">历史接单(单)</div>-->
+<!--                        </n-flex>-->
+<!--                        <n-flex class="personal-data-slider-nums-item" vertical align="center">-->
+<!--                            <div class="slider-nums-item-nums">124000</div>-->
+<!--                            <div class="secondary-color-text-1">总收入(￥)</div>-->
+<!--                        </n-flex>-->
+<!--                        <n-flex class="personal-data-slider-nums-item" vertical align="center">-->
+<!--                            <div class="slider-nums-item-nums">4.9</div>-->
+<!--                            <div class="secondary-color-text-1">评分(5.0)</div>-->
+<!--                        </n-flex>-->
+<!--                    </n-flex>-->
+<!--                </div>-->
+<!--            </n-flex>-->
+<!--            <n-flex align="center" justify="space-between" style="padding:20px">-->
+<!--                <n-space vertical>-->
+<!--                    <span style="font-size: 14px">每周小时数量</span>-->
+<!--                    <n-flex vertical :size="10">-->
+<!--                        <span style="font-size: 11px;color:#808080" class="secondary-color-text-1">-->
+<!--                            超过40小时/周-->
+<!--                        </span>-->
+<!--                    </n-flex>-->
+<!--                </n-space>-->
 
-            </n-flex>
+<!--            </n-flex>-->
 
-            <n-flex vertical :size="15" style="padding:20px">
-                <n-flex align="center" justify="space-between">
-                    <div class="text-size-16">语言</div>
-                </n-flex>
-                <n-flex vertical :size="10">
-                    <span style="font-size: 14px" class="secondary-color-text-1">
-                        中文：母语或双语
-                    </span>
-                    <span style="font-size: 14px" class="secondary-color-text-1">
-                        英语：母语或双语
-                    </span>
-                </n-flex>
-            </n-flex>
-            <n-flex vertical :size="15" style="padding:20px">
-                <n-flex align="center" justify="space-between">
-                    <div class="text-size-16">个人验证</div>
-                </n-flex>
-                <n-flex vertical :size="10">
-                    <span style="font-size: 14px;color:#333333" class="secondary-color-text-1">
-                        身份证认证
-                    </span>
-                    <span style="font-size: 11px;display:flex;align-items: center;" class="secondary-color-text-1">
-                        已认证
-                        <i class="icon-weiyanzheng iconfont" style="padding-left: 5px;"></i>
-                    </span>
-                </n-flex>
-            </n-flex>
-            <n-flex vertical :size="15" style="padding:20px">
-                <n-flex align="center" justify="space-between">
-                    <div class="text-size-16">教育</div>
-                </n-flex>
-                <n-flex vertical :size="10">
-                    <span style="font-size: 14px;color:#333333" class="secondary-color-text-1">
-                        清华大学
-                    </span>
-                    <span style="font-size: 11px;" class="secondary-color-text-1">
-                        设计硕士，高级设计师
-                    </span>
-                    <span style="font-size: 11px;" class="secondary-color-text-1">
-                        2016-2019
-                    </span>
-                </n-flex>
-                <n-flex vertical :size="10">
-                    <span style="font-size: 14px;color:#333333" class="secondary-color-text-1">
-                        天津美术学院
-                    </span>
-                    <span style="font-size: 11px;" class="secondary-color-text-1">
-                        设计硕士，高级设计师
-                    </span>
-                    <span style="font-size: 11px;color:#808080" class="secondary-color-text-1">
-                        2012-2016
-                    </span>
-                </n-flex>
-            </n-flex>
-        </div>
+<!--            <n-flex vertical :size="15" style="padding:20px">-->
+<!--                <n-flex align="center" justify="space-between">-->
+<!--                    <div class="text-size-16">语言</div>-->
+<!--                </n-flex>-->
+<!--                <n-flex vertical :size="10">-->
+<!--                    <span style="font-size: 14px" class="secondary-color-text-1">-->
+<!--                        中文：母语或双语-->
+<!--                    </span>-->
+<!--                    <span style="font-size: 14px" class="secondary-color-text-1">-->
+<!--                        英语：母语或双语-->
+<!--                    </span>-->
+<!--                </n-flex>-->
+<!--            </n-flex>-->
+<!--            <n-flex vertical :size="15" style="padding:20px">-->
+<!--                <n-flex align="center" justify="space-between">-->
+<!--                    <div class="text-size-16">个人验证</div>-->
+<!--                </n-flex>-->
+<!--                <n-flex vertical :size="10">-->
+<!--                    <span style="font-size: 14px;color:#333333" class="secondary-color-text-1">-->
+<!--                        身份证认证-->
+<!--                    </span>-->
+<!--                    <span style="font-size: 11px;display:flex;align-items: center;" class="secondary-color-text-1">-->
+<!--                        已认证-->
+<!--                        <i class="icon-weiyanzheng iconfont" style="padding-left: 5px;"></i>-->
+<!--                    </span>-->
+<!--                </n-flex>-->
+<!--            </n-flex>-->
+<!--            <n-flex vertical :size="15" style="padding:20px">-->
+<!--                <n-flex align="center" justify="space-between">-->
+<!--                    <div class="text-size-16">教育</div>-->
+<!--                </n-flex>-->
+<!--                <n-flex vertical :size="10">-->
+<!--                    <span style="font-size: 14px;color:#333333" class="secondary-color-text-1">-->
+<!--                        清华大学-->
+<!--                    </span>-->
+<!--                    <span style="font-size: 11px;" class="secondary-color-text-1">-->
+<!--                        设计硕士，高级设计师-->
+<!--                    </span>-->
+<!--                    <span style="font-size: 11px;" class="secondary-color-text-1">-->
+<!--                        2016-2019-->
+<!--                    </span>-->
+<!--                </n-flex>-->
+<!--                <n-flex vertical :size="10">-->
+<!--                    <span style="font-size: 14px;color:#333333" class="secondary-color-text-1">-->
+<!--                        天津美术学院-->
+<!--                    </span>-->
+<!--                    <span style="font-size: 11px;" class="secondary-color-text-1">-->
+<!--                        设计硕士，高级设计师-->
+<!--                    </span>-->
+<!--                    <span style="font-size: 11px;color:#808080" class="secondary-color-text-1">-->
+<!--                        2012-2016-->
+<!--                    </span>-->
+<!--                </n-flex>-->
+<!--            </n-flex>-->
+<!--        </div>-->
         <div class="container-body">
             <div class="work-details">
+              <div class="project-described">
+                <n-flex vertical align="flex-start">
+                  <Text :size="24" weight="600">项目名称</Text>
+                  <Text class="secondary-color-text-1">
+                    项目名称巴拉巴拉
+                  </Text>
+                </n-flex>
+              </div>
                 <div class="project-described">
                     <n-flex vertical align="flex-start">
                         <Text :size="24" weight="600">项目描述</Text>
@@ -270,12 +284,12 @@ function onClickSubmit(type){
                             </n-flex>
                         </n-flex>
                     </n-flex>
-                    <div class="header-select">
-                        <div class="header-select-title">
-                            这个项目需要多长时间?
-                        </div>
-                        <span style="font-size: 14px;color: #808080;padding: 18px;display:block">3个月</span>
-                    </div>
+<!--                    <div class="header-select">-->
+<!--                        <div class="header-select-title">-->
+<!--                            这个项目需要多长时间?-->
+<!--                        </div>-->
+<!--                        <span style="font-size: 14px;color: #808080;padding: 18px;display:block">3个月</span>-->
+<!--                    </div>-->
                 </div>
 
                 <div class="header">
@@ -289,6 +303,7 @@ function onClickSubmit(type){
                 </div>
 
                 <div class="terms">
+                  <template v-if="job==1">
                     <div class="professional-title">合同细节</div>
 
                     <div class="professional-title title-2">
@@ -396,9 +411,13 @@ function onClickSubmit(type){
                         <span class="professional-title title-2">￥200</span>
                     </div>
                     <p class="easy-end-alert">
-                        包括原创力固定价格保护。
-                        <span>了解更多信息</span>
+                        包括单刻达固定价格保护。
+
                     </p>
+                  </template>
+                  <template v-else>
+                    <div style="font-size: 20px;">{{ '暂无合适的人才' }}</div>
+                  </template>
                 </div>
 
                 <div class="tow-footer" style="padding: 20px 40px;margin-bottom: 77px">
@@ -410,7 +429,7 @@ function onClickSubmit(type){
                             </template>
                             <n-flex vertical size="large" style="padding:17px;background-color: #ffffff;">
                                 <n-button type="primary" @click="onClickSubmit(1)">结束里程碑工作</n-button>
-                                <n-button type="tertiary" @click="onClickSubmit(2)">结束该项目全部工作</n-button>
+                                <n-button type="tertiary" @click="onClickSubmit(2)" disabled>结束该项目全部工作</n-button>
                             </n-flex>
                         </n-popover>
                         <n-button type="primary" v-else>确认提交工作</n-button>
@@ -422,8 +441,28 @@ function onClickSubmit(type){
 
 
     <!-- 为里程碑付款 -->
-    <ProjectPay v-model:show="open_pay" />
+    <ProjectPay v-model:show="open_pay" @fkFunc="fkFunc"/>
+    <n-modal v-model:show="showModal">
+    <n-card style="width: 600px" :bordered="false" size="huge" role="dialog" aria-modal="true">
+      <div class="header-title">
+        请您尽快付款
+      </div>
+      <div class="header-icon"></div>
+      <div class="header-p">扫描二维码付款</div>
+      <div class="header-span">支持微信支付、支付宝支付、信用卡支付</div>
 
+      <template #footer>
+        <div class="btns1">
+          <n-button quaternary type="primary" @click="showModal = false">
+            取消
+          </n-button>
+          <n-button type="primary" @click="closeDlag">
+            已完成付款
+          </n-button>
+        </div>
+      </template>
+    </n-card>
+  </n-modal>
     <!-- 里程碑审查 -->
     <ProjectApply v-model:show="open_apply" />
 
@@ -627,6 +666,7 @@ function onClickSubmit(type){
     }
 
     .terms-type {
+      width: 50%;
         display: flex;
         gap: 20px;
     }
@@ -865,5 +905,57 @@ function onClickSubmit(type){
     color: #58968B;
     font-size: 14px;
     text-decoration: underline;
+}
+.header-title {
+  font-weight: 400;
+  font-size: 27px;
+  color: #000000;
+}
+
+.header-icon {
+  width: 250px;
+  height: 250px;
+  background: #D9D9D9;
+  border-radius: 12px 12px 12px 12px;
+  margin: 0 auto;
+  margin-top: 30px;
+}
+
+@media screen and (max-width: 768px) {
+  .header-title {
+    font-weight: 400;
+    font-size: 16px;
+    color: #000000;
+  }
+}
+
+.header-icon {
+  width: 200px;
+  height: 200px;
+  background: #D9D9D9;
+  border-radius: 12px 12px 12px 12px;
+  margin: 0 auto;
+  margin-top: 30px;
+}
+
+.header-p {
+  font-size: 14px;
+  color: #000000;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.header-span {
+  font-size: 12px;
+  text-align: center;
+  color: #808080;
+}
+
+.btns1 {
+  text-align: center;
+}
+
+.btns1 button {
+  margin: 0 60px;
 }
 </style>

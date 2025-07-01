@@ -52,9 +52,9 @@
 						<div>提交工作申请</div>
 						<div>成功收到offer</div>
 						<div>交易反馈</div>
-						<div>原创力会员权益3天</div>
-						<div>原创力会员权益7天</div>
-						<div>原创力会员权益14天</div>
+						<div>单刻达会员权益3天</div>
+						<div>单刻达会员权益7天</div>
+						<div>单刻达会员权益14天</div>
 					</n-flex>
 					<n-flex class="positions-skills-container-price-item" vertical align="center" :size="40">
 						<Text :size="16">+5</Text>

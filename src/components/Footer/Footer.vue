@@ -100,20 +100,20 @@
         </div>
         <div class="footer_copy">
           <div class="info">
-            <span>原创力 © 2024</span><span>京ICO备18053355号-2</span><span>京公网安备</span><span>11001402047559号</span>
+            <span>单刻达 © 2024</span><span>京ICO备18053355号-2</span><span>京公网安备</span><span>11001402047559号</span>
             <RouterLink to="/">版权声明</RouterLink>
             <RouterLink to="/">问题反馈</RouterLink>
             <RouterLink to="/">在线沟通</RouterLink>
           </div>
           <div class="share">
             <a href="">
-              <img src="../../assets/img/weibo.png" alt="" />
+              <img src="../../assets/img/weibo.png" alt=""/>
             </a>
             <a href="">
-              <img src="../../assets/img/weixin-copy.png" alt="" />
+              <img src="../../assets/img/weixin-copy.png" alt=""/>
             </a>
             <a href="">
-              <img src="../../assets/img/douyin.png" alt="" />
+              <img src="../../assets/img/douyin.png" alt=""/>
             </a>
           </div>
         </div>
@@ -153,6 +153,7 @@ footer {
 }
 
 .footer_copy {
+  //height: 120px;
   display: flex;
   justify-content: space-between;
   align-items: center;

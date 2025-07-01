@@ -3,14 +3,13 @@ import HeaderTop from '@/components/Header/HeaderTop.vue'
 import Layout from '@/components/Layout/Layout.vue'
 import { Tabs } from '@/components'
 import { useRoute, useRouter } from 'vue-router'
-
+import {  onMounted, ref } from 'vue';
 const router = useRoute()
 
 const routers = useRouter()
 
 const current = ref(router.path)
-
-const options = [
+const options = ref([
   {
     label: '提现方式',
     value: '/user-set/withdrawal',
@@ -18,10 +17,6 @@ const options = [
   {
     label: '联系方式',
     value: '/user-set/contact',
-  },
-  {
-    label: '税务信息',
-    value: '/user-set/tax',
   },
   {
     label: '个人资料',
@@ -39,8 +34,7 @@ const options = [
     label: '通知设置',
     value: '/user-set/notice',
   },
-]
-
+])
 function click(value: string) {
   if (!value) {
     return

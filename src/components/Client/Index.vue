@@ -100,7 +100,7 @@
           <n-flex vertical style="margin-left: 10px;">
             <div class="clientDivTitle1">直接联系人才</div>
             <div class="clientDivTitle2">立即与顶尖人才联系，讨论和协作。</div>
-            <div class="btn2">浏览联系</div>
+            <div class="btn2" @click="$router.push('/client/search-talents')">浏览人才</div>
           </n-flex>
         </n-flex>
       </n-flex>
@@ -138,7 +138,7 @@
           <!--                        <i class="icon-shuaxin iconfont"></i>-->
           <!--                    </div>-->
                     <div class="pt-menu-more" @click="$router.push('/client/search-talents')">
-                        <span style="color: #3BC8B4 ;">更多人才</span>
+                        <span style="color: #3BC8B4 ;">搜寻更多人才</span>
                       <!--                        <i class="icon-jiantou iconfont"></i>-->
                     </div>
                 </span>
@@ -154,15 +154,15 @@
               </n-flex>
               <div class="pt-t1">人工智能产品经理</div>
               <n-flex>
-                <div>
-                  <i class="icon-jinqian iconfont"></i>￥40.00/小时
-                </div>
+<!--                <div>-->
+<!--                  <i class="icon-jinqian iconfont"></i>￥40.00/小时-->
+<!--                </div>-->
                 <n-flex align="center">
                   <img src="../../assets/client/4.png" alt="" style="width: 15px;height: 15px;">4.95
                 </n-flex>
-                <div>
-                  <i class="icon-gongzuo iconfont"></i>63
-                </div>
+<!--                <div>-->
+<!--                  <i class="icon-gongzuo iconfont"></i>63-->
+<!--                </div>-->
               </n-flex>
               <div></div>
             </n-flex>
@@ -244,82 +244,82 @@
       <n-flex class=pt-home5 justify="space-evenly">
         <n-flex vertical justify="center" align="center">
           <img src="../../assets/img/bgIcon1.png"/>
-          <div class="pt-title1">交易通明</div>
+          <div class="pt-title1">交易安全</div>
         </n-flex>
         <n-flex vertical justify="center" align="center">
           <img src="../../assets/img/bgIcon2.png"/>
-          <div class="pt-title1">信息透明</div>
+          <div class="pt-title1">隐私保护</div>
         </n-flex>
         <n-flex vertical justify="center" align="center">
           <img src="../../assets/img/bgIcon3.png"/>
-          <div class="pt-title1">安全保障</div>
+          <div class="pt-title1">无忧售后</div>
         </n-flex>
       </n-flex>
 
-      <div class="pt-menu">
-                <span class="pt-menu-title">
-                    最佳匹配的人才
-                </span>
-      </div>
-      <n-tabs type="line" animated class="my-tabs">
-        <n-tab-pane name="tab1" tab="网站开发" />
-        <n-tab-pane name="tab2" tab="微信开发" />
-        <n-tab-pane name="tab3" tab="工业设计" />
-        <n-tab-pane name="tab4" tab="品牌设计" />
-      </n-tabs>
-      <n-flex class="pt-div" justify="space-between">
-        <n-flex vertical class="pt-content" justify="space-around" v-for="item,index in 3" :key="index">
-          <n-flex class="pt-content1">
-            <img src="../../assets/img/avatar.png" class="avatar">
-            <n-flex vertical style="width: calc(100% - 80px);">
-              <n-flex justify="space-between">
-                <div class="pt-to">Jason Z</div>
-                <div class="pt-status">在线</div>
-              </n-flex>
-              <div class="pt-t1">人工智能产品经理</div>
-              <n-flex>
-                <div>
-                  <i class="icon-jinqian iconfont"></i>￥40.00/小时
-                </div>
-                <n-flex align="center">
-                  <img src="../../assets/client/4.png" alt="" style="width: 15px;height: 15px;">4.95
-                </n-flex>
-                <div>
-                  <i class="icon-gongzuo iconfont"></i>63
-                </div>
-              </n-flex>
-              <div></div>
-            </n-flex>
-          </n-flex>
-          <n-flex>
-            <n-tag size="small" class="easy-tag"
-                   :color="{textColor:'#808080',borderColor:'#EDEDED',color:'#EDEDED'}" round>英文翻译
-            </n-tag>
-            <n-tag size="small" class="easy-tag"
-                   :color="{textColor:'#808080',borderColor:'#EDEDED',color:'#EDEDED'}" round>英文中文
-            </n-tag>
-            <n-tag size="small" class="easy-tag"
-                   :color="{textColor:'#808080',borderColor:'#EDEDED',color:'#EDEDED'}" round>普通话
-            </n-tag>
-          </n-flex>
-          <div class="pt-t2">
-            <span>擅长：</span>智慧城市产品需求，深度复杂算法...
-          </div>
-          <div class="pt-t2">
-            <span>案例：</span>天津智慧城市，工业数字孪生定位识别…
-          </div>
-          <div class="pt-t2">
-            <span>客户：</span>“沟通顺畅，不拖泥带水，技术好”
-          </div>
-          <n-flex justify="space-between">
-            <div class="pt-btn1">在线沟通</div>
-            <div class="pt-btn2" @click="open_member()">查看职业档案</div>
-          </n-flex>
-        </n-flex>
-      </n-flex>
+<!--      <div class="pt-menu">-->
+<!--                <span class="pt-menu-title">-->
+<!--                    最佳匹配的人才-->
+<!--                </span>-->
+<!--      </div>-->
+<!--      <n-tabs type="line" animated class="my-tabs">-->
+<!--        <n-tab-pane name="tab1" tab="网站开发" />-->
+<!--        <n-tab-pane name="tab2" tab="微信开发" />-->
+<!--        <n-tab-pane name="tab3" tab="工业设计" />-->
+<!--        <n-tab-pane name="tab4" tab="品牌设计" />-->
+<!--      </n-tabs>-->
+<!--      <n-flex class="pt-div" justify="space-between">-->
+<!--        <n-flex vertical class="pt-content" justify="space-around" v-for="item,index in 3" :key="index">-->
+<!--          <n-flex class="pt-content1">-->
+<!--            <img src="../../assets/img/avatar.png" class="avatar">-->
+<!--            <n-flex vertical style="width: calc(100% - 80px);">-->
+<!--              <n-flex justify="space-between">-->
+<!--                <div class="pt-to">Jason Z</div>-->
+<!--                <div class="pt-status">在线</div>-->
+<!--              </n-flex>-->
+<!--              <div class="pt-t1">人工智能产品经理</div>-->
+<!--              <n-flex>-->
+<!--                <div>-->
+<!--                  <i class="icon-jinqian iconfont"></i>￥40.00/小时-->
+<!--                </div>-->
+<!--                <n-flex align="center">-->
+<!--                  <img src="../../assets/client/4.png" alt="" style="width: 15px;height: 15px;">4.95-->
+<!--                </n-flex>-->
+<!--                <div>-->
+<!--                  <i class="icon-gongzuo iconfont"></i>63-->
+<!--                </div>-->
+<!--              </n-flex>-->
+<!--              <div></div>-->
+<!--            </n-flex>-->
+<!--          </n-flex>-->
+<!--          <n-flex>-->
+<!--            <n-tag size="small" class="easy-tag"-->
+<!--                   :color="{textColor:'#808080',borderColor:'#EDEDED',color:'#EDEDED'}" round>英文翻译-->
+<!--            </n-tag>-->
+<!--            <n-tag size="small" class="easy-tag"-->
+<!--                   :color="{textColor:'#808080',borderColor:'#EDEDED',color:'#EDEDED'}" round>英文中文-->
+<!--            </n-tag>-->
+<!--            <n-tag size="small" class="easy-tag"-->
+<!--                   :color="{textColor:'#808080',borderColor:'#EDEDED',color:'#EDEDED'}" round>普通话-->
+<!--            </n-tag>-->
+<!--          </n-flex>-->
+<!--          <div class="pt-t2">-->
+<!--            <span>擅长：</span>智慧城市产品需求，深度复杂算法...-->
+<!--          </div>-->
+<!--          <div class="pt-t2">-->
+<!--            <span>案例：</span>天津智慧城市，工业数字孪生定位识别…-->
+<!--          </div>-->
+<!--          <div class="pt-t2">-->
+<!--            <span>客户：</span>“沟通顺畅，不拖泥带水，技术好”-->
+<!--          </div>-->
+<!--          <n-flex justify="space-between">-->
+<!--            <div class="pt-btn1">在线沟通</div>-->
+<!--            <div class="pt-btn2" @click="open_member()">查看职业档案</div>-->
+<!--          </n-flex>-->
+<!--        </n-flex>-->
+<!--      </n-flex>-->
 <!--      <div class="pt-ad">-->
 <!--        <div class="pt-ad-left">-->
-<!--          <span>原创力平台优势</span>-->
+<!--          <span>单刻达平台优势</span>-->
 <!--          <span>支付安全；高效交付；全天候客服团队</span>-->
 <!--        </div>-->
 <!--        <div class="pt-ad-right">-->
@@ -382,17 +382,17 @@
   <IndexSwitch v-model:show="switch_open"/>
 </template>
 <script setup>
-import {ref, defineAsyncComponent} from 'vue';
-import {
-  ChevronBack
-}
-  from '@vicons/ionicons5'
+import {ref, defineAsyncComponent, onMounted} from 'vue';
+import {ChevronBack} from '@vicons/ionicons5'
 import {useRouter} from 'vue-router'
-
+import {userBest} from '@/api/base'
 const IndexMember = defineAsyncComponent(() => import('@/components/Client/IndexMember.vue'))
 const IndexSwitch = defineAsyncComponent(() => import('@/components/Client/IndexSwitch.vue'))
 const open = ref(false)
 const time = ref()
+onMounted(async () => {
+  await userBest({pageNo:1,pageSize:10})
+})
 const mouseenter = () => {
   clearTimeout(time.value)
   open.value = true
@@ -576,6 +576,7 @@ function onClickUrl() {
       }
 
       .btn2 {
+        cursor: pointer;
         width: 120px;
         height: 36px;
         box-shadow: 0px 2px 4px 0px rgba(48, 145, 131, 0.2);

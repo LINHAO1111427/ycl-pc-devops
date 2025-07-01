@@ -2,28 +2,34 @@ import axios from 'axios'
 import { useMessage } from 'naive-ui'
 
 // API 基础地址
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://47.112.180.180:48080'
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://47.120.73.189:48080'
 
 // 创建 Axios 实例
 const service = axios.create({
     baseURL: BASE_URL,
     timeout: 5000,
-    headers: { 'Content-Type': 'application/json' }
+    headers: { 'Content-Type': 'application/json','tenant-id':'1' }
 })
 
-// 请求拦截器
 service.interceptors.request.use(
     config => {
         const token = localStorage.getItem('token')
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`
         }
+
+        const method = config.method?.toLowerCase()
+        if (method === 'post') {
+            config.data =config.data.params
+        }
+
         return config
     },
     error => {
         return Promise.reject(error)
     }
 )
+
 
 // 响应拦截器
 service.interceptors.response.use(

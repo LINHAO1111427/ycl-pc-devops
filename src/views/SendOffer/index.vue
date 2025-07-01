@@ -24,6 +24,34 @@ function onClickConfirm(){
 		router.push('/submit-proposals')
 	}
 }
+const showModal = ref(false)
+const appealStatus = ref(false)
+const appealReason = ref('')
+const fileList = ref([])
+
+const handleUploadChange = ({ file, fileList: newFileList }) => {
+  fileList.value = newFileList
+}
+
+const handleRemove = (options) => {
+  fileList.value = fileList.value.filter(file => file.id !== options.file.id)
+}
+
+const submitAppeal = () => {
+  if (appealStatus.value && !appealReason.value.trim()) {
+    window.$message.warning('请输入申诉理由')
+    return
+  }
+  if (appealStatus.value && appealReason.value.length > 200) {
+    window.$message.warning('申诉理由不能超过200字')
+    return
+  }
+  console.log('申诉状态:', appealStatus.value)
+  console.log('申诉理由:', appealReason.value)
+  console.log('上传文件:', fileList.value)
+  showModal.value = false
+  window.$message.success('提交成功')
+}
 </script>
 
 <template>
@@ -83,9 +111,9 @@ function onClickConfirm(){
           <n-flex vertical>
             <n-flex class="send-offer-work-item" justify="space-between">
               <Text :size="20">
-                {{ invite ? '付款类型' : '固定价格' }}
+                {{ invite ? '项目类型' : '项目类型' }}
               </Text>
-              <Text :size="16" class="secondary-color-text-1">{{ invite ? '固定价格' : '￥200' }}</Text>
+              <Text :size="16" class="secondary-color-text-1">{{ invite ? '里程碑项目' : '里程碑项目' }}</Text>
             </n-flex>
             <n-flex class="send-offer-work-item" justify="space-between">
               <Text :size="20">
@@ -103,7 +131,7 @@ function onClickConfirm(){
         </n-flex>
         <n-flex class="send-offer-footer" :size="20">
           <n-button class="naiveui-button-16" type="primary" block size="large" @click="onClickConfirm">{{ invite ? '确定' : '确定接受offer' }}</n-button>
-          <n-button class="naiveui-button-16" block size="large">忽略</n-button>
+          <n-button class="naiveui-button-16" block size="large" @click="showModal=true">忽略</n-button>
         </n-flex>
         <n-flex vertical :size="0">
           <Text :size="24">
@@ -118,12 +146,52 @@ function onClickConfirm(){
             顺祝商祺
           </Text>
           <Text :size="16" class="secondary-color-text-1">
-            原创力团队
+            单刻达团队
           </Text>
         </n-flex>
       </div>
     </div>
+    <n-modal v-model:show="showModal" title="是否申诉" preset="dialog" class="no-icon-dialog">
+      <n-space vertical size="large">
+        <n-radio-group v-model:value="appealStatus" name="appeal">
+          <n-radio :value="false">否</n-radio>
+          <n-radio :value="true">是</n-radio>
+        </n-radio-group>
+
+        <template v-if="appealStatus">
+          <n-form-item label="申诉理由">
+            <n-input
+                v-model:value="appealReason"
+                type="textarea"
+                maxlength="200"
+                show-count
+                placeholder="请输入申诉理由（最多200字）"
+            />
+          </n-form-item>
+
+          <n-form-item label="上传申诉图片（最多3张）">
+            <n-upload
+                :max="3"
+                list-type="image-card"
+                :file-list="fileList"
+                :on-change="handleUploadChange"
+                :on-remove="handleRemove"
+            >
+<!--              <n-button v-if="fileList.length < 3">上传图片</n-button>-->
+            </n-upload>
+          </n-form-item>
+        </template>
+      </n-space>
+
+      <template #action>
+        <n-space justify="end">
+          <n-button @click="showModal = false">取消</n-button>
+          <n-button type="primary" @click="submitAppeal">提交</n-button>
+        </n-space>
+      </template>
+    </n-modal>
   </Layout>
+
 </template>
 
 

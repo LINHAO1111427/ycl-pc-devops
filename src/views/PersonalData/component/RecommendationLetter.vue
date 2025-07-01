@@ -65,12 +65,12 @@ const emit = defineEmits(['update:show'])
             <Text :size="24" align="center">通过客户推荐加强您的形象</Text>
             <n-space vertical :size="20">
               <Text :size="16">
-                从原创力意外的客户那里展示 您的技能和成功形象
+                从单刻达意外的客户那里展示 您的技能和成功形象
               </Text>
               <Text :size="16">
                 您的客户将收到一封电子邮件， 其中包含提交成功案例的说明
               </Text>
-              <Text :size="16">推荐信将在原创力验证后显示在您的个人资料中</Text>
+              <Text :size="16">推荐信将在单刻达验证后显示在您的个人资料中</Text>
             </n-space>
           </n-flex>
         </n-flex>

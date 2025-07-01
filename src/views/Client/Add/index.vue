@@ -24,7 +24,7 @@ watchEffect(() => {
 
 <style scoped>
 .talents {
-    height: 100%;
+    height: calc(100% - 60px);
     overflow: auto;
 }
 </style>

@@ -4,14 +4,14 @@ import { ref } from 'vue'
 const options = [
   {
     title: '行业分析报告',
-    desc: '了解你所擅长的领域在原创力受青睐程度',
+    desc: '了解你所擅长的领域在单刻达受青睐程度',
   },
   {
     title: '如何雇佣',
     desc: '尝试完成工作的多样化方式',
   },
   {
-    title: '原创力培训',
+    title: '单刻达培训',
     desc: '帮助你在擅长的领域更具竞争力',
   },
   {
@@ -62,15 +62,15 @@ const tag = [
           <div class="header-talents-title">指南</div>
           <n-button text class="router-link">开始成为一名自由职业者</n-button>
         </n-flex>
-        <n-flex
-          vertical
-          class="header-talents-item-right"
-          justify="center"
-          :size="10"
-        >
-          <div class="header-talents-title">指南</div>
-          <n-button text class="router-link">发展你的自由职业生涯</n-button>
-        </n-flex>
+<!--        <n-flex-->
+<!--          vertical-->
+<!--          class="header-talents-item-right"-->
+<!--          justify="center"-->
+<!--          :size="10"-->
+<!--        >-->
+<!--          <div class="header-talents-title">指南</div>-->
+<!--          <n-button text class="router-link">发展你的自由职业生涯</n-button>-->
+<!--        </n-flex>-->
         <n-flex
           vertical
           class="header-talents-item-right"
@@ -84,7 +84,7 @@ const tag = [
         </n-flex>
       </n-flex>
 
-      <n-button text class="router-link">参考更多资料</n-button>
+<!--      <n-button text class="router-link">参考更多资料</n-button>-->
     </div>
   </div>
 </template>
@@ -170,6 +170,6 @@ const tag = [
 		padding-left:20px;
 		padding-right:20px;
 	}
-}	
+}
 
 </style>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import HeaderClientTop from '@/components/Header/HeaderClientTop.vue'
-import WorkIng from '@/components/Client/WorkIng.vue'
 import { Footer, Button as RButton } from '@/components'
 import { ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
+import WorkApply from "@/components/Client/WorkApply.vue";
 
 const route = useRoute()
 
@@ -18,7 +18,7 @@ watchEffect(() => {
   <HeaderClientTop :is-login="false" :is-client="true" :is-work="false" />
     <div class="talents">
         <div class="application">
-            <WorkIng />
+          <WorkApply :status="0"/>
         </div>
         <Footer></Footer>
     </div>

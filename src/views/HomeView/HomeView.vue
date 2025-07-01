@@ -33,15 +33,15 @@ import Footer from '../../components/Footer/Footer.vue'
       justify-content: space-between;
 
       .part05Item {
-        padding: 60px 50px 30px 50px;
-        width: 360px;
-        height: 300px;
-        background: url(../../assets/img/bg1.png);
+        width: 400px;
+        height: 330px;
         background-size: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
+        background: url(../../assets/img/bg1.png);
+        background-size: 100%;;
 
         img {
           width: 75px;
@@ -115,7 +115,7 @@ import Footer from '../../components/Footer/Footer.vue'
 
       .text {
         font-weight: 500;
-        font-size: 56px;
+        font-size: 31px;
         text-align: left;
         font-style: normal;
       }
@@ -130,7 +130,6 @@ import Footer from '../../components/Footer/Footer.vue'
     }
 
     .t2 {
-      width: 464px;
       height: 26px;
       font-weight: 400;
       font-size: 16px;
@@ -364,21 +363,10 @@ import Footer from '../../components/Footer/Footer.vue'
             <img src="../../assets/img/homeicon1.png"/>
             <div class="ct">
               <div class="ct1">
-                免费使用
+                即可体验
               </div>
               <div class="ct2">
-                注册与寻找专业人士。探索项目，以及预定咨
-              </div>
-            </div>
-          </div>
-          <div class="contentItem">
-            <img src="../../assets/img/homeicon2.png"/>
-            <div class="ct">
-              <div class="ct1">
-                发布工作，雇佣人才
-              </div>
-              <div class="ct2">
-                寻找人才并不一定是件苦差事。发布工作后，
+                秒配行业专家，定制商业咨询，探索新项目
               </div>
             </div>
           </div>
@@ -386,10 +374,32 @@ import Footer from '../../components/Footer/Footer.vue'
             <img src="../../assets/img/homeicon3.png"/>
             <div class="ct">
               <div class="ct1">
-                严格的安全保障
+                发布工作，雇佣专业化人才
               </div>
               <div class="ct2">
-                资金托管平台的方式。交易无风险。
+                大模型算法30秒智能匹配，精准链接项目与专家，降低决策风险
+              </div>
+            </div>
+          </div>
+          <div class="contentItem">
+            <img src="../../assets/img/homeicon2.png"/>
+            <div class="ct">
+              <div class="ct1">
+                纯线上工作流程，汇集行业精英
+              </div>
+              <div class="ct2">
+                单刻达平台人才认证，项目无忧推进
+              </div>
+            </div>
+          </div>
+          <div class="contentItem">
+            <img src="../../assets/img/homeicon3.png"/>
+            <div class="ct">
+              <div class="ct1">
+                资金安全保障
+              </div>
+              <div class="ct2">
+                资金银行级托管，7天免费售后，交易0风险
               </div>
             </div>
           </div>
@@ -400,96 +410,7 @@ import Footer from '../../components/Footer/Footer.vue'
           </div>
         </div>
       </div>
-
     </div>
-    <!--    <div class="banner">-->
-    <!--      <div class="container">-->
-    <!--        <div class="info">-->
-    <!--          <div class="txt">-->
-    <!--            <div class="big">让天下没有难找的工作</div>-->
-    <!--            <div class="small">随时随地实现自己的价值</div>-->
-    <!--          </div>-->
-    <!--          <div class="btn">-->
-    <!--            <RouterLink to="/register">开始使用</RouterLink>-->
-    <!--          </div>-->
-    <!--          <div class="icons">-->
-    <!--            <div class="icon">-->
-    <!--              <img src="../../assets/img/quanliuchengtiyan.png" />-->
-    <!--              线上全流程-->
-    <!--            </div>-->
-    <!--            <div class="icon">-->
-    <!--              <img src="../../assets/img/pipei.png" />-->
-    <!--              高效智能匹配-->
-    <!--            </div>-->
-    <!--            <div class="icon">-->
-    <!--              <img src="../../assets/img/renzhengdunpaianquanbaozhangzhibao.png" />-->
-    <!--              严格的安全保障-->
-    <!--            </div>-->
-    <!--            <div class="icon">-->
-    <!--              <img src="../../assets/img/dingdantouminghua.png" />-->
-    <!--              透明化反馈和交易体系-->
-    <!--            </div>-->
-    <!--          </div>-->
-    <!--        </div>-->
-    <!--        <div class="img">-->
-    <!--          <img src="../../assets/img/banner_img.png" />-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <!--    </div>-->
-    <!--    <div class="part1">-->
-    <!--      <div class="wrapper">-->
-    <!--        <div class="container">-->
-    <!--          <div class="title">让寻找工作与雇佣更加简单</div>-->
-    <!--          <div class="box">-->
-    <!--            <div class="left">-->
-    <!--              <div class="item">-->
-    <!--                <div class="icon"><img src="../../assets/img/Frame8.png" /></div>-->
-    <!--                <div class="info">-->
-    <!--                  <div class="tit">免费使用</div>-->
-    <!--                  <div class="des">-->
-    <!--                    注册与寻找专业人士.-->
-    <!--                    <br />-->
-    <!--                    探索项目，以及预定咨询。-->
-    <!--                  </div>-->
-    <!--                </div>-->
-    <!--              </div>-->
-    <!--              <div class="item">-->
-    <!--                <div class="icon"><img src="../../assets/img/Frame6.png" /></div>-->
-    <!--                <div class="info">-->
-    <!--                  <div class="tit">发布工作，雇佣人才</div>-->
-    <!--                  <div class="des">-->
-    <!--                    寻找人才并不一定是件苦差事。-->
-    <!--                    <br />-->
-    <!--                    发布工作后，或许我们可以帮你找到。-->
-    <!--                  </div>-->
-    <!--                </div>-->
-    <!--              </div>-->
-    <!--              <div class="item">-->
-    <!--                <div class="icon"><img src="../../assets/img/Frame7.png" /></div>-->
-    <!--                <div class="info">-->
-    <!--                  <div class="tit">严格的安全保障</div>-->
-    <!--                  <div class="des">-->
-    <!--                    资金托管平台的方式。-->
-    <!--                    <br />-->
-    <!--                    交易无风险。-->
-    <!--                  </div>-->
-    <!--                </div>-->
-    <!--              </div>-->
-    <!--            </div>-->
-    <!--            <div class="right">-->
-    <!--              <ul>-->
-    <!--                <li class="reg">-->
-    <!--                  <RouterLink to="/register">注册使用</RouterLink>-->
-    <!--                </li>-->
-    <!--                &lt;!&ndash; <li class="lj">-->
-    <!--                  <RouterLink to="/">了解如何雇用</RouterLink>-->
-    <!--                </li> &ndash;&gt;-->
-    <!--              </ul>-->
-    <!--            </div>-->
-    <!--          </div>-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <!--    </div>-->
     <div class="part2">
       <div class="wrapper">
         <div class="container">
@@ -594,23 +515,23 @@ import Footer from '../../components/Footer/Footer.vue'
       <div class="wrapper">
         <div class="container">
           <div class="title1">关于企业</div>
-          <div class="title2" style="color: #ffffff;">这就是好企业</div>
-          <div class="title3">雇佣合适人才的方式</div>
+          <div class="title2" style="color: #ffffff;">顶尖人才矩阵</div>
+          <div class="title3">成就项目宏图</div>
           <div class="box1">
-            访问原创力上最优秀的1%的人才，以及一套完整的混合劳动力管理工具，这就是现在创新的运作方式
+            访问单刻达上最优秀的的专业化人才，为项目方精准赋能，真正降本增效
           </div>
           <div class="box">
             <div class="item">
               <div class="icon"><img src="../../assets/img/jisuxunren.png"/></div>
-              寻找合适人才，填补技能缺口
+              寻找专业化人才，纯线上高效协作
             </div>
-            <div class="item">
-              <div class="icon"><img src="../../assets/img/gongzuo.png"/></div>
-              掌握您的工作流程:雇佣、分类、支付您的人才
-            </div>
+<!--            <div class="item">-->
+<!--              <div class="icon"><img src="../../assets/img/gongzuo.png"/></div>-->
+<!--              掌握您的工作流程:雇佣、分类、支付您的人才-->
+<!--            </div>-->
             <div class="item">
               <div class="icon"><img src="../../assets/img/hezuo.png"/></div>
-              雇佣合适人才的方式
+              自由筛选高质量自由职业者，避免无效招聘，快速找到专业化人才
             </div>
           </div>
 
@@ -623,13 +544,13 @@ import Footer from '../../components/Footer/Footer.vue'
     <div class="part4">
       <div class="container">
         <div class="ctlineText">
-          关于委托人
+<!--          关于委托人-->
         </div>
         <div class="ctLine">
           <div class="ctLine1">
-            与自由工作者线上合作完成工作
+            与自由职业者线上沟通协作，共同完成目标任务
             <br/>
-            从快速转型到重大变量
+<!--            从快速转型到重大变量-->
           </div>
           <div class="ctLine2">
             用自己的方式雇佣人才
@@ -659,27 +580,27 @@ import Footer from '../../components/Footer/Footer.vue'
     </div>
     <div class="part01">
       <div class="container1">
-        <div class="t1">为什么选择在原创力雇佣人才</div>
+        <div class="t1">为什么选择在单刻达雇佣人才</div>
         <div class="part05List">
           <div class="part05Item">
             <img src="../../assets/img/bgIcon1.png"/>
-            <div class="bgText1">质量证明</div>
+            <div class="bgText1">人才严选</div>
             <div class="bgText2">
-              检查任何专业人士的工作样本。 客户评论和身份验证。
+              单刻达人才经过层层筛选，只准入行业内30%的精英，作为平台的自由职业者，为项目方项目保驾护航。
             </div>
           </div>
           <div class="part05Item">
             <img src="../../assets/img/bgIcon2.png"/>
-            <div class="bgText1">放心雇佣</div>
+            <div class="bgText1">无忧售后</div>
             <div class="bgText2">
-              寻找适合你的工作，谈价格。 只支付你批准的工作。
+              专业化客服团队为项目方提供全天候支持，项目成果7天内免费修改。
             </div>
           </div>
           <div class="part05Item">
             <img src="../../assets/img/bgIcon3.png"/>
-            <div class="bgText1">安全可靠</div>
+            <div class="bgText1">隐私保护</div>
             <div class="bgText2">
-              保护您的数据和隐私。 随时为您提供全天候支持。
+              全方位保护项目方数据与隐私，平台不留存任何项目成果，支付交易安全无忧，银行级资金托管。
             </div>
           </div>
         </div>
@@ -688,16 +609,16 @@ import Footer from '../../components/Footer/Footer.vue'
     <div class="container">
       <div class="part02">
         <div class="t1">
-          <div class="text">让人才找到</div>
-          <div class="text">合适的工作</div>
+          <div class="text">为人才匹配和展示优秀的项目，</div>
+          <div class="text">人尽其才</div>
         </div>
         <div class="t2">
-          与您乐于合作的客户会面，并将您的事业或业务提升到新的高度。
+          在单刻达平台，与顶级项目方远程高效联动，拓宽职业边界，塑造行业影响力。
         </div>
         <div class="t3">
           <div>  自由掌握您的工作时间、地点和方式</div>
           <div>  探索不同的方式来增加收入</div>
-          <div>  为你的自由职业生涯的每一个阶段寻找机会</div>
+          <div>  单刻达平台帮你寻找职业生涯中的每个机会</div>
         </div>
         <div>
           <div class="btn">
@@ -706,178 +627,6 @@ import Footer from '../../components/Footer/Footer.vue'
         </div>
       </div>
     </div>
-<!--    <div class="part4">-->
-<!--      <div class="wrapper">-->
-<!--        <div class="container">-->
-<!--          <div class="left">-->
-<!--            <div class="title1">关于委托人</div>-->
-<!--            <div class="title2">-->
-<!--              用自己的方式-->
-<!--              <br/>-->
-<!--              雇佣人才-->
-<!--            </div>-->
-<!--            <div class="title3">-->
-<!--              与自由工作者线上合作完成工作-->
-<!--              <br/>-->
-<!--              从快速转型到重大变量-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div class="right">-->
-<!--            <div class="item">-->
-<!--              <div class="tit">-->
-<!--                发布一个工作-->
-<!--                <br/>-->
-<!--                并且雇佣人才-->
-<!--              </div>-->
-<!--              <div class="link">-->
-<!--                <RouterLink to="/client/search-talents">前往人才市场</RouterLink>-->
-<!--                <img src="../../assets/img/qianjin.png"/>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="item">-->
-<!--              <div class="tit">-->
-<!--                浏览工作-->
-<!--                <br/>-->
-<!--                并且应聘一个职位-->
-<!--              </div>-->
-<!--              <div class="link">-->
-<!--                <RouterLink to="/search/position">前往项目市场</RouterLink>-->
-<!--                <img src="../../assets/img/qianjin.png"/>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="item">-->
-<!--              <div class="tit">-->
-<!--                获得专家的-->
-<!--                <br/>-->
-<!--                行业建议-->
-<!--              </div>-->
-<!--              <div class="link">-->
-<!--                <RouterLink to="/client/search-talents?is_consult=1">前往协商</RouterLink>-->
-<!--                <img src="../../assets/img/qianjin.png"/>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <div class="part5">-->
-<!--      <div class="wrapper">-->
-<!--        <div class="container">-->
-<!--          <div class="left">-->
-<!--            <div class="title1">-->
-<!--              为什么选择-->
-<!--              <br/>-->
-<!--              在原创力雇佣人才-->
-<!--            </div>-->
-<!--            <div class="box">-->
-<!--              <div class="item">-->
-<!--                <div class="icon">-->
-<!--                  <img src="../../assets/img/zhenshikekao.png" alt=""/>-->
-<!--                </div>-->
-<!--                <div class="info">-->
-<!--                  <div class="tit">质量证明</div>-->
-<!--                  <div class="des">-->
-<!--                    检查任何专业人士的工作样本。-->
-<!--                    <br/>-->
-<!--                    客户评论和身份验证。-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="item">-->
-<!--                <div class="icon">-->
-<!--                  <img src="../../assets/img/zhaopin-qiyeziliao.png" alt=""/>-->
-<!--                </div>-->
-<!--                <div class="info">-->
-<!--                  <div class="tit">放心雇佣</div>-->
-<!--                  <div class="des">-->
-<!--                    寻找适合你的工作，谈价格.-->
-<!--                    <br/>-->
-<!--                    只支付你批准的工作。-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="item">-->
-<!--                <div class="icon">-->
-<!--                  <img src="../../assets/img/zhenshikekao.png" alt=""/>-->
-<!--                </div>-->
-<!--                <div class="info">-->
-<!--                  <div class="tit">安全可靠</div>-->
-<!--                  <div class="des">-->
-<!--                    专注于您的工作，了解我们帮助保护您的数据和隐私。-->
-<!--                    <br/>-->
-<!--                    如果您需要，我们随时为您提供全天候支持.-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div class="right">-->
-<!--            <div class="box">-->
-<!--              <div class="tit1">原创力</div>-->
-<!--              <div class="tit2">随时随地实现</div>-->
-<!--              <div class="tit3">自己的价值</div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <div class="part6">-->
-<!--      <div class="wrapper">-->
-<!--        <div class="container">-->
-<!--          <div class="left">-->
-<!--            <div class="title1">关于人才</div>-->
-<!--          </div>-->
-<!--          <div class="right">-->
-<!--            <div class="tit1">-->
-<!--              让人才找到合适的-->
-<!--              <br/>-->
-<!--              工作-->
-<!--            </div>-->
-<!--            <div class="tit2">-->
-<!--              与您乐于合作的客户会面，并将您的事业或业务提升到新的高度。-->
-<!--            </div>-->
-<!--            <div class="box">-->
-<!--              <div class="item">-->
-<!--                <span></span>-->
-<!--                自由掌握您的工作时间、地点和方式-->
-<!--              </div>-->
-<!--              <div class="item">-->
-<!--                <span></span>-->
-<!--                探索不同的方式来增加收入-->
-<!--              </div>-->
-<!--              <div class="item">-->
-<!--                <span></span>-->
-<!--                为你的自由职业生涯的每一个阶段寻找机会-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="btn">-->
-<!--              <RouterLink to="/register">注册使用</RouterLink>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <div class="part7">-->
-<!--      <div class="wrapper">-->
-<!--        <div class="container">-->
-<!--          <div class="title1">受到领先品牌和创业公司的信赖</div>-->
-<!--          <div class="box">-->
-<!--            <div class="item">-->
-<!--              “我们全流程把控各个运营环节的潜在风险，使我们能够从竞争对手中脱颖而出。”-->
-<!--              <span>原创力运营总监</span>-->
-<!--            </div>-->
-<!--            <div class="item">-->
-<!--              “做一个有灵魂有温度的互联网用工平台，力求为自由职业者和客户提供一个纯粹的交易环境。”-->
-<!--              <span>原创力CEO</span>-->
-<!--            </div>-->
-<!--            <div class="item">-->
-<!--              “我们不断收集来自自由职业者和客户的意见，全天候客服团队的支持，让所有的问题在最短时间内得到解决。”-->
-<!--              <span>原创力客户支持总监</span>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-    <Footer/>
+<!--    <Footer/>-->
   </main>
 </template>

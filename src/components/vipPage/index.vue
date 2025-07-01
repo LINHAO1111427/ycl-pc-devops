@@ -2,7 +2,7 @@
   <n-modal v-model:show="modalVisible" class="custom-modal">
     <n-card style="width: 700px; padding: 20px" closable @close="closeModal">
       <n-flex vertical class="vipTitle" align="center" justify="space-evenly">
-        <div class="t1">原创力会员</div>
+        <div class="t1">单刻达会员</div>
         <div class="t2">提高您的知名度、薪酬等等！</div>
         <div class="vbtn" style="margin-top: 10px;">立即开通</div>
       </n-flex>

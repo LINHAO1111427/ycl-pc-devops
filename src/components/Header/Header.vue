@@ -20,7 +20,7 @@ const getHeaderHeight = computed(() => props.isHeaderNav ? '101px' : '64px')
 
 <template>
   <header>
-    <HeaderTop :is-work="isWork" :is-login="isLogin"  />
+    <HeaderTop :is-work="isWork" :is-login="isLogin"  :isView="true"/>
     <HeaderNav v-if="isHeaderNav" />
   </header>
   <div class="header_bg"></div>

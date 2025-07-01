@@ -236,6 +236,7 @@ function onClickChecked(index){
 
 
     .terms-type {
+      width: 50%;
         display: flex;
         gap: 20px;
 

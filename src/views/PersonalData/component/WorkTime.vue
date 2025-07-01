@@ -43,7 +43,7 @@ function onClickConfirm(){
         <Text :size="30">有效工作时间</Text>
         <n-flex vertical>
           <Text :size="18">每周小时数</Text>
-          <Text :size="16" color="#808080">了解你的工作量有助于原创力找到适合你的工作。</Text>
+          <Text :size="16" color="#808080">了解你的工作量有助于单刻达找到适合你的工作。</Text>
         </n-flex>
         <n-divider style="margin: 0"></n-divider>
         <n-space vertical>

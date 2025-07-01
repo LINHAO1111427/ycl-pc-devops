@@ -60,7 +60,7 @@ function register(){
 		router.push('/talents')
 	}else{
 		router.push('/client/index')
-	}	
+	}
 }
 </script>
 
@@ -77,7 +77,7 @@ function register(){
           <img src="../../assets/img/back-image.png" alt="" />
           返回
         </div>
-        <div class="password_header-logo">原创力</div>
+        <div class="password_header-logo">单刻达</div>
       </n-flex>
       <template v-if="!isRegister">
         <div class="register-body">
@@ -113,7 +113,7 @@ function register(){
           <div class="footer-container">
             <Button @click="isRegister = !isRegister">创建用户</Button>
             <div class="form-prompt">
-              已拥有原创力账号？
+              已拥有单刻达账号？
               <RouterLink to="/login">
                 <n-button type="primary" text>登录</n-button>
               </RouterLink>
@@ -143,7 +143,7 @@ function register(){
                 给我发有用的电子邮件，以找到有价值的工作和工作线索。
               </n-checkbox>
               <n-checkbox>
-                我理解并同意原创力
+                我理解并同意单刻达
                 <n-button text type="primary" class="router-link">
                   服务条款
                 </n-button>
@@ -162,7 +162,7 @@ function register(){
               注册
             </n-button>
             <div class="form-prompt">
-              已注册原创力账号?
+              已注册单刻达账号?
               <RouterLink to="/login">
                 <n-button type="primary" text>前往登录</n-button>
               </RouterLink>
@@ -386,7 +386,7 @@ function register(){
         gap: 10px;
         align-items: center;
 		cursor: pointer;
-		
+
         & img {
           width: 30px;
           height: 30px;

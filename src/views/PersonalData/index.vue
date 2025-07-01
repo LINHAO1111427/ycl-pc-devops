@@ -37,7 +37,7 @@
 	<Layout>
 		<div class="personal-data">
 			<n-flex class="personal-data-header" align="center" :size="20">
-				<n-avatar :size="60" round :src="avatarUrl"></n-avatar>
+				<n-avatar :size="60" round ></n-avatar>
 				<n-flex vertical :size="10">
 					<n-flex class="personal-data-title" align="center">
 						Jason Z.

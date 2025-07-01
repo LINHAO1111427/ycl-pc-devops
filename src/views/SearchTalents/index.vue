@@ -117,14 +117,6 @@ const options = [
     key: 'shou',
     children: [
       {
-        item: '每小时',
-        value: '每小时',
-      },
-      {
-        item: '固定价格',
-        value: '固定价格',
-      },
-      {
         item: '少于100元',
         value: '少于100元',
       },
@@ -203,7 +195,7 @@ const options = [
   .search-category {
     flex-shrink: 0;
   }
-  
+
   ::v-deep(.n-tabs-tab__label) {
     font-size: 16px;
   }

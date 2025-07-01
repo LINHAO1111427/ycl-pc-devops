@@ -24,10 +24,10 @@
                             </div>
                             <div class="talent-item-name">宝拉</div>
                             <div class="talent-item-brief">专业配音艺术家和翻译</div>
-                            <div class="talent-item-money">
-                                <span>￥</span>
-                                ￥40.00/小时
-                            </div>
+<!--                            <div class="talent-item-money">-->
+<!--                                <span>￥</span>-->
+<!--                                ￥40.00/小时-->
+<!--                            </div>-->
                             <div class="talent-item-rate">
                                 <n-rate readonly :default-value="5" />
                                 <span>5</span>

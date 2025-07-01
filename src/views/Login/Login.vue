@@ -33,14 +33,14 @@ function onClickLogin() {
     <div class="login-box">
       <div class="box-left">
         <div class="box-title">
-          原创力
+          单刻达
         </div>
         <img src="../../assets/img/login-back.png" alt="">
       </div>
       <div class="box-right">
         <div class="box-right-container">
           <div class="box-right-title">
-            欢迎登录原创力
+            欢迎登录单刻达
           </div>
           <Tabs :options="options" :value="currentTabs" @click="onClickSwiperTabs" />
           <div class="form-tabs-container">
@@ -53,7 +53,7 @@ function onClickLogin() {
               <n-button type="primary" block size="large" @click="onClickLogin">登录</n-button>
             </div>
             <div class="form-prompt">
-              没有原创力账号？
+              没有单刻达账号？
               <RouterLink to="/register">
                 <n-button type="primary" text>去注册</n-button>
               </RouterLink>

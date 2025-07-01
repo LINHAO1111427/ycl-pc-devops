@@ -31,7 +31,7 @@
 							window.open(routeData.href, '_blank')
 						},
 					},
-					{ default: () => '原创力平台订单取消协议' }),
+					{ default: () => '单刻达平台订单取消协议' }),
 			]),
 			positiveText: '是',
 			negativeText: '否',
@@ -308,7 +308,7 @@
             font-size: 34px;
             color: #333333;
         }
-		
+
 		.hide_input{
 			position: relative;
 			::v-deep(.n-date-picker){

@@ -116,7 +116,7 @@ const charMessageShow = ref(false)
             <n-button text type="primary"  @click="charMessageShow = true"><span style="text-decoration: underline">举报不当内容</span></n-button>
           </n-flex>
           <div class="secondary-color-text-1">
-            于2024-07-30加入原创力
+            于2024-07-30加入单刻达
           </div>
         </div>
         <div>
@@ -186,14 +186,14 @@ const charMessageShow = ref(false)
             50+
           </div>
         </n-flex>
-        <n-flex justify="space-between" class="skills-item">
-          <div>
-            当前面试数量：
-          </div>
-          <div>
-            7
-          </div>
-        </n-flex>
+<!--        <n-flex justify="space-between" class="skills-item">-->
+<!--          <div>-->
+<!--            当前面试数量：-->
+<!--          </div>-->
+<!--          <div>-->
+<!--            7-->
+<!--          </div>-->
+<!--        </n-flex>-->
         <n-flex justify="space-between" class="skills-item">
           <div>
             发出邀请数量：
@@ -403,7 +403,7 @@ const charMessageShow = ref(false)
     line-height: 30px;
     border-bottom: solid 1px #EDEDED;
   }
-  
+
   .flex-new{
 	  display: flex;
 	  align-items: center;
