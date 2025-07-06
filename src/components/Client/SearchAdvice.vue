@@ -30,9 +30,9 @@
             <div class="n-flex-left-item">
                 <div class="item-member">
                     <span class="item-member-title">个人资料</span>
-                    <span>
-                        <n-button type="primary" ghost @click="onClickUrl('/client/member-detail')">在新窗口打开个人资料</n-button>
-                    </span>
+<!--                    <span>-->
+<!--                        <n-button type="primary" ghost @click="onClickUrl('/client/member-detail')">在新窗口打开个人资料</n-button>-->
+<!--                    </span>-->
                 </div>
                 <div class="item-member-view">
                     <div class="item-member-view-left">
@@ -552,6 +552,6 @@ h1 {
 
 ::v-deep(.n-base-icon svg),
 ::v-deep(.n-base-icon) {
-    color: #F18B41;
+    //color: #F18B41;
 }
 </style>

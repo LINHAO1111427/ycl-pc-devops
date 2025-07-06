@@ -1,24 +1,23 @@
 <template>
-  <div class="personal-data">
+  <div class="personal-data" v-if="isinIt">
     <n-flex class="personal-data-header" align="center" :size="20">
-      <n-avatar :size="60" round :src="avatarUrl"></n-avatar>
+      <n-avatar :size="60" round :src="user.userFoundation.avatar"></n-avatar>
       <n-flex vertical :size="10">
         <n-flex class="personal-data-title" align="center">
-          Jason Z.
-
+          {{ user.userFoundation.name }}
         </n-flex>
         <n-space align="center">
           <n-flex class="secondary-color-text-1" align="center" :size="5">
             <n-icon :size="16" class="main-color-size">
               <LocationOutline/>
             </n-icon>
-            天津
+            {{ user.userFoundation.city || '暂无' }}
           </n-flex>
           <n-flex class="secondary-color-text-1" align="center" :size="5">
             <n-icon :size="10" class="main-color-size">
               <EllipseSharp/>
             </n-icon>
-            在线时间 9:00
+            在线时间 {{ user.userFoundation.loginTime || '暂无' }}
           </n-flex>
         </n-space>
       </n-flex>
@@ -63,15 +62,15 @@
         </div>
         <n-flex class="personal-data-slider-nums" align="center" justify="center" :size="20">
           <n-flex class="personal-data-slider-nums-item" vertical align="center">
-            <div class="slider-nums-item-nums">124</div>
+            <div class="slider-nums-item-nums">{{ user.userOrderInfo.orderCount }}</div>
             <div class="secondary-color-text-1">历史接单(单)</div>
           </n-flex>
           <n-flex class="personal-data-slider-nums-item" vertical align="center">
-            <div class="slider-nums-item-nums">124000</div>
+            <div class="slider-nums-item-nums">{{ user.userOrderInfo.totalIncome }}</div>
             <div class="secondary-color-text-1">总收入(￥)</div>
           </n-flex>
           <n-flex class="personal-data-slider-nums-item" vertical align="center">
-            <div class="slider-nums-item-nums">4.9</div>
+            <div class="slider-nums-item-nums">{{ user.userOrderInfo.assess }}</div>
             <div class="secondary-color-text-1">评分(5.0)</div>
           </n-flex>
         </n-flex>
@@ -87,31 +86,26 @@
           <n-flex align="center" justify="space-between">
             <n-space vertical>
               <span style="font-size: 14px">每周小时数量</span>
-              <span class="secondary-color-text-1">超过40小时/周</span>
+              <span class="secondary-color-text-1">超过{{ user.userOtherInfo.weeklyWorkHours }}小时/周</span>
             </n-space>
           </n-flex>
           <n-flex vertical :size="15">
             <n-flex align="center" justify="space-between">
               <div class="text-size-16">语言</div>
             </n-flex>
-            <n-flex justify="space-between">
+            <n-flex justify="space-between" v-for="(item1,index) in user.userOtherInfo.languageList">
               <n-flex vertical :size="10">
-                <span style="font-size: 14px">中文：母语或双语</span>
-              </n-flex>
-            </n-flex>
-            <n-flex justify="space-between">
-              <n-flex vertical :size="10">
-                <span style="font-size: 14px">英语：母语或双语</span>
+                <span style="font-size: 14px">{{ item1.language }}：{{ item1.level }}</span>
               </n-flex>
             </n-flex>
           </n-flex>
-          <n-flex align="center" justify="space-between">
+          <n-flex align="center" justify="space-between" v-if="user.userOtherInfo.cardUrl!==null">
             <div class="text-size-16">个人验证</div>
           </n-flex>
           <n-flex align="center">
             <n-space vertical>
               <span style="font-size: 14px">身份证认证</span>
-              <n-flex align="center">
+              <n-flex align="center" v-if="user.userOtherInfo.cardUrl!==null">
                 <Text class="secondary-color-text-1">已认证</Text>
                 <i class="icon-weiyanzheng iconfont"></i>
               </n-flex>
@@ -121,19 +115,11 @@
             <n-flex align="center" justify="space-between">
               <div class="text-size-16">教育</div>
             </n-flex>
-            <n-flex justify="space-between">
+            <n-flex justify="space-between" v-for="(item1,index) in user.userOtherInfo.qualificationsList">
               <n-flex vertical :size="10">
-                <span style="font-size: 14px">清华大学</span>
-                <span class="secondary-color-text-1">设计硕士，高级设计师</span>
-                <span class="secondary-color-text-1">2016-2019</span>
-              </n-flex>
-
-            </n-flex>
-            <n-flex justify="space-between">
-              <n-flex vertical :size="10">
-                <span style="font-size: 14px">天津美术学院</span>
-                <span class="secondary-color-text-1">设计硕士，高级设计师</span>
-                <span class="secondary-color-text-1">2016-2019</span>
+                <span style="font-size: 14px">{{ item1.schoolName }}</span>
+                <span class="secondary-color-text-1">{{ item1.major }}</span>
+                <span class="secondary-color-text-1">{{ item1.startDate }} {{ item1.graduationDate }} </span>
               </n-flex>
             </n-flex>
           </n-flex>
@@ -150,29 +136,28 @@
             </n-icon>
           </n-flex>
           <Text :size="14" class="secondary-color-text-1">
-            CET4/6 TEM4/8
-            我在我的大学通过了，TEM8是我国的最高级别，代表英语学习者可以像母语人士一样与外国人交流，在我的国家，我做过翻译，为外国客户翻译论文和其他东西，我有很强的学习新事物的能力，如果你雇用我，
-            我绝对不会让你失望的！
+            {{ user.userBusinessConsultation.selfIntroduction }}
           </Text>
         </div>
         <div class="personal-work-experience">
           <n-flex align="center" style="height: 30px;margin-bottom: 30px">
             <Text :size="26" weight="600">工作经历</Text>
           </n-flex>
-          <Text :size="18">
-            已完成工作（3）
+          <Text :size="18" v-if="user.userBusinessConsultation.workList!==null">
+            已完成工作
           </Text>
           <n-flex class="personal-work-list" :size="20" vertical>
-            <n-flex class="personal-work-list-item" vertical v-for="_item in 3" @click="showWorkDetails = true">
+            <n-flex class="personal-work-list-item" vertical v-for="(item,index) in user.userBusinessConsultation.workList"
+                    @click="showWorkDetails = true">
               <Text :size="20">
-                将普通话翻译成英语
+                {{ item.workName }}
               </Text>
               <Text :size="16" color="#808080">
-                没有给出反馈
+                {{ item.position }}
               </Text>
               <n-flex justify="space-between" style="margin-top: 20px">
                 <Text :size="16" color="#808080">
-                  2021-04-10 - 2022-04-10
+                  {{ item.startData }} {{ item.endData }}
                 </Text>
               </n-flex>
             </n-flex>
@@ -181,15 +166,7 @@
         <n-flex class="personal-skills-container" vertical :size="20">
           <Text :size="26" weight="600">技能和专业知识</Text>
           <n-flex>
-            <n-tag round class="cursor-pointer-style">中文</n-tag>
-            <n-tag round class="cursor-pointer-style">法语</n-tag>
-            <n-tag round class="cursor-pointer-style">德语</n-tag>
-            <n-tag round class="cursor-pointer-style">阿拉伯语</n-tag>
-            <n-tag round class="cursor-pointer-style">荷兰语</n-tag>
-            <n-tag round class="cursor-pointer-style">意大利语</n-tag>
-            <n-tag round class="cursor-pointer-style">日语</n-tag>
-            <n-tag round class="cursor-pointer-style">朝鲜语</n-tag>
-            <n-tag round class="cursor-pointer-style">内容本地化</n-tag>
+            <n-tag round class="cursor-pointer-style" v-for="(item,index) in skills">{{ item }}</n-tag>
           </n-flex>
         </n-flex>
         <n-flex class="personal-skills-container" vertical :size="10">
@@ -199,9 +176,9 @@
             <!--              <img src="../../assets/client/10.png" alt="">-->
             <!--            </div>-->
             <div class="item-open-scroll">
-              <n-flex class="item-open-view" vertical v-for="item in 3" :key="item">
+              <n-flex class="item-open-view" vertical v-for="(item,index) in user.userConsultaionList" :key="item">
                 <p class="item-open-view-p1">
-                  商业咨询<span>咨询服务说明</span>
+                  商业咨询<span>{{ item.projectName }}</span>
                   <div class="item-open-btn">
                     <n-button type="primary" round style="padding:0 40px"
                               @click="$router.push('/client/search-advice')">
@@ -209,26 +186,12 @@
                     </n-button>
                   </div>
                 </p>
-                <p class="item-open-view-p2">腾讯会议每30分钟150元</p>
-                <p class="item-open-view-p3">下次咨询时间：14:00</p>
+                <p class="item-open-view-p2">
+                  {{ item.projectIntroduction }}每{{ item.consultationDuration }}分钟{{ item.consultaionPrice }}元</p>
+                <p class="item-open-view-p3">下次咨询时间：{{ item.consultaionTime }}</p>
                 <div class="n-flex-left-item-tag1">
                   <n-tag size="small" :color="{textColor:'#808080',borderColor:'#E9E9E9',color:'#E9E9E9'}"
-                         round>文件翻译
-                  </n-tag>
-                  <n-tag size="small" :color="{textColor:'#808080',borderColor:'#E9E9E9',color:'#E9E9E9'}"
-                         round>译本
-                  </n-tag>
-                  <n-tag size="small" :color="{textColor:'#808080',borderColor:'#E9E9E9',color:'#E9E9E9'}"
-                         round>普通话
-                  </n-tag>
-                  <n-tag size="small" :color="{textColor:'#808080',borderColor:'#E9E9E9',color:'#E9E9E9'}"
-                         round>方言
-                  </n-tag>
-                  <n-tag size="small" :color="{textColor:'#808080',borderColor:'#E9E9E9',color:'#E9E9E9'}"
-                         round>英译中文
-                  </n-tag>
-                  <n-tag size="small" :color="{textColor:'#808080',borderColor:'#E9E9E9',color:'#E9E9E9'}"
-                         round>翻译
+                         round v-for="(item,index) in achievement">{{ item }}
                   </n-tag>
                 </div>
               </n-flex>
@@ -244,21 +207,13 @@
             </Text>
             <template v-else>
               <n-flex style="margin-top: 20px">
-                <n-flex vertical>
+                <n-flex vertical v-for="(item,index) in old">
                   <n-image>
                     <template #placeholder>
                       <div class="image-placeholder"></div>
                     </template>
                   </n-image>
-                  <Text :size="16" weight="600">证书</Text>
-                </n-flex>
-                <n-flex vertical>
-                  <n-image>
-                    <template #placeholder>
-                      <div class="image-placeholder"></div>
-                    </template>
-                  </n-image>
-                  <Text :size="16" weight="600">设计：web网站</Text>
+                  <Text :size="16" weight="600">{{ item.title }}</Text>
                 </n-flex>
               </n-flex>
             </template>
@@ -268,26 +223,25 @@
       </div>
     </n-flex>
   </div>
-
-  <div class="client-form">
-    <div class="client-form-view">
-      <p class="client-form-view-title">工作经历</p>
-      <p class="client-form-view-pp">阿尔法视觉有限公司</p>
-      <p class="client-form-view-p1">视觉设计师</p>
-      <p class="client-form-view-p2">2016年3月-目前</p>
-      <p class="client-form-view-p2">
-        我现在在阿尔法视觉有限公司担任视觉设计师职位，我的工作时负责公司设计方面的一切工作</p>
-    </div>
-  </div>
-  <div class="client-form">
-    <div class="client-form-view">
-      <p class="client-form-view-title">其他经历</p>
-      <p class="client-form-view-pp">个人经历</p>
-      <p class="client-form-view-p1">视觉设计师</p>
-      <p class="client-form-view-p2">
-        我现在在阿尔法视觉有限公司担任视觉设计师职位，我的工作时负责公司设计方面的一切工作</p>
-    </div>
-  </div>
+<!--  <div class="client-form">-->
+  <!--    <div class="client-form-view">-->
+  <!--      <p class="client-form-view-title">工作经历</p>-->
+  <!--      <p class="client-form-view-pp">阿尔法视觉有限公司</p>-->
+  <!--      <p class="client-form-view-p1">视觉设计师</p>-->
+  <!--      <p class="client-form-view-p2">2016年3月-目前</p>-->
+  <!--      <p class="client-form-view-p2">-->
+  <!--        我现在在阿尔法视觉有限公司担任视觉设计师职位，我的工作时负责公司设计方面的一切工作</p>-->
+  <!--    </div>-->
+  <!--  </div>-->
+  <!--  <div class="client-form">-->
+  <!--    <div class="client-form-view">-->
+  <!--      <p class="client-form-view-title">其他经历</p>-->
+  <!--      <p class="client-form-view-pp">个人经历</p>-->
+  <!--      <p class="client-form-view-p1">视觉设计师</p>-->
+  <!--      <p class="client-form-view-p2">-->
+  <!--        我现在在阿尔法视觉有限公司担任视觉设计师职位，我的工作时负责公司设计方面的一切工作</p>-->
+  <!--    </div>-->
+  <!--  </div>-->
 
   <!-- 立即邀请发送项目简历按钮 -->
   <IndexMemberSend v-model:show="send" :typeValue="typeValue" @updateFunc="updateFunc"/>
@@ -304,10 +258,15 @@ import {
   from '@vicons/ionicons5'
 import avatarUrl from '../../assets/img/avatar.png'
 import {Text, RenderIcon, IconStart} from '@/components'
-import {ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import IndexMemberSend from './IndexMemberSend.vue'
 import {createDiscreteApi} from "naive-ui";
-
+import {userInfo} from '@/api/base'
+import {useMessage} from 'naive-ui'
+import * as from from "@vicons/ionicons5";
+import {pageOld} from "@/api/home.js";
+// 创建 message 实例
+const message = useMessage()
 var edi = false
 
 var active = true
@@ -316,15 +275,23 @@ const send = ref(false)
 const typeValue = ref(1)
 const isPayment = ref(false)
 const {dialog} = createDiscreteApi(['dialog'])
+const isinIt = ref(false)
 const props = defineProps({
   isShowButton: {
     type: Boolean,
     default: true,
   },
+  userId: {
+    type: Number,
+    default: null,
+  },
 })
-
+const user = ref({})
+const skills = ref([])
+const old = ref([])
+const achievement = ref([])
 const change_send = (val) => {
-  if(val!==1){
+  if (val !== 1) {
     if (isPayment.value) {
       dialog.success({
         actionClass: 'naiveui-dialog-action',
@@ -346,7 +313,7 @@ const change_send = (val) => {
       send.value = !send.value
       typeValue.value = val
     }
-  }else{
+  } else {
     send.value = !send.value
     typeValue.value = val
   }
@@ -358,6 +325,35 @@ const updateFunc = (val) => {
 const isCollection = ref(false)
 
 const charMessageShow = ref(false)
+
+onMounted(async () => {
+  try {
+    const res1 = await userInfo({userId: props.userId})
+    if (res1.code !== 0) {
+      message.error(res1.msg || '获取人才详情失败')
+      return
+    }
+
+    user.value = res1.data.info
+    skills.value = (res1?.data?.info?.userBusinessConsultation?.skills || '')
+        .split(',')
+        .filter(skill => skill.trim() !== '')
+    const res = await pageOld({
+      workerId: props.userId,
+      pageNo: 1,
+      pageSize: 10
+    })
+    if (res.code === -1) {
+      message.error(res.msg)
+      return
+    }
+    old.value = res.data.list.slice(0, 2)
+    isinIt.value = true
+  } catch (err) {
+    console.error('获取用户详情失败', err)
+    message.error('请求失败，请稍后重试')
+  }
+})
 </script>
 <style scoped>
 .start-icons-button {

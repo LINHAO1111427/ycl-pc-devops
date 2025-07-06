@@ -11,7 +11,7 @@ import {Notice, renderCustomHeader, renderCustomIcons} from '@/components/Header
 import HeaderDropdownSelect from './HeaderDropdownSelect.vue'
 import ChangeAccount from './ChangeAccount.vue'
 import EditAvatar from '@/views/PersonalData/component/EditAvatar.vue'
-import {} from '@/api/user'
+
 const router = useRouter()
 
 const searchType = ref('人才')
@@ -25,7 +25,13 @@ let id: null | number = null
 const key = ref('College')
 
 type Options = any[] | ((value: any[]) => any[])
-const avatar = localStorage.getItem('avatar') || ''
+import {useStore} from 'vuex'
+import {computed} from 'vue'
+
+const store = useStore()
+const avatar = computed(() => store.getters.avatar)
+const userInfo = computed(() => store.getters.userInfo)
+console.log(userInfo.value)
 const props = withDefaults(
     defineProps<{
       isWork: boolean,
@@ -36,7 +42,7 @@ const props = withDefaults(
     {
       isView: false,
       isWork: true,
-      isLogin: false,
+      isLogin: true,
     }
 )
 
@@ -74,11 +80,11 @@ const avatarOptions = ref([
     key: 'header',
     type: 'render',
     // render: renderCustomHeader,
-    render: () => h(renderCustomHeader, {
-      onClick: (event) => {
-        showEditAvatar.value = true
-      },
-    })
+    render: () =>
+        renderCustomHeader(avatar.value, userInfo.value, (event) => {
+          console.log(event)
+          showEditAvatar.value = true
+        })
   },
   {
     key: 'icons',
@@ -174,7 +180,7 @@ const charMessageShow = ref(false)
     <div class="wrapper">
       <div class="container">
         <div class="container-header-nav">
-          <div class="logo" @click="$router.push('/')">
+          <div class="logo" @click="$router.push('/talents')">
             <img src="../../assets/img/logo.png" alt=""/>
           </div>
           <div class="header-nav-container">
@@ -278,7 +284,7 @@ const charMessageShow = ref(false)
               </template>
             </n-input>
             <n-space>
-              <template v-if="isLogin">
+              <template v-if="!isLogin">
                 <n-button
                     style="width: 104px"
                     quaternary
@@ -303,9 +309,9 @@ const charMessageShow = ref(false)
                 <n-flex align="center" :size="30" style="margin-left: 30px">
                   <RenderIcon size="24" fill="#808080" :icon="IconService" @click="charMessageShow = true"/>
                   <n-dropdown trigger="hover" :options="noticeOptions" show-arrow placement="bottom-end">
-                    <n-badge :offset="[-4,2]" color="red" dot>
-                      <RenderIcon size="24" fill="#808080" :icon="IconRemind"/>
-                    </n-badge>
+                    <!--                    <n-badge :offset="[-4,2]" color="red" dot>-->
+                    <RenderIcon size="24" fill="#808080" :icon="IconRemind"/>
+                    <!--                    </n-badge>-->
                   </n-dropdown>
                   <n-dropdown trigger="hover" :options="avatarOptions" show-arrow style="width:245px">
                     <n-avatar
@@ -328,7 +334,7 @@ const charMessageShow = ref(false)
     </HeaderModal>
   </div>
   <ChatMessage v-model:show="charMessageShow"/>
-  <ChangeAccount v-model:show="showChangeAccount"/>
+  <ChangeAccount v-model:show="showChangeAccount" v-if="showChangeAccount"/>
   <EditAvatar v-model:show="showEditAvatar"/>
 </template>
 

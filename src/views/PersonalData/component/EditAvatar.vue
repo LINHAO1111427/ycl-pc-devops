@@ -3,15 +3,18 @@ import {Text} from '@/components'
 import {createDiscreteApi} from 'naive-ui'
 import {upUserAvatar} from '@/api/user'
 
-const emit = defineEmits(['update:show'])
+const emit = defineEmits(['update:show','success'])
 
 const {dialog} = createDiscreteApi(['dialog'])
-const uploadUrl = 'http://47.120.73.189:48080/app-api/common/addOrUpdate' // 替换为你的真实上传地址
+const uploadUrl = `${import.meta.env.VITE_API_BASE_URL}/app-api/common/addOrUpdate` // 替换为你的真实上传地址
 // 假设 token 来自 localStorage 或其他状态管理
 const token = localStorage.getItem('token')
 const userId = localStorage.getItem('userId')
-const avatar = localStorage.getItem('avatar')
+const avatar = ref(localStorage.getItem('avatar') || '')
 const imageUrl = ref('null')
+import { useStore } from 'vuex'
+
+const store = useStore()
 // 设置 headers
 const uploadHeaders = {
   Authorization: `Bearer ${token}`, // 或其他自定义 key，比如 'token': token
@@ -23,7 +26,7 @@ function handleUploadFinish({file, event, fileList}) {
   console.log('上传成功：', response)
 
   // 你可以从 response 中取出图片 URL
-  avatar = response.url || response.data?.url
+  avatar.value = response.url || response.data?.url
   console.log('图片 URL:', imageUrl)
 
   // TODO: 你可以把 imageUrl 存到某个变量或者传给父组件
@@ -32,8 +35,10 @@ function handleUploadFinish({file, event, fileList}) {
 const submit = async () => {
   await upUserAvatar({
     userId: userId, //用户id
-    avatar: avatar
+    avatar: avatar.value
   })
+  store.dispatch('updateAvatar', avatar.value)
+  localStorage.setItem('avatar', avatar.value)
   dialog.success({
     actionClass: 'naiveui-dialog-action',
     showIcon: false,
@@ -47,6 +52,7 @@ const submit = async () => {
     },
     onPositiveClick: () => {
       emit('update:show', false)
+      emit('success')
     }
   })
 }

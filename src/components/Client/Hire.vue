@@ -310,6 +310,6 @@ function onClickUrl(){
 
 ::v-deep(.n-base-icon svg),
 ::v-deep(.n-base-icon) {
-    color: #F18B41;
+    //color: #F18B41;
 }
 </style>

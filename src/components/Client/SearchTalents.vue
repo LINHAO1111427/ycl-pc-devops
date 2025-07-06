@@ -4,6 +4,7 @@ import SearchCategory from '@/components/SearchCategory/index.vue'
 import HeaderTop from '@/components/Header/HeaderTop.vue'
 import Cart from '@/components/Client/SearchTalentsDetails.vue'
 import {useRouter} from 'vue-router'
+import {userFilter} from '@/api/base'
 
 const router = useRouter()
 const IndexMember = defineAsyncComponent(() => import('@/components/Client/IndexMember.vue'))
@@ -11,7 +12,10 @@ import {
   ChevronBack
 }
   from '@vicons/ionicons5'
-
+import {onMounted} from "vue";
+import {useMessage} from 'naive-ui'
+// 创建 message 实例
+const message = useMessage()
 const props = defineProps({
   isConsult: {
     type: Boolean,
@@ -39,24 +43,24 @@ const options = [
     ],
     value: props.isConsult == 1 ? ['商业咨询'] : []
   },
-  {
-    header: '5星好评率',
-    key: 'rate',
-    children: [
-      {
-        item: '0-2',
-        value: '0-2',
-      },
-      {
-        item: '2-4',
-        value: '2-4',
-      },
-      {
-        item: '4-5',
-        value: '4-5',
-      },
-    ],
-  },
+  // {
+  //   header: '5星好评率',
+  //   key: 'rate',
+  //   children: [
+  //     {
+  //       item: '0-2',
+  //       value: '0-2',
+  //     },
+  //     {
+  //       item: '2-4',
+  //       value: '2-4',
+  //     },
+  //     {
+  //       item: '4-5',
+  //       value: '4-5',
+  //     },
+  //   ],
+  // },
   {
     header: '接单量',
     key: 'jie',
@@ -131,12 +135,16 @@ const options = [
     ],
   },
 ]
+const userList = ref([])
 const open_index_member = ref(false)
+const userId = ref()
 const open_member = () => {
+
   open_index_member.value = !open_index_member.value
 }
-const openFunc = (data) => {
-  console.log(data)
+const openFunc = (item, data) => {
+  console.log(item.value)
+  userId.value = item.userId
   open_index_member.value = true
   if (data === "1") {
     setTimeout(() => {
@@ -153,6 +161,15 @@ function onClickUrl() {
   const routerPath = router.resolve(`/client/member-detail`).href
   window.open(routerPath, '_blank')
 }
+
+onMounted(async () => {
+  const res = await userFilter({bossUserId: localStorage.getItem('userId')})
+  if (res.code !== 0) {
+    message.error(res.msg)
+    return
+  }
+  userList.value = res.data.list
+})
 </script>
 
 <template>
@@ -178,7 +195,7 @@ function onClickUrl() {
         <!--          <n-tab-pane name="jay chou" tab="企业" />-->
         <!--        </n-tabs>-->
         <n-flex class="search-category-container" vertical :size="20">
-          <Cart :isConsult="isConsult" @click="openFunc"></Cart>
+          <Cart :isConsult="isConsult" @click="openFunc" :userList="userList"></Cart>
         </n-flex>
       </n-flex>
     </n-flex>
@@ -191,10 +208,10 @@ function onClickUrl() {
           <n-icon :size="20" class="cursor-pointer-style">
             <ChevronBack/>
           </n-icon>
-          <n-button size="small" type="primary" ghost @click="onClickUrl">在新窗口中打开个人资料</n-button>
+<!--          <n-button size="small" type="primary" ghost @click="onClickUrl">在新窗口中打开个人资料</n-button>-->
         </n-flex>
       </template>
-      <IndexMember/>
+      <IndexMember :userId="userId"/>
     </n-drawer-content>
   </n-drawer>
 </template>

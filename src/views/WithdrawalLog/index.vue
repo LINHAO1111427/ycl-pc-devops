@@ -5,7 +5,7 @@ import { SettingsOutline } from '@vicons/ionicons5'
 </script>
 
 <template>
-  <HeaderTop :is-work="false" :is-login="false"></HeaderTop>
+  <HeaderTop :is-work="false" ></HeaderTop>
   <div class="my-wallet">
     <div class="wallet">
       <div class="wallet-header-title">
@@ -34,7 +34,7 @@ import { SettingsOutline } from '@vicons/ionicons5'
   height: $container-height;
   overflow: auto;
   background-color: $BackColor;
-  
+
   .wallet {
     width: 1326px;
     margin: auto;
@@ -55,11 +55,11 @@ import { SettingsOutline } from '@vicons/ionicons5'
     color: #000000;
 	display: flex;
   }
-  
+
   .wallet-amount-slider-content{
 	  margin-top: 82px;
   }
-  
+
   .date-main{
 	  margin-top: 10px;
   }

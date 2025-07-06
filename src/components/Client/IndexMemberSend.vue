@@ -198,7 +198,7 @@
             取消
           </n-button>
           <n-button type="primary" @click="confirm">
-            {{ typeValue == 1 ? '发送offer' : '继续付款' }}
+            {{ typeValue == 1 ? '发送offer' : '确认邀请' }}
           </n-button>
         </div>
       </template>

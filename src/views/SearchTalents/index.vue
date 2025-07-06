@@ -34,24 +34,24 @@ const options = [
     ],
 	value:isConsult.value == 1 ? ['商业咨询'] : []
   },
-  {
-    header: '5星好评率',
-    key: 'rate',
-    children: [
-      {
-        item: '0-2',
-        value: '0-2',
-      },
-      {
-        item: '2-4',
-        value: '2-4',
-      },
-      {
-        item: '4-5',
-        value: '4-5',
-      },
-    ],
-  },
+  // {
+  //   header: '5星好评率',
+  //   key: 'rate',
+  //   children: [
+  //     {
+  //       item: '0-2',
+  //       value: '0-2',
+  //     },
+  //     {
+  //       item: '2-4',
+  //       value: '2-4',
+  //     },
+  //     {
+  //       item: '4-5',
+  //       value: '4-5',
+  //     },
+  //   ],
+  // },
   {
     header: '接单量',
     key: 'jie',

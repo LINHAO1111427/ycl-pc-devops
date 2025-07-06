@@ -146,7 +146,10 @@ function handleUpdateValue() {
 <template>
   <div class="application">
     <div class="application-container">
-      <div class="application-header-title">{{ title }}</div>
+      <div class="application-header-title">{{
+          status === 100 ? '所有工作' : (status === 0 ? '生效的工作' : '审核中的工作')
+        }}
+      </div>
       <n-flex align="center" style="margin-bottom:20px;">
         <n-input round placeholder="搜索项目名称" size="large" style="width: 516px">
           <template #prefix>

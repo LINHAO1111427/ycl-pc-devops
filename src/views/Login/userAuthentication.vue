@@ -5,6 +5,7 @@ import {ArchiveOutline as ArchiveIcon, ReturnDownBackSharp} from '@vicons/ionico
 
 const images = import.meta.glob('@/assets/img/*.png', {eager: true});
 import {useRouter, useRoute} from "vue-router";
+import {getUserSkill} from '@/api/user'
 import {Text} from "@/components";
 import {
   guideUserInfo,
@@ -38,11 +39,7 @@ const levels = [
     img: images['/src/assets/img/uac3.png'].default
   }
 ];
-const options = [
-  {label: 'java', value: 'java'},
-  {label: 'vue', value: 'vue'},
-  {label: 'c++', value: 'c++'}
-]
+const options = ref([])
 const levels1 = [
   {
     key: "beginner1",
@@ -79,8 +76,8 @@ const form = ref({
   userId: localStorage.getItem('userId'),
   avatar: "",
   name: "",
-  birthday: new Date(),
-  participateWorkDate: new Date(),
+  birthday: null,
+  participateWorkDate: null,
   sex: 1,
   mark: "",
   skill: "java,vue,c++",
@@ -91,7 +88,7 @@ const form = ref({
       educationSystem: "",
       degree: "",
       major: "",
-      graduationDate: new Date(),
+      graduationDate:null,
       certificatePhotoUrl: ""
     }
   ],
@@ -103,7 +100,7 @@ const form = ref({
       department: "",
       industry: "",
       position: "",
-      employmentPeriod: new Date(),
+      employmentPeriod: null,
       jobDescription: ""
     }
   ],
@@ -173,6 +170,7 @@ const nextFunc = async () => {
     }
   } else {
     if (stage.value === 6) {
+      nextFlag.value = false
       try {
         const res = await setTitle({title: formData.value.title})
         if (res.code === 0) {
@@ -193,8 +191,6 @@ const nextFunc = async () => {
             id: projectId.value,
             totalBudget: formData.value.totalBudget
           })
-          nextFlag.value = false
-
         } else {
           message.error(res.msg)
         }
@@ -239,9 +235,19 @@ const goToProfile = () => {
   console.log("返回个人中心");
 };
 console.log(router)
-onMounted(() => {
-  console.log("页面加载完成！");
-  console.log(useRoute().params.type)
+onMounted(async() => {
+  const res = await getUserSkill({classification: 3})
+  if (res.code !== 0) {
+    message.error(res.msg)
+    return
+  }
+  options.value = res.data.map(item => {
+    return {
+      value: item.id,
+      label: item.name,
+      checked: false,
+    }
+  })
 });
 const userInput = ref({
   hig: ['英文翻译'],
@@ -275,6 +281,7 @@ const removeSkill = (index) => {
     <div v-if="userType===1" style="height: 100%;">
       <div v-show="stage===1" class="stageClass">
         <div class="containerTitle">
+          <h2>恭喜您注册成功</h2>
           <h2>恭喜您注册成功</h2>
           <h2>为了更精准匹配客户，请简单回答几个问题。</h2>
         </div>
@@ -442,7 +449,7 @@ const removeSkill = (index) => {
             </n-gi>
             <n-gi>
               <n-date-picker v-model:value="form.qualificationList[0].graduationDate" type="date"
-                             placeholder="请选择时间"
+                             placeholder="毕业时间"
                              :style="{'--n-input-height': '50px'}"/>
             </n-gi>
           </n-grid>
@@ -545,7 +552,7 @@ const removeSkill = (index) => {
           <!--            </div>-->
           <!--          </NCard>-->
           <div class="button-group">
-            <NButton type="primary" @click="goToOrders">立即接单</NButton>
+<!--            <NButton type="primary" @click="goToOrders">立即接单</NButton>-->
             <NButton secondary @click="goToProfile">返回个人中心</NButton>
           </div>
         </div>
@@ -632,7 +639,7 @@ const removeSkill = (index) => {
           <!--            </div>-->
           <!--          </NCard>-->
           <div class="button-group">
-            <NButton type="primary" @click="goToOrders">立即发单</NButton>
+<!--            <NButton type="primary" @click="goToOrders">立即发单</NButton>-->
             <NButton secondary @click="goToProfile">返回个人中心</NButton>
           </div>
         </div>

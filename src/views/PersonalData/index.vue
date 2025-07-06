@@ -1,93 +1,126 @@
 <script setup lang="ts">
-	import HeaderTop from '@/components/Header/HeaderTop.vue'
-	import Layout from '@/components/Layout/Layout.vue'
-	import {
-		CreateOutline,
-		LocationOutline,
-		EllipseSharp,
-	} from '@vicons/ionicons5'
-	import Slider from '@/views/PersonalData/component/Slider.vue'
-	import Container from '@/views/PersonalData/component/Container.vue'
-	import Footer from '@/views/PersonalData/component/Footer.vue'
-	import avatarUrl from '../../assets/img/avatar.png'
-	import { useRoute, useRouter } from 'vue-router'
-	import { watchEffect } from 'vue'
-	import EditAvatar from './component/EditAvatar.vue'
+import HeaderTop from '@/components/Header/HeaderTop.vue'
+import Layout from '@/components/Layout/Layout.vue'
+import {
+  CreateOutline,
+  LocationOutline,
+  EllipseSharp,
+} from '@vicons/ionicons5'
+import Slider from '@/views/PersonalData/component/Slider.vue'
+import Container from '@/views/PersonalData/component/Container.vue'
+import Footer from '@/views/PersonalData/component/Footer.vue'
+import avatarUrl from '../../assets/img/avatar.png'
+import {useRoute, useRouter} from 'vue-router'
+import {computed, onMounted, ref, watchEffect} from 'vue'
+import EditAvatar from './component/EditAvatar.vue'
+import {getUserMenberInfo} from '@/api/user'
+import {useMessage} from 'naive-ui'
+import {useStore} from 'vuex'
+import {useUser} from "@/api/useUser.ts";
 
-	const route = useRoute()
+const store = useStore()
+// 创建 message 实例
+const message = useMessage()
+const route = useRoute()
 
-	const router = useRouter()
+const router = useRouter()
 
-	const isPreview = ref()
+const isPreview = ref()
 
-	const showEditAvatar = ref(false)
+const showEditAvatar = ref(false)
+const userInfo = ref({})
+const isInit = ref(false)
+const avatar = computed(() => store.getters.avatar)
+const {getUser} = useUser()
+const userData = ref({})
 
-	function onClickTo() {
-		router.push('/personal-data?preview=preview')
-	}
+function onClickTo() {
+  router.push('/personal-data?preview=preview')
+}
 
+function formatTime(timestamp) {
+  const date = new Date(timestamp)
+  return date.toLocaleString() // 例如 "2024/7/5 08:00:00"
+}
 
-	watchEffect(() => {
-		isPreview.value = Boolean(route.query.preview)
-	})
+const getUserData = async () => {
+  const res = await getUserMenberInfo({userId: localStorage.getItem('userId')})
+  if (res.code !== 0) {
+    message.error(res.msg)
+  }
+  userInfo.value = res.data
+  userData.value = await getUser()
+}
+onMounted(async () => {
+  await getUserData()
+
+  isInit.value = true
+})
+const success = () => {
+  getUserData()
+}
+watchEffect(() => {
+  isPreview.value = Boolean(route.query.preview)
+})
 </script>
 
 <template>
-	<HeaderTop :is-work="false"></HeaderTop>
-	<Layout>
-		<div class="personal-data">
-			<n-flex class="personal-data-header" align="center" :size="20">
-				<n-avatar :size="60" round ></n-avatar>
-				<n-flex vertical :size="10">
-					<n-flex class="personal-data-title" align="center">
-						Jason Z.
-						<n-icon :size="22" class="cursor-pointer-style main-color-size" v-if="!isPreview" @click="showEditAvatar = true">
-							<CreateOutline></CreateOutline>
-						</n-icon>
-					</n-flex>
-					<n-space align="center">
-<!--						<n-flex class="secondary-color-text-1" align="center" :size="5">-->
-<!--							<n-icon :size="16" class="main-color-size">-->
-<!--								<LocationOutline />-->
-<!--							</n-icon>-->
-<!--							天津-->
-<!--						</n-flex>-->
+  <HeaderTop :is-work="false"></HeaderTop>
+  <Layout v-if="isInit">
+    <div class="personal-data">
+      <n-flex class="personal-data-header" align="center" :size="20">
+        <n-avatar :size="60" round :src="avatar"></n-avatar>
+        <n-flex vertical :size="10">
+          <n-flex class="personal-data-title" align="center">
+            {{ userInfo.name }}
+            <n-icon :size="22" class="cursor-pointer-style main-color-size" v-if="!isPreview"
+                    @click="showEditAvatar = true">
+              <CreateOutline></CreateOutline>
+            </n-icon>
+          </n-flex>
+          <n-space align="center">
+            <!--						<n-flex class="secondary-color-text-1" align="center" :size="5">-->
+            <!--							<n-icon :size="16" class="main-color-size">-->
+            <!--								<LocationOutline />-->
+            <!--							</n-icon>-->
+            <!--							天津-->
+            <!--						</n-flex>-->
             <n-flex class="secondary-color-text-1" align="center" :size="5">
-              <div class="creditScore">信用分：100</div>
+              <div class="creditScore">信用分：{{ userInfo.score }}</div>
             </n-flex>
-            <n-flex class="secondary-color-text-1" align="center" :size="5">
+            <n-flex class="secondary-color-text-1" align="center" :size="5" v-if="userInfo.isSpecialIndivuals===0">
               <div class="disabilityCertification">残疾认证</div>
             </n-flex>
-						<n-flex class="secondary-color-text-1" align="center" :size="5">
-<!--							<n-icon :size="10" class="main-color-size">-->
-<!--								<EllipseSharp />-->
-<!--							</n-icon>-->
-              在线时间：9:00  ｜   广东
+            <n-flex class="secondary-color-text-1" align="center" :size="5">
+              <!--							<n-icon :size="10" class="main-color-size">-->
+              <!--								<EllipseSharp />-->
+              <!--							</n-icon>-->
+              在线时间：{{ formatTime(userInfo.loginTime) }} ｜ {{ userInfo.city }}
             </n-flex>
-					</n-space>
-				</n-flex>
-				<n-space style="margin-left:auto" :size="30" v-if="!isPreview">
-<!--					<n-button type="primary" ghost size="large" style="width: 178px"-->
-<!--						@click="onClickTo">-->
-<!--						<span class="naiveui-text-14">个人资料预览</span>-->
-<!--						</n-button>-->
-					<n-button type="primary" size="large" style="width: 140px;background-color: #3BC8B4;border-radius: 20px;">
-						<span class="naiveui-text-14">资料修改</span>
-						</n-button>
-				</n-space>
-			</n-flex>
-			<n-flex :size="0" class="personal-data-container" :wrap="false">
-				<Slider :edi="!isPreview" />
-				<Container :edi="!isPreview" />
-			</n-flex>
-			<Footer :edi="!isPreview"></Footer>
-		</div>
-	</Layout>
-	<EditAvatar v-model:show="showEditAvatar" />
+          </n-space>
+        </n-flex>
+        <n-space style="margin-left:auto" :size="30" v-if="!isPreview">
+          <!--					<n-button type="primary" ghost size="large" style="width: 178px"-->
+          <!--						@click="onClickTo">-->
+          <!--						<span class="naiveui-text-14">个人资料预览</span>-->
+          <!--						</n-button>-->
+          <!--          <n-button type="primary" size="large" style="width: 140px;background-color: #3BC8B4;border-radius: 20px;">-->
+          <!--            <span class="naiveui-text-14">资料修改</span>-->
+          <!--          </n-button>-->
+        </n-space>
+      </n-flex>
+      <n-flex :size="0" class="personal-data-container" :wrap="false">
+        <Slider :edi="!isPreview" :userData="userInfo" @success="success"/>
+        <Container :edi="!isPreview" :userData="userInfo" @success="success"/>
+      </n-flex>
+      <Footer :edi="!isPreview"></Footer>
+    </div>
+  </Layout>
+  <EditAvatar v-model:show="showEditAvatar" @success="success"/>
 </template>
 
 <style scoped lang="scss">
-.creditScore{
+.creditScore {
   padding: 0px 10px;
   height: 22px;
   background: linear-gradient(270deg, #6DE6DB 0%, #3BC8B4 100%);
@@ -99,7 +132,8 @@
   text-align: left;
   font-style: normal;
 }
-.disabilityCertification{
+
+.disabilityCertification {
   padding: 0px 10px;
   height: 22px;
   border-radius: 2px;
@@ -109,33 +143,35 @@
   line-height: 22px;
   text-align: left;
   font-style: normal;
-  background: linear-gradient( 270deg, #E6996D 0%, #C8683B 100%);
+  background: linear-gradient(270deg, #E6996D 0%, #C8683B 100%);
 }
-	.personal-data {
-		margin-top: 50px;
-		border-top-left-radius: 16px;
-		border-top-right-radius: 16px;
-		overflow: hidden;
-		margin-bottom: 180px;
 
-		.personal-data-header {
-			height: 114px;
-			background: #FFFFFF;
-			padding: 20px;
-			box-sizing: border-box;
-			border-bottom: solid 1px #e7e7e7;
+.personal-data {
+  margin-top: 50px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 180px;
 
-			.personal-data-title {
-				font-weight: 500;
-				font-size: 20px;
-				color: #333333;
-				line-height: 23px;
-			}
-		}
-		.personal-data-container {
-      border-bottom: 1px solid #EDEDED;
-      border-left: 1px solid #EDEDED;
-      background: #FFFFFF;
-		}
-	}
+  .personal-data-header {
+    height: 114px;
+    background: #FFFFFF;
+    padding: 20px;
+    box-sizing: border-box;
+    border-bottom: solid 1px #e7e7e7;
+
+    .personal-data-title {
+      font-weight: 500;
+      font-size: 20px;
+      color: #333333;
+      line-height: 23px;
+    }
+  }
+
+  .personal-data-container {
+    border-bottom: 1px solid #EDEDED;
+    border-left: 1px solid #EDEDED;
+    background: #FFFFFF;
+  }
+}
 </style>

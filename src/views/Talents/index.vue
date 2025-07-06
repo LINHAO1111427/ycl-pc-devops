@@ -3,11 +3,15 @@ import HeaderTop from '@/components/Header/HeaderTop.vue'
 import {Footer, Button as RButton} from '@/components'
 import SliderUser from '@/components/Talents/SliderUser.vue'
 import Resume from '@/components/Talents/Resume.vue'
-import {onMounted, ref, watchEffect} from 'vue'
+import {computed, onMounted, ref, watchEffect} from 'vue'
 import {useRoute} from 'vue-router'
 import vipPage from '@/components/vipPage/index.vue'
 import {getUserInfo} from '@/api/home'
+import {useStore} from 'vuex'
+
+const store = useStore()
 import {useMessage} from 'naive-ui'
+import {useUser} from "@/api/useUser.ts";
 
 // 创建 message 实例
 const message = useMessage()
@@ -17,27 +21,25 @@ watchEffect(() => {
   type.value = route.query.type
 })
 
-
+const avatar = computed(() => store.getters.avatar)
 const showModal = ref(false);
 const charMessageShow = ref(false);
-const userData = ref({});
-const isInit = ref(false);
+const {getUser} = useUser()
+const userData = ref({})
+
 onMounted(async () => {
-  const res = await getUserInfo({userId: localStorage.getItem('userId')})
-  isInit.value = true
-  if (res.code === -1) {
-    message.error(res.msg)
-    return
-  }
-  localStorage.setItem('avatar', res.data.avatar)
+  const res = await getUser()
   userData.value = res.data
-  console.log(userData)
+})
+
+// const isInit = ref(false);
+onMounted(async () => {
 })
 </script>
 
 <template>
-  <HeaderTop :is-login="false" :is-work="false" :avatar="userData.avatar" v-if="isInit"/>
-  <div class="talents" v-if="isInit">
+  <HeaderTop :is-work="false" :avatar="avatar"/>
+  <div class="talents">
     <div class="talents-container">
       <!-- <div class="talents-container-banner">
 		<n-flex vertical :size="20">

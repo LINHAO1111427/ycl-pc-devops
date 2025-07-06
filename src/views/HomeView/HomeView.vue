@@ -1,6 +1,24 @@
 <script setup>
 import Header from '../../components/Header/Header.vue'
 import Footer from '../../components/Footer/Footer.vue'
+import {onMounted} from "vue";
+import {freelancerCountPage} from "@/api/home";
+import {useMessage} from 'naive-ui'
+// 创建 message 实例
+const message = useMessage()
+const isLogin = ref(!!localStorage.getItem('token'))
+const userList = ref([])
+onMounted(async () => {
+  const res = await freelancerCountPage({
+    pageNo: 1,
+    pageSize: 10
+  })
+  if (res.code !== 0) {
+    message.error(res.msg)
+    return
+  }
+  userList.value = res.data.list
+})
 </script>
 <style>
 .part01 {
@@ -346,9 +364,9 @@ import Footer from '../../components/Footer/Footer.vue'
 </style>
 <template>
   <main class="home-main">
-    <Header/>
-    <div>
-      <img src="../../assets/img/home1.png" alt="logo" style="width: 100%"/>
+    <Header :isLogin="isLogin"/>
+    <div style="cursor: pointer;">
+      <img src="../../assets/img/home1.png" alt="logo" style="width: 100%" @click="$router.push('/login')"/>
     </div>
     <div class="container">
       <div class="part">
@@ -420,91 +438,14 @@ import Footer from '../../components/Footer/Footer.vue'
             <RouterLink to="/client/search-talents">浏览人才</RouterLink>
           </div>
           <div class="box">
-            <div class="item">
-              <div class="tit">UI设计师</div>
+            <div class="item" v-for="(item,index) in userList">
+              <div class="tit">{{ item.jobName }}</div>
               <div class="info">
                 <div class="star">
                   <img src="../../assets/img/star.png"/>
-                  4.85
+                  {{ item.assess }}
                 </div>
-                <div class="num">1086人</div>
-              </div>
-            </div>
-
-            <div class="item">
-              <div class="tit">前端工程师</div>
-              <div class="info">
-                <div class="star">
-                  <img src="../../assets/img/star.png"/>
-                  4.85
-                </div>
-                <div class="num">1086人</div>
-              </div>
-            </div>
-
-            <div class="item">
-              <div class="tit">平面设计师</div>
-              <div class="info">
-                <div class="star">
-                  <img src="../../assets/img/star.png"/>
-                  4.85
-                </div>
-                <div class="num">1086人</div>
-              </div>
-            </div>
-
-            <div class="item">
-              <div class="tit">3D建模师</div>
-              <div class="info">
-                <div class="star">
-                  <img src="../../assets/img/star.png"/>
-                  4.85
-                </div>
-                <div class="num">1086人</div>
-              </div>
-            </div>
-
-            <div class="item">
-              <div class="tit">摄影师</div>
-              <div class="info">
-                <div class="star">
-                  <img src="../../assets/img/star.png"/>
-                  4.85
-                </div>
-                <div class="num">1086人</div>
-              </div>
-            </div>
-
-            <div class="item">
-              <div class="tit">人力资源</div>
-              <div class="info">
-                <div class="star">
-                  <img src="../../assets/img/star.png"/>
-                  4.85
-                </div>
-                <div class="num">1086人</div>
-              </div>
-            </div>
-
-            <div class="item">
-              <div class="tit">视频剪辑师</div>
-              <div class="info">
-                <div class="star">
-                  <img src="../../assets/img/star.png"/>
-                  4.85
-                </div>
-                <div class="num">1086人</div>
-              </div>
-            </div>
-
-            <div class="item">
-              <div class="tit">3D动画师</div>
-              <div class="info">
-                <div class="star">
-                  <img src="../../assets/img/star.png"/>
-                  4.85
-                </div>
-                <div class="num">1086人</div>
+                <div class="num">{{ item.number }}人</div>
               </div>
             </div>
           </div>
@@ -525,10 +466,10 @@ import Footer from '../../components/Footer/Footer.vue'
               <div class="icon"><img src="../../assets/img/jisuxunren.png"/></div>
               寻找专业化人才，纯线上高效协作
             </div>
-<!--            <div class="item">-->
-<!--              <div class="icon"><img src="../../assets/img/gongzuo.png"/></div>-->
-<!--              掌握您的工作流程:雇佣、分类、支付您的人才-->
-<!--            </div>-->
+            <!--            <div class="item">-->
+            <!--              <div class="icon"><img src="../../assets/img/gongzuo.png"/></div>-->
+            <!--              掌握您的工作流程:雇佣、分类、支付您的人才-->
+            <!--            </div>-->
             <div class="item">
               <div class="icon"><img src="../../assets/img/hezuo.png"/></div>
               自由筛选高质量自由职业者，避免无效招聘，快速找到专业化人才
@@ -544,13 +485,13 @@ import Footer from '../../components/Footer/Footer.vue'
     <div class="part4">
       <div class="container">
         <div class="ctlineText">
-<!--          关于委托人-->
+          <!--          关于委托人-->
         </div>
         <div class="ctLine">
           <div class="ctLine1">
             与自由职业者线上沟通协作，共同完成目标任务
             <br/>
-<!--            从快速转型到重大变量-->
+            <!--            从快速转型到重大变量-->
           </div>
           <div class="ctLine2">
             用自己的方式雇佣人才
@@ -558,19 +499,19 @@ import Footer from '../../components/Footer/Footer.vue'
           <div class="ctLineItemList">
             <div class="ctLineItem">
               <div>发布工作，并且雇佣人才</div>
-              <div>
+              <div @click="$router.push('/login')" style="cursor: pointer;">
                 <a>前往人才市场</a>
               </div>
             </div>
             <div class="ctLineItem">
               <div>浏览工作，应聘一个职位</div>
-              <div>
+              <div @click="$router.push('/login')" style="cursor: pointer;">
                 <a>前往项目市场</a>
               </div>
             </div>
             <div class="ctLineItem">
               <div>获得专家的行业建议</div>
-              <div>
+              <div @click="$router.push('/login')" style="cursor: pointer;">
                 <a>前往协商</a>
               </div>
             </div>
@@ -616,9 +557,9 @@ import Footer from '../../components/Footer/Footer.vue'
           在单刻达平台，与顶级项目方远程高效联动，拓宽职业边界，塑造行业影响力。
         </div>
         <div class="t3">
-          <div>  自由掌握您的工作时间、地点和方式</div>
-          <div>  探索不同的方式来增加收入</div>
-          <div>  单刻达平台帮你寻找职业生涯中的每个机会</div>
+          <div> 自由掌握您的工作时间、地点和方式</div>
+          <div> 探索不同的方式来增加收入</div>
+          <div> 单刻达平台帮你寻找职业生涯中的每个机会</div>
         </div>
         <div>
           <div class="btn">
@@ -627,6 +568,6 @@ import Footer from '../../components/Footer/Footer.vue'
         </div>
       </div>
     </div>
-<!--    <Footer/>-->
+    <!--    <Footer/>-->
   </main>
 </template>

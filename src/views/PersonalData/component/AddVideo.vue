@@ -30,6 +30,7 @@ const emit = defineEmits(['update:show'])
 		          list-type="text"
 		        >
 		          <n-button>上传视频</n-button>
+            <span style="color: gray;">上传视频须在5M以内</span>
 		        </n-upload>
 		    </n-form-item-gi>
 		  </n-grid>

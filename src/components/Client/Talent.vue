@@ -12,20 +12,21 @@
       <div class="client-form">
         <n-flex justify="space-between" align="center">
           <h1 class="client-form-h1">极速匹配人才</h1>
-          <span style="font-size: 20px;cursor: pointer;" v-if="isJxShow" @click="isJxShow=false">+</span>
-          <span style="font-size: 20px;cursor: pointer;" v-else  @click="handleRefresh"
+          <span style="font-size: 20px;cursor: pointer;" v-if="isJxShow" @click="isJxShow=false">  <NSwitch size="small"
+                                                                                                            defaultValue={false}></NSwitch></span>
+          <span style="font-size: 20px;cursor: pointer;" v-else @click="handleRefresh"
                 :class="{ rotate: isRotating }"> <i class="icon-shuaxin iconfont"></i></span>
         </n-flex>
         <n-flex class="pt-div" justify="space-between" v-if="!isJxShow">
-          <n-flex vertical class="pt-content" justify="space-around" v-for="item,index in 3" :key="index">
+          <n-flex vertical class="pt-content" justify="space-around" v-for="(item,index) in userList1" :key="index">
             <n-flex class="pt-content1">
               <img src="../../assets/img/avatar.png" class="avatar">
               <n-flex vertical style="width: calc(100% - 80px);">
                 <n-flex justify="space-between">
-                  <div class="pt-to">Jason Z</div>
-                  <div class="pt-status">在线</div>
+                  <div class="pt-to">{{ item.name }}</div>
+                  <div class="pt-status" v-if="item.loginStatus">{{ ['在线', '忙碌', '离线'][item.loginStatus] }}</div>
                 </n-flex>
-                <div class="pt-t1">人工智能产品经理</div>
+                <div class="pt-t1">{{ item.position }}</div>
                 <n-flex>
                   <!--                <div>-->
                   <!--                  <i class="icon-jinqian iconfont"></i>￥40.00/小时-->
@@ -42,23 +43,18 @@
             </n-flex>
             <n-flex>
               <n-tag size="small" class="easy-tag"
-                     :color="{textColor:'#808080',borderColor:'#EDEDED',color:'#EDEDED'}" round>英文翻译
-              </n-tag>
-              <n-tag size="small" class="easy-tag"
-                     :color="{textColor:'#808080',borderColor:'#EDEDED',color:'#EDEDED'}" round>英文中文
-              </n-tag>
-              <n-tag size="small" class="easy-tag"
-                     :color="{textColor:'#808080',borderColor:'#EDEDED',color:'#EDEDED'}" round>普通话
+                     :color="{textColor:'#808080',borderColor:'#EDEDED',color:'#EDEDED'}" round
+                     v-for="(item1,index) in item.skills">{{ item1 }}
               </n-tag>
             </n-flex>
             <div class="pt-t2">
-              <span>擅长：</span>智慧城市产品需求，深度复杂算法...
+              <span>擅长：</span>{{ item.skilled }}
             </div>
             <div class="pt-t2">
-              <span>案例：</span>天津智慧城市，工业数字孪生定位识别…
+              <span>案例：</span>{{ item.projectTitle }}
             </div>
             <div class="pt-t2">
-              <span>客户：</span>“沟通顺畅，不拖泥带水，技术好”
+              <span>客户：</span>{{ item.content }}
             </div>
             <n-flex justify="space-between">
               <div class="pt-btn1">在线沟通</div>
@@ -66,29 +62,29 @@
             </n-flex>
           </n-flex>
         </n-flex>
-<!--        <p class="client-form-p">正在为您扩大搜索范围,请稍候...</p>-->
+        <!--        <p class="client-form-p">正在为您扩大搜索范围,请稍候...</p>-->
 
         <h1 class="client-form-h1">最佳人才推荐</h1>
         <el-scrollbar>
           <div class="talent-view">
-            <div class="talent-item" v-for="item,index in 5" :key="index" @click="open_member()">
+            <div class="talent-item" v-for="(item,index) in userList" :key="index" @click="open_member()">
               <div class="talent-houcang">
                 <i class="icon-shoucang iconfont"></i>
               </div>
-
-              <div class="talent-item-icon">
-                <div class="talent-item-icon-tag"></div>
-              </div>
-              <div class="talent-item-name">宝拉</div>
-              <div class="talent-item-brief">专业配音艺术家和翻译</div>
-              <div class="talent-item-money">
-                <span>￥</span>
-                ￥40.00/小时
-              </div>
+              <n-avatar :size="60" round :src="item.avatar"></n-avatar>
+              <!--              <div class="talent-item-icon">-->
+              <!--                <div class="talent-item-icon-tag"></div>-->
+              <!--              </div>-->
+              <div class="talent-item-name">{{ item.name }}</div>
+              <div class="talent-item-brief">{{ item.skilled }}</div>
+              <!--              <div class="talent-item-money">-->
+              <!--                <span>￥</span>-->
+              <!--                ￥40.00/小时-->
+              <!--              </div>-->
               <div class="talent-item-rate">
                 <!-- <el-rate v-model="value2" :colors="colors" show-text :texts="['1', '2', '3', '4', '5']" /> -->
-                <n-rate readonly :default-value="5"/>
-                <span>5</span>
+                <n-rate readonly :default-value="item.assess"/>
+                <span>{{ item.assess }}</span>
               </div>
             </div>
           </div>
@@ -117,7 +113,7 @@
           <n-icon :size="20" class="cursor-pointer-style">
             <ChevronBack/>
           </n-icon>
-          <n-button size="small" type="primary" ghost @click="onClickUrl">在新窗口中打开个人资料</n-button>
+          <!--          <n-button size="small" type="primary" ghost @click="onClickUrl">在新窗口中打开个人资料</n-button>-->
         </n-flex>
       </template>
       <IndexMember/>
@@ -128,7 +124,10 @@
 <script setup>
 import {reactive, onMounted, onUnmounted, ref} from 'vue';
 import {useRouter} from 'vue-router'
-
+import {userFilter, userRqpid} from '@/api/base.js'
+import {useMessage} from 'naive-ui'
+// 创建 message 实例
+const message = useMessage()
 const router = useRouter()
 const isJxShow = ref(true)
 const value2 = 5
@@ -142,6 +141,7 @@ function handleRefresh() {
     isRotating.value = false
   }, 600) // 动画持续时间
 }
+
 const data = reactive({
   menu: 1,
   title_id: 0,
@@ -171,9 +171,12 @@ import {
   ChevronBack
 }
   from '@vicons/ionicons5'
+import avatarUrl from "@/assets/img/avatar.png";
 
 const IndexMember = defineAsyncComponent(() => import('@/components/Client/IndexMember.vue'))
 const open_index_member = ref(false)
+const userList = ref([])
+const userList1 = ref([])
 const open_member = () => {
   open_index_member.value = !open_index_member.value
 }
@@ -182,6 +185,31 @@ function onClickUrl() {
   const routerPath = router.resolve(`/client/member-detail`).href
   window.open(routerPath, '_blank')
 }
+
+onMounted(async () => {
+  const res = await userFilter({
+    bossUserId: localStorage.getItem('userId')
+  })
+  if (res.code !== 0) {
+    message.error(res.msg)
+    return
+  }
+  userList.value = res.data.list
+  const res1 = await userRqpid({
+    bossUserId: localStorage.getItem('userId')
+  })
+  if (res1.code !== 0) {
+    message.error(res1.msg)
+    return
+  }
+  UserList1.value = res1.data.list.map(item => {
+    return {
+      ...item,
+      skills: item.skills ? item.skills.split(',') : []
+    }
+  })
+})
+
 </script>
 
 <style scoped>
@@ -198,6 +226,7 @@ function onClickUrl() {
     transform: rotate(360deg);
   }
 }
+
 .pt-div {
   .pt-t2 {
     font-weight: 400;
@@ -286,6 +315,7 @@ function onClickUrl() {
     }
   }
 }
+
 ::v-deep(.n-drawer-header__main) {
   width: 100%;
 }
@@ -513,6 +543,6 @@ function onClickUrl() {
 
 ::v-deep(.n-base-icon svg),
 ::v-deep(.n-base-icon) {
-  color: #F18B41;
+  //color: #F18B41;
 }
 </style>

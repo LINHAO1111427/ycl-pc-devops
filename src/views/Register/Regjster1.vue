@@ -20,19 +20,20 @@
                 </n-button>
               </template>
             </n-input>
+            <n-input v-model:value="inviteMobile" placeholder="请输入邀请人手机号(非必填)" class="verify-input"/>
 
-            <n-input
-                v-model:value="password"
-                :type="showPassword ? 'text' : 'password'"
-                placeholder="请设置密码"
-                class="verify-input"
-            >
-              <template #suffix>
-                <n-icon @click="togglePassword" class="toggle-icon" style="font-size: 20px;cursor: pointer;">
-                  <component :is="showPassword ? EyeOutline : EyeOffOutline"/>
-                </n-icon>
-              </template>
-            </n-input>
+            <!--            <n-input-->
+            <!--                v-model:value="password"-->
+            <!--                :type="showPassword ? 'text' : 'password'"-->
+            <!--                placeholder="请设置密码"-->
+            <!--                class="verify-input"-->
+            <!--            >-->
+            <!--              <template #suffix>-->
+            <!--                <n-icon @click="togglePassword" class="toggle-icon" style="font-size: 20px;cursor: pointer;">-->
+            <!--                  <component :is="showPassword ? EyeOutline : EyeOffOutline"/>-->
+            <!--                </n-icon>-->
+            <!--              </template>-->
+            <!--            </n-input>-->
             <n-button type="primary" class="submit-btn" @click="register">注册</n-button>
           </n-tab-pane>
           <n-tab-pane name="login" tab="我要招人">
@@ -48,23 +49,23 @@
                 </n-button>
               </template>
             </n-input>
-
-            <n-input
-                v-model:value="password"
-                :type="showPassword ? 'text' : 'password'"
-                placeholder="请设置密码"
-                class="verify-input"
-            >
-              <template #suffix>
-                <n-icon @click="togglePassword" class="toggle-icon" style="font-size: 20px;cursor: pointer;">
-                  <component :is="showPassword ? EyeOutline : EyeOffOutline"/>
-                </n-icon>
-              </template>
-            </n-input>
+            <n-input v-model:value="inviteMobile" placeholder="请输入邀请人手机号(非必填)" class="verify-input"/>
+            <!--            <n-input-->
+            <!--                v-model:value="password"-->
+            <!--                :type="showPassword ? 'text' : 'password'"-->
+            <!--                placeholder="请设置密码"-->
+            <!--                class="verify-input"-->
+            <!--            >-->
+            <!--              <template #suffix>-->
+            <!--                <n-icon @click="togglePassword" class="toggle-icon" style="font-size: 20px;cursor: pointer;">-->
+            <!--                  <component :is="showPassword ? EyeOutline : EyeOffOutline"/>-->
+            <!--                </n-icon>-->
+            <!--              </template>-->
+            <!--            </n-input>-->
             <n-button type="primary" class="submit-btn" @click="register">注册</n-button>
           </n-tab-pane>
         </n-tabs>
-<!--        <n-button text class="wechat-btn">微信登录</n-button>-->
+        <!--        <n-button text class="wechat-btn">微信登录</n-button>-->
         <div class="footer-text">
           通过手机注册，即表示您同意接受我们的
           <a href="#">《用户服务协议》</a> 和 <a href="#">《隐私政策》</a>
@@ -72,7 +73,7 @@
       </div>
     </div>
     <footer v-if="!isMobileByWidth()">
-      单刻达 © 2024 京ICP备18053355号-2 京公网安备 11010420247559号 版权声明 问题反馈 在线沟通
+      单刻达 © 2025 津ICP备2025033117号 -1 版权声明 问题反馈 在线沟通
     </footer>
   </div>
 </template>
@@ -82,18 +83,23 @@ import {ref} from "vue";
 import {NButton, NInput, NTabs, NTabPane, NIcon} from "naive-ui";
 import {ArrowBack} from "@vicons/ionicons5";
 import {useRouter} from "vue-router";
-import {addUser, mobileLogin, sendCode} from '@/api/user'
+import {addUser, sendCode} from '@/api/user'
 import {useMessage} from 'naive-ui'
 
 // 创建 message 实例
 const message = useMessage()
 const activeTab = ref("register");
+const inviteMobile = ref("");
 const phone = ref("");
 const email = ref("");
 const code = ref("");
 const router = useRouter();
 import {EyeOutline, EyeOffOutline} from "@vicons/ionicons5";
+import {useStore} from 'vuex'
+import {getUserInfo} from "@/api/home.js";
+import {useUser} from '@/api/useUser'
 
+const store = useStore()
 const isMobileByWidth = () => {
   return window.innerWidth < 768
 }
@@ -143,19 +149,19 @@ const startCountdown = () => {
     }
   }, 1000)
 }
+const {loginAndInitUser, getUser, setUserData} = useUser()
 const login = async () => {
   // if (activeTab.value === "register") {
   try {
     const parem = {
-      userType:(activeTab.value === "register"?1:0),
+      userType: (activeTab.value === "register" ? 1 : 0),
       mobile: phone.value,
-      password: password.value
+      code: code.value,
+      scene: 1
     }
-    const res = await mobileLogin(parem)
+    const res = await loginAndInitUser(parem)
     if (res.code === 0) {
-      localStorage.setItem('LoginData', JSON.stringify({userType: res.data.userType, isLogin: true}))
-      localStorage.setItem('token', res.data.accessToken)
-      localStorage.setItem('userId', res.data.userId)
+      await getUser()
       message.success('注册成功')
       router.push(`/userAuthentication/${res.data.userType}`)
     } else {
@@ -164,11 +170,7 @@ const login = async () => {
   } catch (error) {
     message.error('登录失败')
   }
-  // } else {
-  //   router.push("/client/index");
-  // }
 };
-
 const register = async () => {
 
   try {
@@ -178,11 +180,15 @@ const register = async () => {
       code: code.value,
       scene: 0,
       email: '',
-      password: password.value
+      inviteMobile: inviteMobile.value
     }
     const res = await addUser(parem)
     if (res.code === 0) {
-      await login()
+      setUserData(res.data)
+      await getUser()
+      message.success('注册成功')
+      router.push(`/userAuthentication/${res.data.userType}`)
+      // await login()
     } else {
       message.error(res.msg)
     }
@@ -191,6 +197,20 @@ const register = async () => {
     console.log(res)
   } catch (error) {
     console.error('获取用户失败', error)
+  }
+}
+onMounted(() => {
+  window.addEventListener('keydown', handleKeyDown)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', handleKeyDown)
+})
+
+function handleKeyDown(e) {
+  if (e.key === 'Enter') {
+    register()
+    // 执行你的逻辑
   }
 }
 </script>

@@ -3,14 +3,31 @@ import { Footer, IconMessage, RenderIcon, Text, IconWeiyanzheng, IconYiyanzheng 
 import Header from '@/components/Header/Header.vue'
 import WorkDetails from './component/WorkDetails.vue'
 import avatarUrl from '../../assets/img/avatar.png'
-import { ref } from 'vue'
+import {onMounted, ref} from 'vue'
 import { useRoute } from 'vue-router'
-
+import {getProject} from '@/api/home'
+import {useMessage} from 'naive-ui'
+// 创建 message 实例
+const message = useMessage()
 const route = useRoute()
-
 const type = ref(route.query.type||1)
-
 const charMessageShow = ref(false)
+const id = route.query.id
+const data = ref({
+  id: id
+})
+const project = ref({})
+const getPageNow = async () => {
+  const res = await getProject(data.value)
+  if (res.code === -1) {
+    message.error(res.msg)
+    return
+  }
+  project.value = res.data
+}
+onMounted(async () => {
+  await getPageNow()
+})
 </script>
 
 <template>

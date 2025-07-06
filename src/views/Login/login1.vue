@@ -54,8 +54,19 @@
           </n-tab-pane>
           <n-tab-pane name="register" tab="自由职业者" v-if="tabType === 1">
             <n-input v-model:value="phone" placeholder="请输入手机号" class="verify-input"/>
-            <n-input v-model:value="password" placeholder="请输入密码" type="password" class="verify-input"/>
-            <div class="restPassword" @click="nextTabFunc('recoverPassword')">忘记密码？</div>
+            <n-input v-model:value="code" placeholder="请输入验证码" class="verify-input">
+              <template #suffix>
+                <n-button
+                    text
+                    class="verify-button"
+                    @click="sendCodeFunc"
+                    :disabled="phone==='' || countdown > 0">
+                  {{ countdown > 0 ? countdown + '秒后重试' : '获取验证码' }}
+                </n-button>
+              </template>
+            </n-input>
+            <!--            <n-input v-model:value="password" placeholder="请输入密码" type="password" class="verify-input"/>-->
+            <!--            <div class="restPassword" @click="nextTabFunc('recoverPassword')">忘记密码？</div>-->
             <n-button type="primary" class="submit-btn" @click="login">登录</n-button>
             <div class="restPassword">
               没有账号？
@@ -64,8 +75,17 @@
           </n-tab-pane>
           <n-tab-pane name="login" tab="企业" v-if="tabType === 1">
             <n-input v-model:value="phone" placeholder="请输入手机号" class="verify-input"/>
-            <n-input v-model:value="password" placeholder="请输入密码" type="password" class="verify-input"/>
-            <div class="restPassword" @click="nextTabFunc('recoverPassword')">忘记密码？</div>
+            <n-input v-model:value="code" placeholder="请输入验证码" class="verify-input">
+              <template #suffix>
+                <n-button
+                    text
+                    class="verify-button"
+                    @click="sendCodeFunc"
+                    :disabled="phone==='' || countdown > 0">
+                  {{ countdown > 0 ? countdown + '秒后重试' : '获取验证码' }}
+                </n-button>
+              </template>
+            </n-input>
             <n-button type="primary" class="submit-btn" @click="login">登录</n-button>
             <div class="restPassword">
               没有账号？
@@ -73,7 +93,7 @@
             </div>
           </n-tab-pane>
         </n-tabs>
-<!--        <n-button text class="wechat-btn" v-if="tabType === 1">微信登录</n-button>-->
+        <!--        <n-button text class="wechat-btn" v-if="tabType === 1">微信登录</n-button>-->
         <div class="footer-text" v-if="tabType === 1">
           通过手机注册，即表示您同意接受我们的
           <a href="#">《用户服务协议》</a> 和 <a href="#">《隐私政策》</a>
@@ -96,28 +116,33 @@ const router = useRouter();
 const activeTab = ref("register");
 const backActiveTab = ref("");
 const phone = ref("");
+const code = ref("");
 const email = ref("");
 const password = ref("");
 const newPassword = ref("");
 const tabType = ref(1);
 const tabKey = ref(0); // 关键点：每次切换 tabType 都更新 tabKey
 import {ref, watch, nextTick} from 'vue'
+import {useUser} from '@/api/useUser'
 
 const codeArray = ref(Array(4).fill('')) // 6位验证码
 const inputs = ref([]) // 绑定输入框
 const isCodeComplete = ref(false) // 验证码是否填满
-const userType= ref(1)
+const userType = ref(1)
+import {useStore} from 'vuex'
 
+const store = useStore()
 watch(activeTab, (newVal, oldVal) => {
-  if(newVal==='register'){
-    userType.value=1
+  if (newVal === 'register') {
+    userType.value = 1
   }
-  if(newVal==='login'){
-    userType.value=0
+  if (newVal === 'login') {
+    userType.value = 0
   }
 })
-import {mobileLogin, isMobile, sendCode, validateSmsCode, updatePasswordSms} from '@/api/user'
+import {isMobile, sendCode, validateSmsCode, updatePasswordSms} from '@/api/user'
 import {useMessage} from 'naive-ui'
+import {getUserInfo} from "@/api/home.js";
 // 创建 message 实例
 const message = useMessage()
 // 监听输入框，判断是否填满
@@ -125,6 +150,42 @@ localStorage.clear();
 watch(codeArray, (newVal) => {
   isCodeComplete.value = newVal.every((char) => char !== '')
 })
+// 60秒倒计时逻辑
+const countdown = ref(0)
+let timer = null
+
+const startCountdown = () => {
+  countdown.value = 60
+  timer = setInterval(() => {
+    countdown.value--
+    if (countdown.value <= 0) {
+      clearInterval(timer)
+      timer = null
+    }
+  }, 1000)
+}
+const sendCodeFunc = async () => {
+  if (phone.value === '') {
+    message.warning('请输入手机号')
+    return
+  }
+  try {
+    const parem = {
+      mobile: phone.value,
+      scene: 1
+    }
+    const res = await sendCode(parem)
+    if (res.code === 0) {
+      message.success('验证码已发送！')
+    } else {
+      message.error(res.msg)
+    }
+  } catch (error) {
+    message.error('验证发送失败')
+  }
+  // 这里写实际的发送验证码逻辑
+  startCountdown()
+}
 const isMobileByWidth = () => {
   return window.innerWidth < 768
 }
@@ -189,7 +250,7 @@ const nextTabFunc = async (tabName) => {
       }
       const res1 = await sendCode({
         mobile: phone.value,
-        scene: 0
+        scene: 1
       })
       if (res1.code === 0) {
         message.success('验证码已发送！')
@@ -240,20 +301,21 @@ const updatePassword = async () => {
     message.error('系统异常')
   }
 }
+const {loginAndInitUser, getUser} = useUser()
 const login = async () => {
   // if (activeTab.value === "register") {
   try {
     const parem = {
-      userType:userType.value,
+      userType: userType.value,
       mobile: phone.value,
-      password: password.value
+      code: code.value,
+      scene: 1
     }
-    const res = await mobileLogin(parem)
+    const res = await loginAndInitUser(parem)
+    console.log(res)
     if (res.code === 0) {
-      localStorage.setItem('LoginData', JSON.stringify({userType: res.data.userType, isLogin: true}))
-      localStorage.setItem('token', res.data.accessToken)
-      localStorage.setItem('userId', res.data.userId)
-      if(res.data.isGuideStatus===1){
+      await getUser()
+      if (res.data.isGuideStatus === 1) {
         router.push(`/userAuthentication/${res.data.userType}`)
         return
       }
@@ -272,9 +334,28 @@ const login = async () => {
   //   router.push("/client/index");
   // }
 };
+onMounted(() => {
+  window.addEventListener('keydown', handleKeyDown)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', handleKeyDown)
+})
+
+function handleKeyDown(e) {
+  if (e.key === 'Enter') {
+    login()
+    // 执行你的逻辑
+  }
+}
 </script>
 
 <style scoped>
+.verify-button {
+  color: #53b1e6;
+  font-size: 14px;
+}
+
 .verify-container {
   display: flex;
   flex-direction: column;

@@ -12,29 +12,35 @@ import {
 } from '@/components'
 import {ref} from 'vue'
 
-import avatarUrl from '../../assets/img/avatar.png'
 
 import Pay from './component/Pay.vue'
+import {useStore} from 'vuex'
+import {computed} from 'vue'
 
+const store = useStore()
+const avatar = computed(() => store.getters.avatar)
 const showPay = ref(false)
 
 const currentSelect = ref('连续包月')
-
+const userData = ref(JSON.parse(localStorage.getItem('UserInfo') || JSON.stringify({
+  isMatch: false,
+  isConsulting: false
+})))
 const options = [
   {
-    title: '连续包月',
-    tip: '首月',
+    title: '第一个月尝鲜价',
+    tip: '',
     price: '19.9',
-    price1: '199',
+    price1: '第二个月每月$199',
   },
   {
-    title: '连续包季',
-    tip: '首月',
-    price: '76.7',
+    title: '第二个月',
+    tip: '',
+    price: '199',
     price1: '89.7',
   },
   {
-    title: '连续包年',
+    title: '原价',
     tip: '',
     price: '339',
     price1: '0.94/天',
@@ -75,13 +81,13 @@ const descOptions = [
           <n-flex justify="space-around" vertical>
             <n-flex align="center" class="avatar_user">
               <n-avatar
-                  :src="avatarUrl"
+                  :src="avatar"
                   round
                   :size="80"
               />
               <n-flex justify="space-evenly" vertical>
-                <div class="avatar-title">Jason Z.</div>
-                <div class="avatar-desc">设计师</div>
+                <div class="avatar-title">{{ userData.name }}</div>
+                <div class="avatar-desc">{{ userData.expectedPosition }}</div>
               </n-flex>
             </n-flex>
             <span style="margin-top: 20px;">
@@ -112,14 +118,14 @@ const descOptions = [
                 <div class="member-pages-price-numbers">{{ item.price }}</div>
               </div>
             </n-flex>
-            <n-flex align="flex-end" justify="center" :size="5">
-              <div class="member-pages-price">
-                <div class="member-pages-price-symbol mini">￥</div>
-                <div class="member-pages-price-numbers mini">
-                  {{ item.price1 }}
-                </div>
-              </div>
-            </n-flex>
+<!--            <n-flex align="flex-end" justify="center" :size="5">-->
+<!--              <div class="member-pages-price">-->
+<!--                <div class="member-pages-price-symbol mini"></div>-->
+<!--                <div class="member-pages-price-numbers mini">-->
+<!--                  {{ item.price1 }}-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </n-flex>-->
           </n-flex>
         </n-flex>
         <n-flex vertical class="button-footer" justify="center">

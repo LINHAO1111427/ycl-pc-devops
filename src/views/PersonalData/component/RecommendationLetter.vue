@@ -1,18 +1,38 @@
 <script setup lang="ts">
-import { Text } from '@/components'
-import { RenderIcon, IconCashLine } from '@/components'
-
+import {Text} from '@/components'
+import {RenderIcon, IconCashLine} from '@/components'
+import {createUserRecommendation} from '@/api/user'
+import {useMessage} from 'naive-ui'
+// 创建 message 实例
+const message = useMessage()
 const emit = defineEmits(['update:show'])
+const recommendation = ref({
+  userId: localStorage.getItem('userId'),  // 用户ID
+  name: "",                             // 姓名
+  companyEmail: "",      // 企业邮箱
+  title: "",                          // 标题
+  projectType: "",                 // 项目类型
+  message: ""                     // 消息内容
+})
+
+const addRecommendation = async () => {
+  const res = await createUserRecommendation(recommendation.value)
+  if (res.code !== 0) {
+    message.error(res.msg)
+    return
+  }
+  emit('update:show', false)
+}
 </script>
 
 <template>
   <n-modal>
     <n-card
-      :bordered="false"
-      size="huge"
-      role="dialog"
-      aria-modal="true"
-      style="width: 850px"
+        :bordered="false"
+        size="huge"
+        role="dialog"
+        aria-modal="true"
+        style="width: 850px"
     >
       <n-flex :size="40" class="work-details-modal" vertical>
         <div>
@@ -23,45 +43,45 @@ const emit = defineEmits(['update:show'])
           </Text>
         </div>
         <n-flex :wrap="false" :size="20">
-          <n-form style="width: calc(100% - 256px)"  class="naiveui-form-16">
+          <n-form style="width: calc(100% - 256px)" class="naiveui-form-16">
             <n-grid :cols="24" :x-gap="20">
               <n-form-item-gi :span="22" label="姓名" path="inputValue">
-                <n-input placeholder="请输入姓名" />
+                <n-input placeholder="请输入姓名" v-model:value="recommendation.name"/>
               </n-form-item-gi>
               <n-form-item-gi
-                :span="22"
-                label="企业电子邮件地址"
-                path="inputValue"
+                  :span="22"
+                  label="企业电子邮件地址"
+                  path="inputValue"
               >
-                <n-input placeholder="请输入企业电子邮件地址" />
+                <n-input placeholder="请输入企业电子邮件地址" v-model:value="recommendation.companyEmail"/>
               </n-form-item-gi>
               <n-form-item-gi
-                :span="11"
-                label="客户标题（可选）"
-                path="inputValue"
+                  :span="11"
+                  label="客户标题（可选）"
+                  path="inputValue"
               >
-                <n-input placeholder="请输入企业电子邮件地址" />
+                <n-input placeholder="请输入企业电子邮件地址"/>
               </n-form-item-gi>
               <n-form-item-gi
-                :span="11"
-                label="项目类型（可选）"
-                path="inputValue"
+                  :span="11"
+                  label="项目类型（可选）"
+                  path="inputValue"
               >
-                <n-input placeholder="请输入标题" />
+                <n-input placeholder="请输入标题" v-model:value="recommendation.title"/>
               </n-form-item-gi>
 
               <n-form-item-gi :span="22" label="给客户的消息" path="inputValue">
                 <n-input
-                  placeholder="请输入标题"
-                  type="textarea"
-                  style="height: 160px"
+                    placeholder="请给客户的消息"
+                    type="textarea"
+                    style="height: 160px" v-model:value="recommendation.message"
                 />
               </n-form-item-gi>
             </n-grid>
           </n-form>
           <n-flex vertical class="letter-container" align="center">
             <!-- <RenderIcon :icon="IconCashLine" :size="100"></RenderIcon> -->
-			<img src="../../../assets/img/tuijian-sousuo.png">
+            <img src="../../../assets/img/tuijian-sousuo.png">
             <Text :size="24" align="center">通过客户推荐加强您的形象</Text>
             <n-space vertical :size="20">
               <Text :size="16">
@@ -78,7 +98,7 @@ const emit = defineEmits(['update:show'])
           <n-button type="primary" @click="emit('update:show', false)" text class="naiveui-button-16">
             取消
           </n-button>
-          <n-button type="primary" @click="emit('update:show', false)" class="naiveui-button-16">
+          <n-button type="primary" @click="addRecommendation()" class="naiveui-button-16">
             请求推荐
           </n-button>
         </n-flex>

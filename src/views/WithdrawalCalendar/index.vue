@@ -17,7 +17,7 @@
 </script>
 
 <template>
-	<HeaderTop :is-work="false" :is-login="false" />
+	<HeaderTop :is-work="false"  />
 	<Layout>
 		<div class="transaction-log-container">
 			<div class="transaction-log-header-title">

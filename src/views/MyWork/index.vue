@@ -4,7 +4,7 @@ import { Footer, Text,Empty } from '@/components'
 </script>
 
 <template>
-  <HeaderTop :is-work="false" :is-login="false" />
+  <HeaderTop :is-work="false"  />
 
   <div class="my-work-container">
     <div class="work-container-body">
@@ -13,7 +13,7 @@ import { Footer, Text,Empty } from '@/components'
         <Text :size="18">有效合同</Text>
       </n-flex>
 
-      <div class="container-item-data"> 
+      <div class="container-item-data">
         <Empty size="181px"></Empty>
         <Text :size="24">
             暂时没有有效合同

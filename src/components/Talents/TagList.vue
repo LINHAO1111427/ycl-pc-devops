@@ -55,7 +55,7 @@ function onClickRight() {
         </n-tag>
 
       </n-flex>
-      <div style="width: 150px;background-color: red;"></div>
+<!--      <div style="width: 150px;background-color: red;"></div>-->
     </div>
     <div class="arrow" v-if="isShowArrow">
       <n-icon @click.stop="onClickLeft" v-if="showBackArrow">

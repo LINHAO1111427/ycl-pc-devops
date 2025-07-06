@@ -1,19 +1,24 @@
 <script setup lang="ts">
-import { h, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import {h, ref} from 'vue'
+import {useRouter} from 'vue-router'
 import HeaderModal from './HeaderModal.vue'
-import { IconService, IconRemind, RenderIcon } from '@/components'
-import { ChevronDown } from '@vicons/ionicons5'
+import {IconService, IconRemind, RenderIcon} from '@/components'
+import {ChevronDown} from '@vicons/ionicons5'
 import Looking from './Looking.vue'
 import Talents from './Talents.vue'
 import College from './College.vue'
-import { Notice, renderCustomHeader, renderCustomIcons } from '@/components/Header/ClientNotice.tsx'
+import {Notice, renderCustomHeader, renderCustomIcons} from '@/components/Header/ClientNotice.tsx'
 import HeaderDropdownSelect from './HeaderDropdownSelect.vue'
 import HeaderClient from './HeaderClient.vue'
 import avatarUrl from '../../assets/img/avatar.png'
-import ChangeAccount from './ClientChangeAccount.vue'
+import ChangeAccount from './ChangeAccount.vue'
 import EditAvatar from '@/components/Client/EditAvatar.vue'
+import {useStore} from 'vuex'
+import {computed} from 'vue'
 
+const store = useStore()
+const avatar = computed(() => store.getters.avatar)
+const userInfo = computed(() => store.getters.userInfo)
 const router = useRouter()
 
 const searchType = ref('人才')
@@ -29,17 +34,17 @@ const key = ref('College')
 type Options = any[] | ((value: any[]) => any[])
 
 withDefaults(
-  defineProps<{
-    isWork: boolean
-    isLogin: boolean,
-    isView: boolean,
-    headerOptions?: Options
-  }>(),
-  {
-    isView:false,
-    isWork: true,
-    isLogin: false,
-  },
+    defineProps<{
+      isWork: boolean
+      isLogin: boolean,
+      isView: boolean,
+      headerOptions?: Options
+    }>(),
+    {
+      isView: false,
+      isWork: true,
+      isLogin: false,
+    },
 )
 
 const options = ref([
@@ -78,25 +83,21 @@ const avatarOptions = ref([
     key: 'header',
     type: 'render',
     // render: renderCustomHeader,
-	render: () =>h(renderCustomHeader,{
-    	onClick: (event) => {
-    	 const clickedElement = event.target;
-    	 if (clickedElement.tagName == 'IMG') {
-    		 showEditAvatar.value = true
-         }
-    	},
-    })
+    render: () =>
+        renderCustomHeader(avatar.value,userInfo.value, (event) => {
+          showEditAvatar.value = true
+        })
   },
   {
     key: 'icons',
     type: 'render',
-    render: () => h(renderCustomIcons,{
-    	onClick: (event) => {
-    	 const clickedElement = event.target;
-    	 if (clickedElement.classList.contains('showChangeAccount')) {
-    		 showChangeAccount.value = true
-         }
-    	},
+    render: () => h(renderCustomIcons, {
+      onClick: (event) => {
+        const clickedElement = event.target;
+        if (clickedElement.classList.contains('showChangeAccount')) {
+          showChangeAccount.value = true
+        }
+      },
     }),
   },
 ])
@@ -126,49 +127,51 @@ function onMouseenter(value: string) {
   visual.value = true
 }
 
-function renderLabel({ option }: any) {
+function renderLabel({option}: any) {
   return h(
-    'div',
-    {
-      class: {
-        'header-top-label_container_item': true,
-      },
-    },
-    h(
       'div',
       {
         class: {
-          'header-top-label_container_item_1': true,
-          'active': option.label === searchType.value,
-        },
-        onClick() {
-          onClickSelect(option.label)
+          'header-top-label_container_item': true,
         },
       },
-      [
-        h(
+      h(
           'div',
-          { class: 'header-top-label_container_item-text' },
-          option.label,
-        ),
-        h(
-          'div',
-          { class: 'header-top-label_container_item-text' },
-          option.desc,
-        ),
-      ],
-    ),
+          {
+            class: {
+              'header-top-label_container_item_1': true,
+              'active': option.label === searchType.value,
+            },
+            onClick() {
+              onClickSelect(option.label)
+            },
+          },
+          [
+            h(
+                'div',
+                {class: 'header-top-label_container_item-text'},
+                option.label,
+            ),
+            h(
+                'div',
+                {class: 'header-top-label_container_item-text'},
+                option.desc,
+            ),
+          ],
+      ),
   )
 }
+
 const keyword = ref(null)
-function search(){
-	if(searchType.value == '人才'){
-		router.push('/client/search-talents')
-	}else if(searchType.value == '找工作'){
-		router.push('/search/position')
-	}else if(searchType.value == '商业咨询'){
-		router.push('/client/search-talents?is_consult=1')
-	}
+
+function search() {
+  if (searchType.value == '人才') {
+    router.push('/client/search-talents')
+  } else if (searchType.value == '找工作') {
+    router.push('/search/position')
+  } else if (searchType.value == '商业咨询') {
+    router.push('/client/search-talents?is_consult=1')
+  }
 }
 
 const charMessageShow = ref(false)
@@ -181,7 +184,7 @@ const charMessageShow = ref(false)
       <div class="container">
         <div class="container-header-nav">
           <div class="logo" @click="$router.push('/')">
-            <img src="../../assets/img/logo.png" alt="" />
+            <img src="../../assets/img/logo.png" alt=""/>
           </div>
           <div class="header-nav-container">
             <template v-if="isWork">
@@ -212,28 +215,29 @@ const charMessageShow = ref(false)
                   <ChevronDown></ChevronDown>
                 </n-icon>
               </div>
-<!--              <div class="nav-container-item">专业领域</div>-->
+              <!--              <div class="nav-container-item">专业领域</div>-->
               <div class="nav-container-item">单刻达在线客服中心</div>
             </template>
             <template v-else>
-              <HeaderClient :options="headerOptions" />
+              <HeaderClient :options="headerOptions"/>
             </template>
           </div>
         </div>
         <n-flex align="center" class="right">
           <n-space>
-            <n-input v-if="isView" round v-model:value="keyword" placeholder="请输入.." size="large" style="width: 300px"
-              @keyup.enter="search">
+            <n-input v-if="isView" round v-model:value="keyword" placeholder="请输入.." size="large"
+                     style="width: 300px"
+                     @keyup.enter="search">
               <template #prefix>
                 <div class="icon">
-                  <img src="../../assets/img/search.png" alt="" />
+                  <img src="../../assets/img/search.png" alt=""/>
                 </div>
               </template>
               <template #suffix>
                 <div class="select" :class="isShow ? 'on' : ''">
                   <n-dropdown trigger="hover" :options="options" :show="isShow" @select="onClickSelect"
-                    :on-update:show="onClickShowDropdown" style="width: 318px" :render-option="renderLabel"
-                    :show-arrow="true" :menu-props="
+                              :on-update:show="onClickShowDropdown" style="width: 318px" :render-option="renderLabel"
+                              :show-arrow="true" :menu-props="
                       () => {
                         return {
                           style: {
@@ -244,7 +248,7 @@ const charMessageShow = ref(false)
                     ">
                     <span class="el-dropdown-link">
                       {{ searchType }}
-                      <img src="../../assets/img/xiala.png" alt="" />
+                      <img src="../../assets/img/xiala.png" alt=""/>
                     </span>
                   </n-dropdown>
                 </div>
@@ -263,14 +267,14 @@ const charMessageShow = ref(false)
               </template>
               <template v-else>
                 <n-flex align="center" :size="30" style="margin-left: 30px">
-                  <RenderIcon size="24" fill="#808080" :icon="IconService" @click="charMessageShow = true" />
-				  <n-dropdown trigger="hover" :options="noticeOptions" show-arrow placement="bottom-end">
-					<n-badge :offset="[-4,2]" color="red" dot>
-						<RenderIcon size="24" fill="#808080" :icon="IconRemind" />
-					</n-badge>
-				  </n-dropdown>
+                  <RenderIcon size="24" fill="#808080" :icon="IconService" @click="charMessageShow = true"/>
+                  <n-dropdown trigger="hover" :options="noticeOptions" show-arrow placement="bottom-end">
+                    <n-badge :offset="[-4,2]" color="red" dot>
+                      <RenderIcon size="24" fill="#808080" :icon="IconRemind"/>
+                    </n-badge>
+                  </n-dropdown>
                   <n-dropdown trigger="hover" :options="avatarOptions" show-arrow style="width:245px">
-                    <n-avatar round size="large" :src="avatarUrl" />
+                    <n-avatar round size="large" :src="avatar"/>
                   </n-dropdown>
                 </n-flex>
               </template>
@@ -285,9 +289,9 @@ const charMessageShow = ref(false)
       <College v-if="key === 'College'"></College>
     </HeaderModal>
   </div>
-  <ChatMessage v-model:show="charMessageShow" />
-  <ChangeAccount v-model:show="showChangeAccount" />
-  <EditAvatar v-model:show="showEditAvatar" />
+  <ChatMessage v-model:show="charMessageShow"/>
+  <ChangeAccount v-model:show="showChangeAccount" v-if="showChangeAccount"/>
+  <EditAvatar v-model:show="showEditAvatar"/>
 </template>
 
 <style scoped lang="scss">
@@ -306,8 +310,9 @@ const charMessageShow = ref(false)
   display: flex;
   align-items: center;
   height: 64px;
-  .logo{
-  	  cursor: pointer;
+
+  .logo {
+    cursor: pointer;
   }
 }
 

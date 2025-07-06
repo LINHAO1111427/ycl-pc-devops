@@ -10,7 +10,7 @@
 
 <template>
 	<div class="talents">
-		<HeaderTop :is-login="false" :is-work="false" />
+		<HeaderTop  :is-work="false" />
 		<div class="talents-container">
 			<PositionsDetails></PositionsDetails>
 		</div>

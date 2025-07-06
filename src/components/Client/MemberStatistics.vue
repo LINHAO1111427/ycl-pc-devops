@@ -221,7 +221,7 @@ const histogram = computed(() => {
         ::v-deep(.n-base-icon) {
             width: 18px;
             height: 18px;
-            color: #F18B41;
+            //color: #F18B41;
         }
     }
 

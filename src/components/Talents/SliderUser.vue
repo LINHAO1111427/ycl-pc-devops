@@ -1,36 +1,25 @@
 <script setup lang="ts">
 import {ChevronForwardOutline} from '@vicons/ionicons5'
 import avatarUrl from '../../assets/img/avatar.png'
-import { ref,watch } from 'vue'
+import {computed, onMounted, ref, watch} from 'vue'
+import {useUser} from "@/api/useUser.ts";
+import {useStore} from 'vuex'
 
+const store = useStore()
 const emit = defineEmits(["openCharMessageShow"]);
-
+const avatar = computed(() => store.getters.avatar)
 const openCharMessageShow = () => {
   emit("openCharMessageShow", "这是子组件的数据");
 };
 const skillList = ref([])
-
-const props = defineProps({
-  userData: {
-    type: Object,
-    default: {
-      userId: "20297", //用户id
-      avatar: "", //头像
-      name: "", //真实名字
-      expectedPosition: "", //职位
-      skill: "", //技能和专业知识 格式：翻译,编程,法务,
-      orderCount: 1, //历史接单总数
-      totalIncome: 1, //总收入
-      score: 1, //评分
-      dataCompletionRate: 1, //完善你的个人资料
-      isMatch: 1, //是否开启极速匹配（0是1否）
-      isConsulting: 1, //是否开启商业咨询（0是1否）
-      isMember: 1 //是否为会员（0是1否）
-    },
-  }
+const {getUser} = useUser()
+const userData = ref({})
+onMounted(async () => {
+  const res = await getUser()
+  userData.value = res.data
 })
 watch(
-    () => props.userData?.skill,
+    () => userData?.skill,
     (newVal) => {
       if (newVal) {
         skillList.value = newVal.split(',').map(item => item.trim())
@@ -45,13 +34,13 @@ watch(
     <div class="slider-user-item">
       <n-flex align="center" :size="20">
         <n-avatar
-            :src="props.userData.avatar"
+            :src="avatar"
             :size="64"
             round/>
         <n-flex vertical :size="10">
-          <div class="user-name">{{ props.userData.name }}</div>
+          <div class="user-name">{{ userData.name }}</div>
           <div class="user-desc">
-            {{ props.userData.expectedPosition }}
+            {{ userData.expectedPosition }}
           </div>
         </n-flex>
       </n-flex>
@@ -62,21 +51,21 @@ watch(
       </div>
       <n-flex class="slider-user-date" justify="space-between">
         <n-flex vertical align="center">
-          <div class="slider-user-item-nums">{{ props.userData.orderCount }}</div>
+          <div class="slider-user-item-nums">{{ userData.orderCount }}</div>
           <div class="slider-user-item-text">历史接单(单)</div>
         </n-flex>
         <n-flex vertical align="center">
-          <div class="slider-user-item-nums">{{ props.userData.totalIncome }}</div>
+          <div class="slider-user-item-nums">{{ userData.totalIncome }}</div>
           <div class="slider-user-item-text">总收入(￥)</div>
         </n-flex>
         <n-flex vertical align="center">
-          <div class="slider-user-item-nums">{{ props.userData.score }}</div>
+          <div class="slider-user-item-nums">{{ userData.score }}</div>
           <div class="slider-user-item-text">评分(5.0)</div>
         </n-flex>
       </n-flex>
-      <n-flex style="margin-top: 25px;">
+      <n-flex style="margin-top: 25px;cursor: pointer" @click="$router.push('/personal-data')">
         <div class="s-t1">完善你的个人资料</div>
-        <n-progress type="line" color="#3BC8B4" :percentage="props.userData.dataCompletionRate"/>
+        <n-progress type="line" color="#3BC8B4" :percentage="userData.dataCompletionRate"/>
       </n-flex>
     </div>
     <div class="slider-user-item padding-0">

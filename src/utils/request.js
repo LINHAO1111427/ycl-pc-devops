@@ -1,14 +1,14 @@
 import axios from 'axios'
-import { useMessage } from 'naive-ui'
+import {useMessage} from 'naive-ui'
 
 // API 基础地址
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://47.120.73.189:48080'
+const BASE_URL = import.meta.env.VITE_API_BASE_URL // || 'http://47.120.73.189:48080/dkd_api'//正式 http://39.96.170.33/dkd_api
 
 // 创建 Axios 实例
 const service = axios.create({
     baseURL: BASE_URL,
     timeout: 5000,
-    headers: { 'Content-Type': 'application/json','tenant-id':'1' }
+    headers: {'Content-Type': 'application/json', 'tenant-id': '1'}
 })
 
 service.interceptors.request.use(
@@ -20,7 +20,7 @@ service.interceptors.request.use(
 
         const method = config.method?.toLowerCase()
         if (method === 'post') {
-            config.data =config.data.params
+            config.data = config.data.params
         }
 
         return config
@@ -38,9 +38,9 @@ service.interceptors.response.use(
     },
     error => {
         const message = useMessage()
-        const { response } = error
+        const {response} = error
         if (response) {
-            const { status, data } = response
+            const {status, data} = response
             let msg = data.message || '请求出错'
             switch (status) {
                 case 400:

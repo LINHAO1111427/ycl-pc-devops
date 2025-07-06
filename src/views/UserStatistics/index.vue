@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import HeaderTop from '@/components/Header/HeaderTop.vue'
 import Layout from '@/components/Layout/Layout.vue'
-import { computed, ref } from 'vue'
-import { Echarts } from '@/components'
-
+import {computed, onMounted, ref} from 'vue'
+import {Echarts} from '@/components'
+import {getUserCount} from '@/api/home'
+import {freelancerCountPage} from "@/api/home";
+import {useMessage} from 'naive-ui'
+// 创建 message 实例
+const message = useMessage()
 const dateOptions = [
   {
     label: '过去7天',
@@ -22,25 +26,32 @@ const currentDay = ref(7)
 
 
 const discount = computed(() => {
+  const offerNum = userStatistics.value.offerNum || {}
+  const entries = Object.entries(offerNum)
+
+  const xAxisLabels = entries.map(([dateStr]) => {
+    const date = new Date(dateStr)
+    return `${date.getMonth() + 1}-${date.getDate()}`
+  })
+
+  const values = entries.map(([_, value]) => value)
+
   return {
     tooltip: {
       trigger: 'axis',
       axisPointer: {
         type: 'cross',
       },
-      formatter: function([params]) {
-        console.log(params)
+      formatter: function ([params]) {
         return `<div style="width: 102px;text-align: center" class="secondary-color-text-1">
-            <div  style="text-align: center">
-              2024-06-${params.name}
-            </div>
+            <div style="text-align: center">${params.axisValue}</div>
             <div style="color: #000000">${params.value}</div>
         </div>`
       },
     },
     xAxis: {
       type: 'category',
-      data: new Array(currentDay.value).fill(0).map((_, index) => `7-${index + 1}`),
+      data: xAxisLabels,
     },
     yAxis: {
       type: 'value',
@@ -51,7 +62,7 @@ const discount = computed(() => {
     },
     series: [
       {
-        data: new Array(currentDay.value).fill(0).map((_, index) => Math.floor(Math.random() * 10)),
+        data: values,
         type: 'line',
         smooth: true,
         symbol: 'none',
@@ -62,12 +73,21 @@ const discount = computed(() => {
     ],
   }
 })
-
 const histogram = computed(() => {
+  const workInfo = userStatistics.value.wokrInfo || {}
+  const entries = Object.entries(workInfo)
+
+  const xAxisLabels = entries.map(([dateStr]) => {
+    const date = new Date(dateStr)
+    return `${date.getMonth() + 1}-${date.getDate()}`
+  })
+
+  const values = entries.map(([_, value]) => value)
+
   return {
     xAxis: {
       type: 'category',
-      data: new Array(currentDate.value).fill(0).map((_, index) => `7-${index + 1}`),
+      data: xAxisLabels,
     },
     yAxis: {
       type: 'value',
@@ -79,12 +99,11 @@ const histogram = computed(() => {
     series: [
       {
         type: 'bar',
-        data: new Array(currentDate.value).fill(0).map((_, index) => Math.floor(Math.random() * 10)),
+        data: values,
         itemStyle: {
           normal: {
-            color: function(params) {
-              return params.dataIndex % 2 === 0 ? '#FF5B5B' : '#F7C604'
-            },
+            color: (params) =>
+                params.dataIndex % 2 === 0 ? '#FF5B5B' : '#F7C604',
           },
         },
         barWidth: '30%',
@@ -92,11 +111,23 @@ const histogram = computed(() => {
     ],
   }
 })
-
+const userStatistics = ref({})
+onMounted(async () => {
+  const res = await getUserCount({
+    userId: localStorage.getItem('userId'),
+    offerDay: 7,
+    wordDay: 7
+  })
+  if (res.code !== 0) {
+    message.error(res.msg)
+    return
+  }
+  userStatistics.value = res.data
+})
 </script>
 
 <template>
-  <HeaderTop :is-login="false" :is-work="false" />
+  <HeaderTop :is-work="false"/>
   <Layout>
     <div class="user-statistics">
       <div class="statistics-title">
@@ -113,17 +144,18 @@ const histogram = computed(() => {
       <div class="user-statistics-data-item">
         <div class="data-item-title">收入合计</div>
         <div class="data-item-nums">
-          124000
+          {{ userStatistics.totalIncome }}
         </div>
         <RouterLink class="data-item-footer" to="/transaction-log">历史提现记录</RouterLink>
       </div>
       <div class="user-statistics-data-item">
         <div class="data-item-title">好评率</div>
-		<div style="margin-top: 35px;">
-			<n-rate readonly :default-value="5" color="#F18B41" size="large" />
-		</div>
+        <div style="margin-top: 35px;">
+          <n-rate color="#F18B41"
+                  :value="userStatistics.score" readonly/>
+        </div>
         <div class="data-item-nums" style="margin-top: 15px;">
-          5.0
+          {{ userStatistics.score }}
         </div>
       </div>
     </div>
@@ -132,18 +164,18 @@ const histogram = computed(() => {
         <div class="echarts-discount-title">
           offer总数
         </div>
-        <n-select :options="dateOptions" v-model:value="currentDay" style="width:150px" />
+        <n-select :options="dateOptions" v-model:value="currentDay" style="width:150px"/>
         <div class="echarts-container">
-          <Echarts :options="discount" />
+          <Echarts :options="discount"/>
         </div>
       </n-flex>
       <n-flex class="user-echarts-discount size-450" :size="16" vertical>
-		  <div class="echarts-discount-title">
-		    工作申请
-		  </div>
-          <n-select :options="dateOptions" v-model:value="currentDate" style="width:150px" />
+        <div class="echarts-discount-title">
+          工作申请
+        </div>
+        <n-select :options="dateOptions" v-model:value="currentDate" style="width:150px"/>
         <div class="echarts-container">
-          <Echarts :options="histogram" />
+          <Echarts :options="histogram"/>
         </div>
       </n-flex>
     </n-flex>
@@ -185,7 +217,7 @@ const histogram = computed(() => {
     display: flex;
     align-items: center;
     flex-direction: column;
-	background-color: #ffffff;
+    background-color: #ffffff;
 
     .data-item-title {
       font-weight: 500;
@@ -210,11 +242,12 @@ const histogram = computed(() => {
       color: #58968B;
       line-height: 14px;
     }
-	::v-deep(.n-base-icon svg), ::v-deep(.n-base-icon) {
-	  width: 18px;
-	  height: 18px;
-	  color: #F18B41;
-	}
+
+    ::v-deep(.n-base-icon svg), ::v-deep(.n-base-icon) {
+      width: 18px;
+      height: 18px;
+      //color: #F18B41;
+    }
   }
 
 }

@@ -92,7 +92,7 @@
           <n-flex vertical style="margin-left: 10px;">
             <div class="clientDivTitle1">发布新的职位</div>
             <div class="clientDivTitle2">创建新的职位发布并从人才那里活得建议</div>
-            <div class="btn1">发布新职位</div>
+            <div class="btn1" @click="$router.push('/client/addclient')" style="cursor: pointer;">发布新职位</div>
           </n-flex>
         </n-flex>
         <n-flex class="clientDivContent" align="center">
@@ -144,52 +144,48 @@
                 </span>
       </div>
       <n-flex class="pt-div" justify="space-between">
-        <n-flex vertical class="pt-content" justify="space-around" v-for="item,index in 6" :key="index">
+        <n-flex vertical class="pt-content" justify="space-around" v-for="(item,index) in UserList" :key="index">
           <n-flex class="pt-content1">
-            <img src="../../assets/img/avatar.png" class="avatar">
+            <n-avatar :size="60" round :src="item.avatar"></n-avatar>
             <n-flex vertical style="width: calc(100% - 80px);">
               <n-flex justify="space-between">
-                <div class="pt-to">Jason Z</div>
-                <div class="pt-status">在线</div>
+                <div class="pt-to">{{ item.name }}</div>
+                <div class="pt-status" v-if="item.loginStatus">{{ ['在线', '忙碌', '离线'][item.loginStatus] }}</div>
               </n-flex>
-              <div class="pt-t1">人工智能产品经理</div>
+              <div class="pt-t1">{{ item.position }}</div>
               <n-flex>
-<!--                <div>-->
-<!--                  <i class="icon-jinqian iconfont"></i>￥40.00/小时-->
-<!--                </div>-->
+                <!--                <div>-->
+                <!--                  <i class="icon-jinqian iconfont"></i>￥40.00/小时-->
+                <!--                </div>-->
                 <n-flex align="center">
+
                   <img src="../../assets/client/4.png" alt="" style="width: 15px;height: 15px;">4.95
                 </n-flex>
-<!--                <div>-->
-<!--                  <i class="icon-gongzuo iconfont"></i>63-->
-<!--                </div>-->
+                <!--                <div>-->
+                <!--                  <i class="icon-gongzuo iconfont"></i>63-->
+                <!--                </div>-->
               </n-flex>
               <div></div>
             </n-flex>
           </n-flex>
           <n-flex>
             <n-tag size="small" class="easy-tag"
-                   :color="{textColor:'#808080',borderColor:'#EDEDED',color:'#EDEDED'}" round>英文翻译
-            </n-tag>
-            <n-tag size="small" class="easy-tag"
-                   :color="{textColor:'#808080',borderColor:'#EDEDED',color:'#EDEDED'}" round>英文中文
-            </n-tag>
-            <n-tag size="small" class="easy-tag"
-                   :color="{textColor:'#808080',borderColor:'#EDEDED',color:'#EDEDED'}" round>普通话
+                   :color="{textColor:'#808080',borderColor:'#EDEDED',color:'#EDEDED'}" round
+                   v-for="(item1,index) in item.skills">{{ item1 }}
             </n-tag>
           </n-flex>
           <div class="pt-t2">
-            <span>擅长：</span>智慧城市产品需求，深度复杂算法...
+            <span>擅长：</span>{{ item.skilled }}
           </div>
           <div class="pt-t2">
-            <span>案例：</span>天津智慧城市，工业数字孪生定位识别…
+            <span>案例：</span>{{ item.projectTitle }}
           </div>
           <div class="pt-t2">
-            <span>客户：</span>“沟通顺畅，不拖泥带水，技术好”
+            <span>客户：</span>{{ item.content }}
           </div>
           <n-flex justify="space-between">
             <div class="pt-btn1">在线沟通</div>
-            <div class="pt-btn2" @click="open_member()">查看职业档案</div>
+            <div class="pt-btn2" @click="open_member(item)">查看职业档案</div>
           </n-flex>
         </n-flex>
       </n-flex>
@@ -256,125 +252,125 @@
         </n-flex>
       </n-flex>
 
-<!--      <div class="pt-menu">-->
-<!--                <span class="pt-menu-title">-->
-<!--                    最佳匹配的人才-->
-<!--                </span>-->
-<!--      </div>-->
-<!--      <n-tabs type="line" animated class="my-tabs">-->
-<!--        <n-tab-pane name="tab1" tab="网站开发" />-->
-<!--        <n-tab-pane name="tab2" tab="微信开发" />-->
-<!--        <n-tab-pane name="tab3" tab="工业设计" />-->
-<!--        <n-tab-pane name="tab4" tab="品牌设计" />-->
-<!--      </n-tabs>-->
-<!--      <n-flex class="pt-div" justify="space-between">-->
-<!--        <n-flex vertical class="pt-content" justify="space-around" v-for="item,index in 3" :key="index">-->
-<!--          <n-flex class="pt-content1">-->
-<!--            <img src="../../assets/img/avatar.png" class="avatar">-->
-<!--            <n-flex vertical style="width: calc(100% - 80px);">-->
-<!--              <n-flex justify="space-between">-->
-<!--                <div class="pt-to">Jason Z</div>-->
-<!--                <div class="pt-status">在线</div>-->
-<!--              </n-flex>-->
-<!--              <div class="pt-t1">人工智能产品经理</div>-->
-<!--              <n-flex>-->
-<!--                <div>-->
-<!--                  <i class="icon-jinqian iconfont"></i>￥40.00/小时-->
-<!--                </div>-->
-<!--                <n-flex align="center">-->
-<!--                  <img src="../../assets/client/4.png" alt="" style="width: 15px;height: 15px;">4.95-->
-<!--                </n-flex>-->
-<!--                <div>-->
-<!--                  <i class="icon-gongzuo iconfont"></i>63-->
-<!--                </div>-->
-<!--              </n-flex>-->
-<!--              <div></div>-->
-<!--            </n-flex>-->
-<!--          </n-flex>-->
-<!--          <n-flex>-->
-<!--            <n-tag size="small" class="easy-tag"-->
-<!--                   :color="{textColor:'#808080',borderColor:'#EDEDED',color:'#EDEDED'}" round>英文翻译-->
-<!--            </n-tag>-->
-<!--            <n-tag size="small" class="easy-tag"-->
-<!--                   :color="{textColor:'#808080',borderColor:'#EDEDED',color:'#EDEDED'}" round>英文中文-->
-<!--            </n-tag>-->
-<!--            <n-tag size="small" class="easy-tag"-->
-<!--                   :color="{textColor:'#808080',borderColor:'#EDEDED',color:'#EDEDED'}" round>普通话-->
-<!--            </n-tag>-->
-<!--          </n-flex>-->
-<!--          <div class="pt-t2">-->
-<!--            <span>擅长：</span>智慧城市产品需求，深度复杂算法...-->
-<!--          </div>-->
-<!--          <div class="pt-t2">-->
-<!--            <span>案例：</span>天津智慧城市，工业数字孪生定位识别…-->
-<!--          </div>-->
-<!--          <div class="pt-t2">-->
-<!--            <span>客户：</span>“沟通顺畅，不拖泥带水，技术好”-->
-<!--          </div>-->
-<!--          <n-flex justify="space-between">-->
-<!--            <div class="pt-btn1">在线沟通</div>-->
-<!--            <div class="pt-btn2" @click="open_member()">查看职业档案</div>-->
-<!--          </n-flex>-->
-<!--        </n-flex>-->
-<!--      </n-flex>-->
-<!--      <div class="pt-ad">-->
-<!--        <div class="pt-ad-left">-->
-<!--          <span>单刻达平台优势</span>-->
-<!--          <span>支付安全；高效交付；全天候客服团队</span>-->
-<!--        </div>-->
-<!--        <div class="pt-ad-right">-->
-<!--          <img src="../../assets/img/home5.png" alt="">-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="pt-menu">-->
-<!--                <span class="pt-menu-title">-->
-<!--                    最佳匹配的人才-->
-<!--                </span>-->
-<!--      </div>-->
-<!--      <div class="pt-brief">与行业专家一起探索可能性。查看他们的可用性，并预定适合您的时间。</div>-->
-<!--      <a href="/client/search-talents?is_consult=1" class="pt-more">浏览所有类别</a>-->
-<!--      <div class="pt-level">-->
-<!--        <div class="pt-level-item">-->
-<!--          <img src="../../assets/img/nav1.jpg" alt="">-->
-<!--          <span>程序代码工程师</span>-->
-<!--        </div>-->
-<!--        <div class="pt-level-item">-->
-<!--          <img src="../../assets/img/nav2.jpg" alt="">-->
-<!--          <span>程序代码工程师</span>-->
-<!--        </div>-->
-<!--        <div class="pt-level-item">-->
-<!--          <img src="../../assets/img/nav3.jpg" alt="">-->
-<!--          <span>程序代码工程师</span>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="pt-end">-->
-<!--        <div class="pt-end-item">-->
-<!--          <span>交易透明化</span>-->
-<!--          <img src="../../assets/client/6.png" alt="">-->
-<!--        </div>-->
-<!--        <div class="pt-end-item">-->
-<!--          <span>反馈信息透明化</span>-->
-<!--          <img src="../../assets/client/7.png" alt="">-->
-<!--        </div>-->
-<!--        <div class="pt-end-item">-->
-<!--          <span>信息保证安全</span>-->
-<!--          <img src="../../assets/client/8.png" alt="">-->
-<!--        </div>-->
-<!--      </div>-->
+      <!--      <div class="pt-menu">-->
+      <!--                <span class="pt-menu-title">-->
+      <!--                    最佳匹配的人才-->
+      <!--                </span>-->
+      <!--      </div>-->
+      <!--      <n-tabs type="line" animated class="my-tabs">-->
+      <!--        <n-tab-pane name="tab1" tab="网站开发" />-->
+      <!--        <n-tab-pane name="tab2" tab="微信开发" />-->
+      <!--        <n-tab-pane name="tab3" tab="工业设计" />-->
+      <!--        <n-tab-pane name="tab4" tab="品牌设计" />-->
+      <!--      </n-tabs>-->
+      <!--      <n-flex class="pt-div" justify="space-between">-->
+      <!--        <n-flex vertical class="pt-content" justify="space-around" v-for="item,index in 3" :key="index">-->
+      <!--          <n-flex class="pt-content1">-->
+      <!--            <img src="../../assets/img/avatar.png" class="avatar">-->
+      <!--            <n-flex vertical style="width: calc(100% - 80px);">-->
+      <!--              <n-flex justify="space-between">-->
+      <!--                <div class="pt-to">Jason Z</div>-->
+      <!--                <div class="pt-status">在线</div>-->
+      <!--              </n-flex>-->
+      <!--              <div class="pt-t1">人工智能产品经理</div>-->
+      <!--              <n-flex>-->
+      <!--                <div>-->
+      <!--                  <i class="icon-jinqian iconfont"></i>￥40.00/小时-->
+      <!--                </div>-->
+      <!--                <n-flex align="center">-->
+      <!--                  <img src="../../assets/client/4.png" alt="" style="width: 15px;height: 15px;">4.95-->
+      <!--                </n-flex>-->
+      <!--                <div>-->
+      <!--                  <i class="icon-gongzuo iconfont"></i>63-->
+      <!--                </div>-->
+      <!--              </n-flex>-->
+      <!--              <div></div>-->
+      <!--            </n-flex>-->
+      <!--          </n-flex>-->
+      <!--          <n-flex>-->
+      <!--            <n-tag size="small" class="easy-tag"-->
+      <!--                   :color="{textColor:'#808080',borderColor:'#EDEDED',color:'#EDEDED'}" round>英文翻译-->
+      <!--            </n-tag>-->
+      <!--            <n-tag size="small" class="easy-tag"-->
+      <!--                   :color="{textColor:'#808080',borderColor:'#EDEDED',color:'#EDEDED'}" round>英文中文-->
+      <!--            </n-tag>-->
+      <!--            <n-tag size="small" class="easy-tag"-->
+      <!--                   :color="{textColor:'#808080',borderColor:'#EDEDED',color:'#EDEDED'}" round>普通话-->
+      <!--            </n-tag>-->
+      <!--          </n-flex>-->
+      <!--          <div class="pt-t2">-->
+      <!--            <span>擅长：</span>智慧城市产品需求，深度复杂算法...-->
+      <!--          </div>-->
+      <!--          <div class="pt-t2">-->
+      <!--            <span>案例：</span>天津智慧城市，工业数字孪生定位识别…-->
+      <!--          </div>-->
+      <!--          <div class="pt-t2">-->
+      <!--            <span>客户：</span>“沟通顺畅，不拖泥带水，技术好”-->
+      <!--          </div>-->
+      <!--          <n-flex justify="space-between">-->
+      <!--            <div class="pt-btn1">在线沟通</div>-->
+      <!--            <div class="pt-btn2" @click="open_member()">查看职业档案</div>-->
+      <!--          </n-flex>-->
+      <!--        </n-flex>-->
+      <!--      </n-flex>-->
+      <!--      <div class="pt-ad">-->
+      <!--        <div class="pt-ad-left">-->
+      <!--          <span>单刻达平台优势</span>-->
+      <!--          <span>支付安全；高效交付；全天候客服团队</span>-->
+      <!--        </div>-->
+      <!--        <div class="pt-ad-right">-->
+      <!--          <img src="../../assets/img/home5.png" alt="">-->
+      <!--        </div>-->
+      <!--      </div>-->
+      <!--      <div class="pt-menu">-->
+      <!--                <span class="pt-menu-title">-->
+      <!--                    最佳匹配的人才-->
+      <!--                </span>-->
+      <!--      </div>-->
+      <!--      <div class="pt-brief">与行业专家一起探索可能性。查看他们的可用性，并预定适合您的时间。</div>-->
+      <!--      <a href="/client/search-talents?is_consult=1" class="pt-more">浏览所有类别</a>-->
+      <!--      <div class="pt-level">-->
+      <!--        <div class="pt-level-item">-->
+      <!--          <img src="../../assets/img/nav1.jpg" alt="">-->
+      <!--          <span>程序代码工程师</span>-->
+      <!--        </div>-->
+      <!--        <div class="pt-level-item">-->
+      <!--          <img src="../../assets/img/nav2.jpg" alt="">-->
+      <!--          <span>程序代码工程师</span>-->
+      <!--        </div>-->
+      <!--        <div class="pt-level-item">-->
+      <!--          <img src="../../assets/img/nav3.jpg" alt="">-->
+      <!--          <span>程序代码工程师</span>-->
+      <!--        </div>-->
+      <!--      </div>-->
+      <!--      <div class="pt-end">-->
+      <!--        <div class="pt-end-item">-->
+      <!--          <span>交易透明化</span>-->
+      <!--          <img src="../../assets/client/6.png" alt="">-->
+      <!--        </div>-->
+      <!--        <div class="pt-end-item">-->
+      <!--          <span>反馈信息透明化</span>-->
+      <!--          <img src="../../assets/client/7.png" alt="">-->
+      <!--        </div>-->
+      <!--        <div class="pt-end-item">-->
+      <!--          <span>信息保证安全</span>-->
+      <!--          <img src="../../assets/client/8.png" alt="">-->
+      <!--        </div>-->
+      <!--      </div>-->
     </div>
   </div>
   <!-- 人才详情弹窗 -->
-  <n-drawer v-model:show="open_index_member" width="1153px" placement="right">
+  <n-drawer v-model:show="open_index_member" v-if="open_index_member" width="1153px" placement="right">
     <n-drawer-content>
       <template #header>
         <n-flex justify="space-between" align="center" @click="open_member()">
           <n-icon :size="20" class="cursor-pointer-style">
             <ChevronBack/>
           </n-icon>
-          <n-button size="small" type="primary" ghost @click="onClickUrl">在新窗口中打开个人资料</n-button>
+          <!--          <n-button size="small" type="primary" ghost @click="onClickUrl">在新窗口中打开个人资料</n-button>-->
         </n-flex>
       </template>
-      <IndexMember/>
+      <IndexMember :userId="userId"/>
     </n-drawer-content>
   </n-drawer>
 
@@ -384,15 +380,22 @@
 <script setup>
 import {ref, defineAsyncComponent, onMounted} from 'vue';
 import {ChevronBack} from '@vicons/ionicons5'
-import {useRouter} from 'vue-router'
-import {userBest} from '@/api/base'
+import {useRouter} from 'vue-router';
+import {userBest} from '@/api/base';
+import {useUser} from "@/api/useUser";
+import {useMessage} from 'naive-ui'
+import avatarUrl from "@/assets/img/avatar.png";
+// 创建 message 实例
+const message = useMessage()
 const IndexMember = defineAsyncComponent(() => import('@/components/Client/IndexMember.vue'))
 const IndexSwitch = defineAsyncComponent(() => import('@/components/Client/IndexSwitch.vue'))
 const open = ref(false)
 const time = ref()
-onMounted(async () => {
-  await userBest({pageNo:1,pageSize:10})
-})
+const {getUser} = useUser()
+const userData = ref({})
+const UserList = ref([])
+const userId = ref()
+
 const mouseenter = () => {
   clearTimeout(time.value)
   open.value = true
@@ -405,7 +408,8 @@ const mouseleave = () => {
 }
 
 const open_index_member = ref(false)
-const open_member = () => {
+const open_member = (item) => {
+  userId.value = item.userId
   open_index_member.value = !open_index_member.value
 }
 
@@ -416,6 +420,31 @@ function onClickUrl() {
   const routerPath = router.resolve(`/client/member-detail`).href
   window.open(routerPath, '_blank')
 }
+
+onMounted(async () => {
+  try {
+    const res = await getUser()
+    userData.value = res.data
+
+    const res1 = await userBest({pageNo: 1, pageSize: 10})
+
+    if (res1.code !== 0) {
+      message.error(res1.msg || '获取推荐用户失败')
+      return
+    }
+
+    UserList.value = res1.data.list.map(item => {
+      return {
+        ...item,
+        skills: item.skills ? item.skills.split(',') : []
+      }
+    })
+  } catch (err) {
+    console.error('获取用户或推荐用户失败', err)
+    message.error('请求失败，请稍后重试')
+  }
+})
+
 </script>
 <style scoped>
 ::v-deep(.n-drawer-header__main) {
@@ -426,7 +455,8 @@ function onClickUrl() {
   width: 100%;
   background-color: white;
   position: relative;
-  .pt-home5{
+
+  .pt-home5 {
     width: 1200px;
     height: 160px;
     background: url(../../assets/img/home5.png);
@@ -434,16 +464,19 @@ function onClickUrl() {
     border-radius: 16px;
     margin-top: 30px;
     margin-bottom: 50px;
-    img{
+
+    img {
       width: 49px;
       height: 42px;
     }
-    .pt-title1{
+
+    .pt-title1 {
       font-weight: 400;
       font-size: 24px;
       color: #FFFFFF;
     }
   }
+
   .pt-div {
     .pt-t2 {
       font-weight: 400;

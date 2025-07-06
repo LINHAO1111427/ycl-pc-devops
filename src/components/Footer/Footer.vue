@@ -1,7 +1,7 @@
 <template>
-  <footer>
-    <div class="wrapper">
-      <div class="container">
+  <footer >
+    <div class="wrapper" v-if="false">
+      <div class="container" >
         <div class="footer_nav">
           <ul>
             <li>
@@ -124,7 +124,7 @@
 
 <style scoped>
 footer {
-  background: #181818;
+  //background: #181818;
   color: #ffffff;
   padding: 50px 0 30px;;
 }

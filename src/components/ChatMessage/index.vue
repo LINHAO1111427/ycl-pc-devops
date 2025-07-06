@@ -1,22 +1,26 @@
 <script setup lang="ts">
-import { RenderIcon, Text } from '@/components'
-import { AddCircle, ArrowForwardSharp } from '@vicons/ionicons5'
+import {RenderIcon, Text} from '@/components'
+import {AddCircle, ArrowForwardSharp} from '@vicons/ionicons5'
+import {getUserInfoList} from '@/api/chat'
+import {onMounted} from "vue";
 
-
+// onMounted(async () => {
+//   await getUserInfoList({userId: localStorage.getItem('userId')})
+// })
 </script>
 
 <template>
   <n-modal class="chat-message-modal">
     <n-card
-      style="width: 70%;"
-      size="huge"
-      :bordered="false"
-      content-style="background-color: #EAE9EC"
+        style="width: 70%;"
+        size="huge"
+        :bordered="false"
+        content-style="background-color: #EAE9EC"
     >
       <n-flex class="char-message" :wrap="false">
         <n-flex class="char-message-slider" vertical :size="30">
           <n-flex :wrap="false" align="center" v-for="item in 3">
-            <n-avatar round style="flex-shrink: 0" size="large" />
+            <n-avatar round style="flex-shrink: 0" size="large"/>
             <n-flex vertical style="width: 100%" :size="5">
               <n-flex justify="space-between" align="center">
                 <Text :size="16">
@@ -66,17 +70,17 @@ import { AddCircle, ArrowForwardSharp } from '@vicons/ionicons5'
                 <AddCircle></AddCircle>
               </n-icon>
               <div class="char-border"></div>
-              <n-input placeholder="请输入消息..." />
+              <n-input placeholder="请输入消息..."/>
               <div class="char-border"></div>
               <n-icon :size="22" color="#605F62">
                 <ArrowForwardSharp></ArrowForwardSharp>
               </n-icon>
             </div>
             <n-space class="char-icons" :size="30">
-              <RenderIcon class="cursor-pointer-style" icon="icon-biaoqing-xue" :size="20" />
-              <RenderIcon class="cursor-pointer-style" icon="icon-tupian" :size="20" />
-              <RenderIcon class="cursor-pointer-style" icon="icon-wenjian" :size="20" />
-              <RenderIcon class="cursor-pointer-style" icon="icon-dianhua" :size="20" />
+              <RenderIcon class="cursor-pointer-style" icon="icon-biaoqing-xue" :size="20"/>
+              <RenderIcon class="cursor-pointer-style" icon="icon-tupian" :size="20"/>
+              <RenderIcon class="cursor-pointer-style" icon="icon-wenjian" :size="20"/>
+              <RenderIcon class="cursor-pointer-style" icon="icon-dianhua" :size="20"/>
             </n-space>
           </n-flex>
         </n-flex>
@@ -89,7 +93,7 @@ import { AddCircle, ArrowForwardSharp } from '@vicons/ionicons5'
 .chat-message-modal {
   border-radius: 20px;
   overflow: hidden;
-  
+
 
   .char-message {
     height: calc(100vh - 200px);
@@ -154,20 +158,20 @@ import { AddCircle, ArrowForwardSharp } from '@vicons/ionicons5'
           background-color: #F3F1FC;
           box-sizing: border-box;
           height: 100%;
-		  border-radius: 16px 0 0 16px;
+          border-radius: 16px 0 0 16px;
         }
-		
-		.char-item-container-slider.left {
-		  border-radius: 16px 0 0 16px;
-		}
-		
-		.char-item-container-slider.right {
-		    border-radius: 0 16px 16px 0;
-		}
-		
-		.text-content{
-			padding:15px 0;
-		}
+
+        .char-item-container-slider.left {
+          border-radius: 16px 0 0 16px;
+        }
+
+        .char-item-container-slider.right {
+          border-radius: 0 16px 16px 0;
+        }
+
+        .text-content {
+          padding: 15px 0;
+        }
       }
     }
 

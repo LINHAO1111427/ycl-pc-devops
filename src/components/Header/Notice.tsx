@@ -30,42 +30,48 @@ import {
 import './notice.scss'
 import {useRouter} from 'vue-router'
 import {updateUserMatchOrConsulting} from '@/api/user'
-const avatar = localStorage.getItem('avatar') || ''
+import {getUserInfo} from '@/api/home'
+
+const userData = JSON.parse(localStorage.getItem('userData') || JSON.stringify({
+    isMatch: false,
+    isConsulting: false
+}))
 export const Notice = defineComponent({
     setup() {
         const router = useRouter()
-        const msgList = [
-            {
-                title: '恭喜您，您收到一个xxx（项目名称）的工作邀请，请及时查看并提交项目简历。',
-                url: '/send-offer?invite=1',
-                date: '昨天 14:40'
-            },
-            {
-                title: '恭喜您，收到一个工作offer',
-                url: '/send-offer',
-                date: '昨天 14:40'
-            },
-            {
-                title: '恭喜您，您已成功兑换单刻达会员XXX天。',
-                url: '',
-                date: '昨天 14:40'
-            },
-            {
-                title: '您的头像已生效，请在个人详情页查看',
-                url: '',
-                date: '昨天 14:40'
-            },
-            {
-                title: '您的头像审核未通过，请在个人详情页重新上传，谢谢',
-                url: '',
-                date: '昨天 14:40'
-            },
-            {
-                title: '最近从未知设备或浏览器登录到您的单刻达帐户(jasonzha)。',
-                url: '',
-                date: '昨天 14:40'
-            },
-        ]
+        const msgList = []
+        // const msgList = [
+        //     {
+        //         title: '恭喜您，您收到一个xxx（项目名称）的工作邀请，请及时查看并提交项目简历。',
+        //         url: '/send-offer?invite=1',
+        //         date: '昨天 14:40'
+        //     },
+        //     {
+        //         title: '恭喜您，收到一个工作offer',
+        //         url: '/send-offer',
+        //         date: '昨天 14:40'
+        //     },
+        //     {
+        //         title: '恭喜您，您已成功兑换单刻达会员XXX天。',
+        //         url: '',
+        //         date: '昨天 14:40'
+        //     },
+        //     {
+        //         title: '您的头像已生效，请在个人详情页查看',
+        //         url: '',
+        //         date: '昨天 14:40'
+        //     },
+        //     {
+        //         title: '您的头像审核未通过，请在个人详情页重新上传，谢谢',
+        //         url: '',
+        //         date: '昨天 14:40'
+        //     },
+        //     {
+        //         title: '最近从未知设备或浏览器登录到您的单刻达帐户(jasonzha)。',
+        //         url: '',
+        //         date: '昨天 14:40'
+        //     },
+        // ]
         const onClickMsg = (item: string) => {
             if (item.url) {
                 router.push(item.url)
@@ -77,6 +83,9 @@ export const Notice = defineComponent({
     },
 
     render() {
+        if (!this.msgList || this.msgList.length === 0) {
+            return null; // 或者 return <div></div>
+        }
         return <div class="notice-dropdown">
             <NScrollbar style="max-height: 277px;">
                 <div class="notice-container">
@@ -90,7 +99,7 @@ export const Notice = defineComponent({
                     }
                 </div>
             </NScrollbar>
-            {/* 底部“查看全部”按钮 */}
+            底部“查看全部”按钮
             <div class="notice-footer" onClick={this.onViewAll}>
                 查看所有消息
             </div>
@@ -99,7 +108,7 @@ export const Notice = defineComponent({
 })
 
 
-export function renderCustomHeader(props: CustomHeaderProps) {
+export function renderCustomHeader(avatar: string, userInfo: object, onAvatarClick: (e: MouseEvent) => void) {
     const router = useRouter()
     const onlineStatus = ref('在线')
     return h(
@@ -112,7 +121,8 @@ export function renderCustomHeader(props: CustomHeaderProps) {
                 round: true,
                 src: avatar,
                 size: 40,
-                style: 'cursor:pointer'
+                style: 'cursor:pointer',
+                onClick: onAvatarClick
             }),
             h('div', null, [
                 h('div', null, [
@@ -127,7 +137,7 @@ export function renderCustomHeader(props: CustomHeaderProps) {
                                     textOverflow: 'ellipsis',
                                 }
                             },
-                            {default: () => 'Jason ZhangDDDDDDDDDDDDDDDDDD'},
+                            {default: () => userInfo.name},
                         ),
                     ],
                 ),
@@ -137,7 +147,7 @@ export function renderCustomHeader(props: CustomHeaderProps) {
                         h(
                             NText,
                             {depth: 3},
-                            {default: () => '设计师'},
+                            {default: () => userInfo.expectedPosition},
                         ),
                     ],
                 ),
@@ -192,27 +202,40 @@ export const renderCustomIcons = defineComponent({
             },
         ]
         const onClickLogout = () => {
-            router.push('/login')
-        };
-        const handleChange = async(value: boolean) => {
-            await updateUserMatchOrConsulting( {
-                userId: localStorage.getItem('userId'),
-                isMatch: value?0:1
-            })
+            if (window.confirm('确认注销吗？')) {
+                router.push('/login')
+            }
 
-            console.log(value);
-            console.log(1)
+
         };
-        const handleChange1 = async(value: boolean) => {
-            await updateUserMatchOrConsulting( {
+        const handleChange = async (value: boolean) => {
+            await updateUserMatchOrConsulting({
                 userId: localStorage.getItem('userId'),
-                isConsulting: value?0:1
+                isMatch: value ? 0 : 1
             })
+            userData.isMatch = value
+            const res = await getUserInfo({userId: localStorage.getItem('userId')})
+            const data = res.data
+            data.isMatch = (data.isMatch === 0)
+            data.isConsulting = (data.isConsulting === 0)
+            localStorage.setItem('UserInfo', JSON.stringify(data))
+        };
+        const handleChange1 = async (value: boolean) => {
+            await updateUserMatchOrConsulting({
+                userId: localStorage.getItem('userId'),
+                isConsulting: value ? 0 : 1
+            })
+            userData.isConsulting = value
+            const res = await getUserInfo({userId: localStorage.getItem('userId')})
+            const data = res.data
+            data.isMatch = (data.isMatch === 0)
+            data.isConsulting = (data.isConsulting === 0)
+            localStorage.setItem('UserInfo', JSON.stringify(data))
         };
         const themeUpdate = (value: string) => {
             themeValue.value = value
         };
-        return {onClickLogout, handleChange, themeValue, themeOptions, themeUpdate,handleChange1}
+        return {onClickLogout, handleChange, themeValue, themeOptions, themeUpdate, handleChange1}
     },
     render() {
         return <div class="CustomIcons">
@@ -229,13 +252,14 @@ export const renderCustomIcons = defineComponent({
             <NFlex justify="space-between" class="CustomIcons-item">
                 极速匹配
                 <div>
-                    <NSwitch size="small" defaultValue={false} on-update:value={this.handleChange}></NSwitch>
+                    <NSwitch size="small" defaultValue={userData.isMatch} on-update:value={this.handleChange}></NSwitch>
                 </div>
             </NFlex>
             <NFlex justify="space-between" class="CustomIcons-item" style={{marginBottom: '15px'}}>
                 商业咨询
                 <div>
-                    <NSwitch size="small" defaultValue={false} on-update:value={this.handleChange1}></NSwitch>
+                    <NSwitch size="small" defaultValue={userData.isConsulting}
+                             on-update:value={this.handleChange1}></NSwitch>
                 </div>
             </NFlex>
             <NFlex alignItems="center" class="CustomIcons-item showChangeAccount" size={5}>

@@ -14,25 +14,26 @@
 
                 <el-scrollbar>
                     <div class="talent-view">
-                        <div class="talent-item" v-for="item,index in 5" :key="index"  @click="open_member()">
-                            <div class="talent-houcang">
-                                <i class="icon-shoucang iconfont"></i>
-                            </div>
-
-                            <div class="talent-item-icon">
-                                <div class="talent-item-icon-tag"></div>
-                            </div>
-                            <div class="talent-item-name">宝拉</div>
-                            <div class="talent-item-brief">专业配音艺术家和翻译</div>
-                            <div class="talent-item-money">
-                                <span>￥</span>
-                                ￥40.00/小时
-                            </div>
-                            <div class="talent-item-rate">
-                                <n-rate readonly :default-value="5" />
-                                <span>5</span>
-                            </div>
+                      <div class="talent-item" v-for="(item,index) in userList" :key="index" @click="open_member()">
+                        <div class="talent-houcang">
+                          <i class="icon-shoucang iconfont"></i>
                         </div>
+                        <n-avatar :size="60" round :src="item.avatar"></n-avatar>
+                        <!--              <div class="talent-item-icon">-->
+                        <!--                <div class="talent-item-icon-tag"></div>-->
+                        <!--              </div>-->
+                        <div class="talent-item-name">{{ item.name }}</div>
+                        <div class="talent-item-brief">{{ item.skilled }}</div>
+                        <!--              <div class="talent-item-money">-->
+                        <!--                <span>￥</span>-->
+                        <!--                ￥40.00/小时-->
+                        <!--              </div>-->
+                        <div class="talent-item-rate">
+                          <!-- <el-rate v-model="value2" :colors="colors" show-text :texts="['1', '2', '3', '4', '5']" /> -->
+                          <n-rate readonly :default-value="item.assess"/>
+                          <span>{{ item.assess }}</span>
+                        </div>
+                      </div>
                     </div>
                 </el-scrollbar>
             </div>
@@ -56,6 +57,10 @@
 <script setup>
 import { reactive, onMounted, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router'
+import {useMessage} from 'naive-ui'
+import {workerFavorList} from '@/api/base.js'
+// 创建 message 实例
+const message = useMessage()
 const router = useRouter()
 
 
@@ -72,15 +77,26 @@ import {
     ChevronBack
 }
     from '@vicons/ionicons5'
+import {userFilter, userRqpid} from "@/api/base.js";
 const IndexMember = defineAsyncComponent(() => import('@/components/Client/IndexMember.vue'))
 const open_index_member = ref(false)
 const open_member = () => {
     open_index_member.value = !open_index_member.value
 }
+const userList = ref([])
 function onClickUrl(){
 	const routerPath = router.resolve(`/client/member-detail`).href
 	window.open(routerPath, '_blank')
 }
+onMounted(async () => {
+  const res = await workerFavorList({
+  })
+  if (res.code !== 0) {
+    message.error(res.msg)
+    return
+  }
+  userList.value = res.data.list
+})
 </script>
 
 <style scoped>
@@ -311,6 +327,6 @@ function onClickUrl(){
 
 ::v-deep(.n-base-icon svg),
 ::v-deep(.n-base-icon) {
-    color: #F18B41;
+    //color: #F18B41;
 }
 </style>

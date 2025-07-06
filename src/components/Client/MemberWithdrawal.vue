@@ -18,6 +18,24 @@ const slider = [
   },
 
 ]
+import {onMounted} from "vue";
+import {freelancerCountPage} from "@/api/home";
+import {useMessage} from 'naive-ui'
+// 创建 message 实例
+const message = useMessage()
+const isLogin = ref(!!localStorage.getItem('token'))
+const userList = ref([])
+onMounted(async () => {
+  const res = await freelancerCountPage({
+    pageNo: 1,
+    pageSize: 10
+  })
+  if (res.code !== 0) {
+    message.error(res.msg)
+    return
+  }
+  userList.value = res.data.list
+})
 function onMouseenter(key: string) {
   current.value = key
   window.location.hash = key

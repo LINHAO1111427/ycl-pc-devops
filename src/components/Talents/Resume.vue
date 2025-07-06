@@ -2,81 +2,52 @@
 import Cart from './Card.vue'
 import {ChevronBack} from '@vicons/ionicons5'
 import PositionsDetails from "@/components/PositionsDetails/index.vue"
-import {ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {squareFreelancerItem} from '@/api/home'
-
+import {useMessage} from 'naive-ui'
+// 创建 message 实例
+const message = useMessage()
 const props = defineProps({
   typeValue: {
     type: Boolean,
     default: 1,
   },
 })
+onMounted(async () => {
+  // await getProjectList()
+});
 const active = ref(false)
 
 const list = ref([])
 
-function getList(value) {
-  if (value == 1) {
-    list.value = [
-      {
-        id: 1,
-        isActive: false
-      },
-      {
-        id: 2,
-        isActive: false
-      },
-      {
-        id: 3,
-        isActive: false
-      }
-    ]
-  } else if (value == 2) {
-    list.value = [
-      {
-        id: 1,
-        isActive: false
-      },
-      {
-        id: 2,
-        isActive: false
-      }
-    ]
-  } else if (value == 3) {
-    list.value = [
-      {
-        id: 1,
-        isActive: true
-      }
-    ]
-  }
-}
-
-watchEffect(() => {
-  getList(props.typeValue)
-})
 
 const router = useRouter()
 const emit = defineEmits(["openVip"]);
-
+const searchContent = ref('')
 const openVip = () => {
   emit("openVip", "这是子组件的数据");
 };
 
 function handleUpdateValue(value) {
-  getProjectList()
+  // getProjectList(props.typeValue - 1)
   router.push(`/talents?type=${value}`)
 }
 
 const getProjectList = async () => {
   const perem = {
     userId: localStorage.getItem('userId'),
-    itemType:1,
+    search: searchContent.value,
+    itemType: props.typeValue - 1,
     pageNo: 1,
     pageSize: 10
   }
   const res = await squareFreelancerItem(perem)
+  if (res.code !== 0) {
+    message.error(res.msg)
+    return
+  }
+  list.value = res.data.itemPage.list
 }
 
 function onClickUrl() {
@@ -84,9 +55,15 @@ function onClickUrl() {
   window.open(routerPath, '_blank')
 }
 
-function search() {
-  router.push(`/search/position`)
+const search = async () => {
+  await getProjectList()
+  // router.push(`/search/position`)
 }
+
+watchEffect(async () => {
+  await getProjectList()
+  // getList(props.typeValue)
+})
 </script>
 
 <template>
@@ -95,7 +72,7 @@ function search() {
       <img src="../../assets/img/vip.png"/>
     </div>
     <div class="resume-search">
-      <n-input placeholder="请输入..." @keyup.enter="search" style="width: 100%">
+      <n-input placeholder="请输入..." @keyup.enter="search" style="width: 100%" v-model:value='searchContent'>
         <!--				<template #prefix>-->
         <!--					<n-flex align="center" class="search-box">-->
         <!--						<span>光速匹配</span>-->
@@ -111,7 +88,7 @@ function search() {
       <n-tabs type="line" animated :value="typeValue" @update:value="handleUpdateValue">
         <n-tab-pane name="1" tab="最佳匹配"/>
         <n-tab-pane name="2" tab="最近浏览"/>
-        <n-tab-pane name="3" tab="我的收藏(1)"/>
+        <n-tab-pane name="3" tab="我的收藏"/>
       </n-tabs>
       <div class="resume-body-container">
         <Cart :list="list" @click="active = true"></Cart>

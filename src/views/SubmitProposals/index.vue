@@ -33,7 +33,7 @@ const options = [
 </script>
 
 <template>
-  <HeaderTop :is-login="false" :is-work="false" />
+  <HeaderTop  :is-work="false" />
   <div class="submit-proposals">
     <div class="container">
       <div class="slider">

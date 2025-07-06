@@ -205,21 +205,17 @@ function isMobileByWidth() {
 
 // 添加全局前置守卫
 router.beforeEach((to, from, next) => {
-    console.log(localStorage.getItem('LoginData'))
     // if (localStorage.getItem('login') === 'y') {
         if (to.path === '/' && isMobileByWidth()) {
             next('/login')
         } else {
-            const LoginData = JSON.parse(localStorage.getItem('LoginData') || JSON.stringify({
-                userType: null,
-                isLogin: false
-            }))
+            const token = localStorage.getItem('token')
             const whiteList = ['/', '/login', '/register', '/userAuthentication']
             const isInWhiteList = (path) => {
                 return whiteList.some((item) => path === item || path.startsWith(item + '/'));
             };
             console.log(isInWhiteList(to.path))
-            if (LoginData.isLogin || isInWhiteList(to.path)) {
+            if (token || isInWhiteList(to.path)) {
                 next()
             } else {
                 next('/login')

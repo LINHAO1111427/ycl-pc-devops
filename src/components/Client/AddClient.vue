@@ -277,14 +277,14 @@ const levels = [
   }
 ];
 const defaultUserForm = ref({
-  title: "项目需求发布1142",
-  preferredQualification: "会java,sql,js",
-  description: "大型人才市场app1",
+  title: "",
+  preferredQualification: "",
+  description: "",
   experienceLevel: 1,
-  district: "北京",
-  headCount: 2,
+  district: "",
+  headCount: 0,
   deliveryType: 20,
-  totalBudget: 20000,
+  totalBudget: 0,
   projectSkills: [
     {id: 1, name: "英文翻译"},
     {id: 2, name: "中文翻译"}
@@ -294,14 +294,14 @@ const defaultUserForm = ref({
       sequence: 1,
       deliveryType: 20,
       projectMilestones: [
-        {description: "里程碑1", budget: 201, endTime: new Date()},
-        {description: "里程碑2", budget: 103, endTime: new Date()}
+        {description: "里程碑1", budget: 0, endTime: null},
+        {description: "里程碑2", budget: 0, endTime: null}
       ]
     },
     {
       sequence: 2,
       deliveryType: 10,
-      totalBudget: 530
+      totalBudget: 0
     }
   ]
 });
@@ -486,6 +486,11 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+::v-deep(.n-date-picker .n-input) {
+  height: 40px !important;
+  margin-bottom: 0px;
+}
+
 .header-job {
   text-align: center;
   font-size: 16px;

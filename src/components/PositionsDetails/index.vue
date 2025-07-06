@@ -370,7 +370,7 @@ const charMessageShow = ref(false)
     gap: 5px;
 
     ::v-deep(.n-base-icon svg), ::v-deep(.n-base-icon) {
-      color: #F18B41;
+      //color: #F18B41;
     }
   }
 
@@ -383,7 +383,7 @@ const charMessageShow = ref(false)
     ::v-deep(.n-base-icon svg), ::v-deep(.n-base-icon) {
       width: 18px;
       height: 18px;
-      color: #F18B41;
+      //color: #F18B41;
     }
 
     span {

@@ -46,7 +46,7 @@ function click(value: string) {
 </script>
 
 <template>
-  <HeaderTop :is-work="false" :is-login="false"></HeaderTop>
+  <HeaderTop :is-work="false" ></HeaderTop>
   <Layout>
     <div class="user-set-container">
       <div class="user-header-title">

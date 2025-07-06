@@ -13,9 +13,10 @@ import ElementPlus from 'element-plus' //全局引入
 import 'element-plus/dist/index.css'
 
 import myPlugin from './plugins/myPlugin.ts';
+import store from './store'
 console.log('start')
 const app = createApp(App)
-
+app.use(store)
 app.use(ElementPlus)
 app.use(createPinia())
 app.use(router)
