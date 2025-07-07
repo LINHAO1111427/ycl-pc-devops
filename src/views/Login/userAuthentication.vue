@@ -85,10 +85,10 @@ const form = ref({
   qualificationList: [
     {
       schoolName: "",
-      educationSystem: "",
+      educationSystem: null,
       degree: "",
       major: "",
-      graduationDate:null,
+      graduationDate: null,
       certificatePhotoUrl: ""
     }
   ],
@@ -235,7 +235,7 @@ const goToProfile = () => {
   console.log("返回个人中心");
 };
 console.log(router)
-onMounted(async() => {
+onMounted(async () => {
   const res = await getUserSkill({classification: 3})
   if (res.code !== 0) {
     message.error(res.msg)
@@ -350,8 +350,14 @@ const removeSkill = (index) => {
                         placeholder="请选择性别" style="height: 50px;"/>
             </n-gi>
           </n-grid>
-          <n-input v-model:value="form.mark" type="textarea" placeholder="请输入自我介绍"
-                   style="width: 100%;height: 130px;"/>
+          <n-input
+              v-model:value="form.mark"
+              type="textarea"
+              placeholder="请输入自我介绍"
+              :maxlength="50"
+              show-count
+              style="width: 100%; height: 130px;"
+          />
         </n-form>
       </div>
       <div v-show="stage===4" class="stageClass">
@@ -438,9 +444,18 @@ const removeSkill = (index) => {
               <n-input v-model:value="form.qualificationList[0].schoolName" placeholder="请输入学校名称"/>
             </n-gi>
             <n-gi>
-              <n-input v-model:value="form.qualificationList[0].educationSystem" placeholder="请选择学制类型"/>
+              <n-select
+                  placeholder="请选择学制类型"
+                  v-model:value="form.qualificationList[0].educationSystem"
+                  :options="[{ label: '统招', value: '统招' },{ label: '非统招', value: '非统招' }]"
+              />
             </n-gi>
             <n-gi>
+              <n-select
+                  placeholder="请选择学制类型"
+                  v-model:value="form.qualificationList[0].educationSystem"
+                  :options="[{ label: '中专/中计', value: '中专/中计' },{ label: '非统招', value: '非统招' }]"
+              />
               <n-input v-model:value="form.qualificationList[0].degree" placeholder="请输入学历"/>
             </n-gi>
             <n-gi>
@@ -551,7 +566,7 @@ const removeSkill = (index) => {
           <!--            </div>-->
           <!--          </NCard>-->
           <div class="button-group">
-<!--            <NButton type="primary" @click="goToOrders">立即接单</NButton>-->
+            <!--            <NButton type="primary" @click="goToOrders">立即接单</NButton>-->
             <NButton secondary @click="goToProfile">返回个人中心</NButton>
           </div>
         </div>
@@ -639,7 +654,7 @@ const removeSkill = (index) => {
           <!--          </NCard>-->
           <div class="button-group">
             <NButton type="primary" @click="goToOrders">立即发单</NButton>
-<!--            <NButton secondary @click="goToProfile">返回个人中心</NButton>-->
+            <!--            <NButton secondary @click="goToProfile">返回个人中心</NButton>-->
           </div>
         </div>
       </div>

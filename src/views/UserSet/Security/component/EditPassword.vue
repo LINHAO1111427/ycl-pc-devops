@@ -20,10 +20,10 @@ const emit = defineEmits(['update:show'])
         <n-form class="naiveui-form-16">
           <n-grid :cols="24" :x-gap="24">
             <n-form-item-gi :span="24" label="新密码" path="inputValue">
-              <n-input placeholder="" />
+              <n-input placeholder="" type="password"/>
             </n-form-item-gi>
 			<n-form-item-gi :span="24" label="确认密码" path="inputValue">
-			  <n-input placeholder="" />
+			  <n-input placeholder="" type="password"/>
 			</n-form-item-gi>
           </n-grid>
         </n-form>

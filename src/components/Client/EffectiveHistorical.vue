@@ -115,6 +115,10 @@ const handleEnter = () => {
   getPageNow()
 }
 const handleUpdateValue = (val) => {
+  if (!val || val.length !== 2) {
+    console.log('已清空日期')
+    return
+  }
   data.value.startDate = val[0]
   data.value.endDate = val[1]
   getPageNow()
