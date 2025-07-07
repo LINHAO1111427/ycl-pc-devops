@@ -1,9 +1,25 @@
 <script setup lang="ts">
-import { IconStart, RenderIcon, IconFaxiangmu, IconYusuanzonge, IconJiangpai, IconWeiyanzheng, IconYiyanzheng } from '@/components'
-import { useMessage } from 'naive-ui'
-import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import {
+  IconStart,
+  RenderIcon,
+  IconFaxiangmu,
+  IconYusuanzonge,
+  IconJiangpai,
+  IconWeiyanzheng,
+  IconYiyanzheng
+} from '@/components'
+import {useMessage} from 'naive-ui'
+import {computed, onMounted, ref} from 'vue'
+import {useRouter} from 'vue-router'
+import {getProject} from '@/api/home'
 
+const props = defineProps({
+  projectId: {
+    type: String,
+    default: null,
+  },
+})
+const id = computed(() => props.projectId)
 const tagOptions = ['Microsoft PowerPoint', '译本', '普通话', '方言', '英译中文']
 
 const message = useMessage()
@@ -16,14 +32,20 @@ const router = useRouter()
 
 const linkUrl = ref('https://yuanchuangli.tjwangzhan.com/talents-detail')
 
-function onClickApply(){
-	router.push('/submit-proposals')
+function onClickApply() {
+  router.push('/submit-proposals')
 }
-function onClickUrl(){
-	const routerPath = router.resolve(`/talents-detail`).href
-	window.open(routerPath, '_blank')
+
+function onClickUrl() {
+  const routerPath = router.resolve(`/talents-detail`).href
+  window.open(routerPath, '_blank')
 }
+
 const charMessageShow = ref(false)
+onMounted(async () => {
+  await getProject({id: id.value})
+  console.log(id.value)
+});
 </script>
 
 <template>
@@ -42,12 +64,12 @@ const charMessageShow = ref(false)
       </n-flex>
       <n-flex>
         <n-flex
-          :class="{'start-icons-button':true,active:isCollection}"
-          align="center"
-          justify="center"
-          @click="isCollection  = !isCollection"
+            :class="{'start-icons-button':true,active:isCollection}"
+            align="center"
+            justify="center"
+            @click="isCollection  = !isCollection"
         >
-          <RenderIcon :icon="IconStart" :fill="isCollection ? '#58968B' : '#e5e5e5'" size="20" />
+          <RenderIcon :icon="IconStart" :fill="isCollection ? '#58968B' : '#e5e5e5'" size="20"/>
         </n-flex>
         <n-button type="primary" size="large" style="width: 184px" @click="onClickApply">
           立即申请
@@ -55,12 +77,12 @@ const charMessageShow = ref(false)
       </n-flex>
     </n-flex>
     <div class="secondary-color-text-1">
-      我们正在寻找一位技术娴熟，一丝不苟的基于Web和Word的中文演示文榜编辑加入我们充满活力的日队。理想的候选人将具备强大的中文能力和出色的辑技能，在创建、和优化网络内容和基于单词的演示文稿方面拥有丰富的经验，这个角色需要的不仅仅是语言能力:候选人必须对中国文化有深入的了解，以确保内容不仅在语言上准确，而且在文化上具有相关性和吸引力。将文化畑微差别无缝整合到内容中的能力至关重要，因为这将与我们的目标受众产生共鸣并保持真实性。<br />
+      我们正在寻找一位技术娴熟，一丝不苟的基于Web和Word的中文演示文榜编辑加入我们充满活力的日队。理想的候选人将具备强大的中文能力和出色的辑技能，在创建、和优化网络内容和基于单词的演示文稿方面拥有丰富的经验，这个角色需要的不仅仅是语言能力:候选人必须对中国文化有深入的了解，以确保内容不仅在语言上准确，而且在文化上具有相关性和吸引力。将文化畑微差别无缝整合到内容中的能力至关重要，因为这将与我们的目标受众产生共鸣并保持真实性。<br/>
       成功的候选人将展示对中国文化习俗、传统和社会规范的根深蒂团的了解。这种文化洞察力对于制作适合上下文和吸引人的内容至关重要，无论是理解惯用语、识别文化参考，还是使内容与文化事件和趋势保持一致，候选人的文化背景都将在他们的编辑职中发挥至关重要的作用。此外，选人必须善于驾驭中文交流中特有的语气和风格的复杂性，确保所有内容都符合我们的品牌声音，同时具有文化敏感性和吸引力。这种全面的文化意识，加上卓越的编辑技巧，将成为候选人为我们团队做出贡献的基石。
     </div>
     <n-flex class="positions-details_type" align="center" justify="space-evenly" :wrap="false">
       <div class="details_type-item">
-        <RenderIcon :icon="IconFaxiangmu" fill="#808080" size="30" />
+        <RenderIcon :icon="IconFaxiangmu" fill="#808080" size="30"/>
         <div>
           <div class="type-item-title">
             一次性项目
@@ -70,9 +92,9 @@ const charMessageShow = ref(false)
           </div>
         </div>
       </div>
-      <n-divider vertical style="height: 30px" />
+      <n-divider vertical style="height: 30px"/>
       <div class="details_type-item">
-        <RenderIcon :icon="IconYusuanzonge" fill="#808080" size="30" />
+        <RenderIcon :icon="IconYusuanzonge" fill="#808080" size="30"/>
         <div>
           <div class="type-item-title">
             ￥1500.00
@@ -82,9 +104,9 @@ const charMessageShow = ref(false)
           </div>
         </div>
       </div>
-      <n-divider vertical style="height: 30px" />
+      <n-divider vertical style="height: 30px"/>
       <div class="details_type-item">
-        <RenderIcon :icon="IconJiangpai" fill="#808080" size="30" />
+        <RenderIcon :icon="IconJiangpai" fill="#808080" size="30"/>
         <div>
           <div class="type-item-title">
             入门级
@@ -113,7 +135,8 @@ const charMessageShow = ref(false)
             <div class="about-customer-item-title">
               关于客户
             </div>
-            <n-button text type="primary"  @click="charMessageShow = true"><span style="text-decoration: underline">举报不当内容</span></n-button>
+            <n-button text type="primary" @click="charMessageShow = true"><span style="text-decoration: underline">举报不当内容</span>
+            </n-button>
           </n-flex>
           <div class="secondary-color-text-1">
             于2024-07-30加入单刻达
@@ -121,12 +144,12 @@ const charMessageShow = ref(false)
         </div>
         <div>
           <div class="secondary-color-text-1 flex-new">
-			  <RenderIcon :size="15" fill="#808080" :icon="IconWeiyanzheng" />
-			  <span style="margin-left: 5px;">付款方式未验证</span>
+            <RenderIcon :size="15" fill="#808080" :icon="IconWeiyanzheng"/>
+            <span style="margin-left: 5px;">付款方式未验证</span>
           </div>
           <div class="secondary-color-text-1 flex-new">
-			  <RenderIcon :size="15" fill="#808080" :icon="IconYiyanzheng" />
-              <span style="margin-left: 5px;">电话号码已验证</span>
+            <RenderIcon :size="15" fill="#808080" :icon="IconYiyanzheng"/>
+            <span style="margin-left: 5px;">电话号码已验证</span>
           </div>
         </div>
       </n-flex>
@@ -150,7 +173,7 @@ const charMessageShow = ref(false)
           </div>
         </n-flex>
         <div class="rate-item-nums">
-          <n-rate value="5" readonly />
+          <n-rate value="5" readonly/>
           <span> 5</span>
         </div>
       </n-flex>
@@ -160,8 +183,8 @@ const charMessageShow = ref(false)
             工作链接
           </div>
           <n-button secondary>
-			<n-ellipsis style="max-width: 230px">{{linkUrl}}</n-ellipsis>
-		  </n-button>
+            <n-ellipsis style="max-width: 230px">{{ linkUrl }}</n-ellipsis>
+          </n-button>
           <n-button text type="primary" @click="$copyText(linkUrl)">复制链接</n-button>
         </n-flex>
       </n-flex>
@@ -186,14 +209,14 @@ const charMessageShow = ref(false)
             50+
           </div>
         </n-flex>
-<!--        <n-flex justify="space-between" class="skills-item">-->
-<!--          <div>-->
-<!--            当前面试数量：-->
-<!--          </div>-->
-<!--          <div>-->
-<!--            7-->
-<!--          </div>-->
-<!--        </n-flex>-->
+        <!--        <n-flex justify="space-between" class="skills-item">-->
+        <!--          <div>-->
+        <!--            当前面试数量：-->
+        <!--          </div>-->
+        <!--          <div>-->
+        <!--            7-->
+        <!--          </div>-->
+        <!--        </n-flex>-->
         <n-flex justify="space-between" class="skills-item">
           <div>
             发出邀请数量：
@@ -216,7 +239,8 @@ const charMessageShow = ref(false)
 
     <div class="positions-professional-skills">
       <div class="skills-title">
-        历史工作发布统计 <span style="text-decoration: underline;cursor: pointer;" @click="$router.push('/custom-effective-work')">进行中的工作</span>
+        历史工作发布统计 <span style="text-decoration: underline;cursor: pointer;"
+                               @click="$router.push('/custom-effective-work')">进行中的工作</span>
       </div>
       <n-flex class="skills-item-item" justify="space-between" v-for="item in (isShow ? 14 : 5)">
         <div>
@@ -226,7 +250,7 @@ const charMessageShow = ref(false)
           </span>
           </n-button>
           <div class="rate-item-nums">
-            <n-rate value="5" readonly />
+            <n-rate value="5" readonly/>
             <span> 5</span>
           </div>
           <n-flex align="center">
@@ -237,7 +261,7 @@ const charMessageShow = ref(false)
             </span>
             </n-button>
             <div class="rate-item-nums1">
-              <n-rate value="5" readonly />
+              <n-rate value="5" readonly/>
               <span>5</span>
             </div>
           </n-flex>
@@ -247,7 +271,8 @@ const charMessageShow = ref(false)
           <span>固定价格￥280.00</span>
         </n-flex>
       </n-flex>
-      <span style="text-decoration: underline;cursor: pointer;" @click="isShow = !isShow">{{ !isShow ? '查看全部(14)' : '收起' }}</span>
+      <span style="text-decoration: underline;cursor: pointer;"
+            @click="isShow = !isShow">{{ !isShow ? '查看全部(14)' : '收起' }}</span>
     </div>
 
     <div class="positions-professional-skills">
@@ -256,7 +281,7 @@ const charMessageShow = ref(false)
       </div>
       <n-flex class="skills-item-item" justify="space-between" v-for="item in 20">
         <n-flex>
-          <n-button text type="primary"  @click="onClickUrl">
+          <n-button text type="primary" @click="onClickUrl">
             <span style="text-decoration: underline">
               我们的远程工作需要以中文为母语的人和作家
             </span>
@@ -269,7 +294,7 @@ const charMessageShow = ref(false)
       </n-flex>
     </div>
   </n-flex>
-  <ChatMessage v-model:show="charMessageShow" />
+  <ChatMessage v-model:show="charMessageShow"/>
 </template>
 
 <style scoped lang="scss">
@@ -404,9 +429,9 @@ const charMessageShow = ref(false)
     border-bottom: solid 1px #EDEDED;
   }
 
-  .flex-new{
-	  display: flex;
-	  align-items: center;
+  .flex-new {
+    display: flex;
+    align-items: center;
   }
 }
 </style>

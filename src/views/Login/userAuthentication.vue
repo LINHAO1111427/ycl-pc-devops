@@ -243,7 +243,7 @@ onMounted(async() => {
   }
   options.value = res.data.map(item => {
     return {
-      value: item.id,
+      value: item.name,
       label: item.name,
       checked: false,
     }
@@ -281,7 +281,6 @@ const removeSkill = (index) => {
     <div v-if="userType===1" style="height: 100%;">
       <div v-show="stage===1" class="stageClass">
         <div class="containerTitle">
-          <h2>恭喜您注册成功</h2>
           <h2>恭喜您注册成功</h2>
           <h2>为了更精准匹配客户，请简单回答几个问题。</h2>
         </div>

@@ -5,7 +5,7 @@ import {friendList} from '@/api/chat'
 import {onMounted} from "vue";
 
 onMounted(async () => {
-  await friendList()
+  // await friendList()
 })
 </script>
 

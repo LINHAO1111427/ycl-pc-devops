@@ -139,6 +139,17 @@ export function renderCustomHeader(avatar: string, userInfo: object, onAvatarCli
                             },
                             {default: () => userInfo.name},
                         ),
+                        h(
+                            NRate,
+                            {
+                                value: userInfo.score,
+                                readonly: true,
+                                allowHalf: true,
+                                sitemStyle: {
+                                    marginRight: '2px'
+                                }
+                            }
+                        ),
                     ],
                 ),
                 h('div',
@@ -278,9 +289,9 @@ export const renderCustomIcons = defineComponent({
                     统计数据和趋势
                 </NFlex>
             </RouterLink>
-            <NFlex alignItems="center" class="CustomIcons-item" size={5} style={{margin: '5px 0'}}>
-                <NRate readonly default-value="5"/> 5
-            </NFlex>
+            {/*<NFlex alignItems="center" class="CustomIcons-item" size={5} style={{margin: '5px 0'}}>*/}
+            {/*    <NRate readonly default-value="5"/> 5*/}
+            {/*</NFlex>*/}
             <RouterLink to="/member">
                 <NFlex alignItems="center" class="CustomIcons-item" size={5} style={{marginBottom: '15px'}}>
                     <RenderIcon icon={IconHuiyuanquanyi} size={16} fill="#808080"></RenderIcon>

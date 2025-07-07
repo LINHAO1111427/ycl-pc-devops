@@ -25,6 +25,7 @@ const list = ref([])
 const router = useRouter()
 const emit = defineEmits(["openVip"]);
 const searchContent = ref('')
+const projectId = ref('')
 const openVip = () => {
   emit("openVip", "这是子组件的数据");
 };
@@ -59,7 +60,11 @@ const search = async () => {
   await getProjectList()
   // router.push(`/search/position`)
 }
-
+const openProject = (item) => {
+  console.log(item.id)
+  projectId.value = item.id
+  active.value = true
+}
 watchEffect(async () => {
   await getProjectList()
   // getList(props.typeValue)
@@ -91,11 +96,11 @@ watchEffect(async () => {
         <n-tab-pane name="3" tab="我的收藏"/>
       </n-tabs>
       <div class="resume-body-container">
-        <Cart :list="list" @click="active = true"></Cart>
+        <Cart :list="list" @click="openProject"></Cart>
       </div>
     </div>
   </div>
-  <n-drawer v-model:show="active" width="1153px" placement="right">
+  <n-drawer v-model:show="active" width="1153px" placement="right" v-if="active">
     <n-drawer-content>
       <template #header>
         <n-flex justify="space-between" align="center">
@@ -105,7 +110,7 @@ watchEffect(async () => {
           <n-button size="small" type="primary" ghost @click="onClickUrl">新窗口中打开职位</n-button>
         </n-flex>
       </template>
-      <PositionsDetails></PositionsDetails>
+      <PositionsDetails :projectId="projectId"></PositionsDetails>
     </n-drawer-content>
   </n-drawer>
 </template>
