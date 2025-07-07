@@ -23,7 +23,11 @@ const userInfo = ref<any>({})
 const isEditingCompanyInfo = ref(false)
 const isEditingCompanyContact = ref(false)
 const isSaving = ref(false)
-
+const token = localStorage.getItem('token')
+const uploadUrl = `${import.meta.env.VITE_API_BASE_URL}/app-api/common/addOrUpdate`
+const uploadHeaders = {
+  Authorization: `Bearer ${token}`, // 或其他自定义 key，比如 'token': token
+}
 // 公司信息表单数据
 const companyInfo = ref({
   companyName: '',
