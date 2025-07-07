@@ -89,4 +89,7 @@ export function getUserCount(params) {
 export function pageUserCount(params) {
     return request.get('/app-api/member/user-count/page', {params})
 }
-
+//获取项目详情
+export function getProjectInfo(params) {
+    return request.get('/app-api/member/project/', {params})
+}

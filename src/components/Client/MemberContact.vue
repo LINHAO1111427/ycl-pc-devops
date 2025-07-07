@@ -163,7 +163,7 @@ const saveCompanyInfo = async () => {
       message.error('统一社会信用代码不能为空')
       return
     }
-    
+
     isSaving.value = true
     const res = await updateEmployerCompanyInfo(companyInfo.value)
     if (res.code === 0) {
@@ -225,24 +225,24 @@ const handleImageUpload = async (file: any, type: string) => {
       message.error('只能上传图片文件')
       return
     }
-    
+
     // 验证文件大小（25MB）
     if (file.size > 25 * 1024 * 1024) {
       message.error('文件大小不能超过25MB')
       return
     }
-    
+
     const formData = new FormData()
     formData.append('file', file)
     formData.append('type', type)
     formData.append('module', 'company') // 模块标识
-    
+
     const res = await uploadCompanyImages(formData)
-    
+
     // 处理阿里云返回的数据
     if (res.code === 0 || res.success) {
       const imageUrl = res.data?.url || res.data?.path || res.url
-      
+
       if (imageUrl) {
         // 根据类型更新对应的图片数组
         if (type === 'businessLicensePerson') {
@@ -290,19 +290,19 @@ const beforeUpload = (file, type) => {
     message.error('最多只能上传2张图片')
     return false
   }
-  
+
   // 检查文件类型
   if (!file.type.startsWith('image/')) {
     message.error('只能上传图片文件')
     return false
   }
-  
+
   // 检查文件大小
   if (file.size > 25 * 1024 * 1024) {
     message.error('文件大小不能超过25MB')
     return false
   }
-  
+
   return true
 }
 
@@ -344,10 +344,10 @@ onMounted(async () => {
   try {
     const res = await getUser()
     userInfo.value = res.data || {}
-    
+
     // 调用查询接口获取公司信息
     const companyRes = await getEmployerCompanyInfo()
-    
+
     if (companyRes.code === 0 && companyRes.data) {
       // 初始化所有数据
       initCompanyInfo(companyRes.data)
@@ -431,12 +431,12 @@ onMounted(async () => {
         <n-flex align="center" justify="space-between">
           <Text color="#333333" :size="24">公司详情</Text>
           <n-flex :size="12">
-            <n-button 
-              v-if="!isEditingCompanyInfo" 
-              type="primary" 
-              size="small" 
-              @click="startEditCompanyInfo"
-              style="background: #58968B; border-color: #58968B;"
+            <n-button
+                v-if="!isEditingCompanyInfo"
+                type="primary"
+                size="small"
+                @click="startEditCompanyInfo"
+                style="background: #58968B; border-color: #58968B;"
             >
               <template #icon>
                 <n-icon><CreateOutline /></n-icon>
@@ -444,22 +444,22 @@ onMounted(async () => {
               修改
             </n-button>
             <template v-else>
-              <n-button 
-                type="primary" 
-                size="small" 
-                @click="saveCompanyInfo"
-                :loading="isSaving"
-                style="background: #58968B; border-color: #58968B;"
+              <n-button
+                  type="primary"
+                  size="small"
+                  @click="saveCompanyInfo"
+                  :loading="isSaving"
+                  style="background: #58968B; border-color: #58968B;"
               >
                 <template #icon>
                   <n-icon><SaveOutline /></n-icon>
                 </template>
                 保存
               </n-button>
-              <n-button 
-                size="small" 
-                @click="cancelEdit"
-                :disabled="isSaving"
+              <n-button
+                  size="small"
+                  @click="cancelEdit"
+                  :disabled="isSaving"
               >
                 取消
               </n-button>
@@ -471,12 +471,12 @@ onMounted(async () => {
             <Text :size="16" color="#808080">
               公司名称
             </Text>
-            <n-input 
-              v-if="isEditingCompanyInfo"
-              v-model:value="companyInfo.companyName"
-              size="small"
-              style="width: 200px;"
-              placeholder="请输入公司名称"
+            <n-input
+                v-if="isEditingCompanyInfo"
+                v-model:value="companyInfo.companyName"
+                size="small"
+                style="width: 200px;"
+                placeholder="请输入公司名称"
             />
             <Text v-else :size="16" color="#808080">
               {{ companyInfo.companyName || '暂无数据' }}
@@ -487,12 +487,12 @@ onMounted(async () => {
             <Text :size="16" color="#808080">
               公司地址
             </Text>
-            <n-input 
-              v-if="isEditingCompanyInfo"
-              v-model:value="companyInfo.companyAddress"
-              size="small"
-              style="width: 200px;"
-              placeholder="请输入公司地址"
+            <n-input
+                v-if="isEditingCompanyInfo"
+                v-model:value="companyInfo.companyAddress"
+                size="small"
+                style="width: 200px;"
+                placeholder="请输入公司地址"
             />
             <Text v-else :size="16" color="#808080">
               {{ companyInfo.companyAddress || '暂无数据' }}
@@ -503,12 +503,12 @@ onMounted(async () => {
             <Text :size="16" color="#808080">
               网站
             </Text>
-            <n-input 
-              v-if="isEditingCompanyInfo"
-              v-model:value="companyInfo.website"
-              size="small"
-              style="width: 200px;"
-              placeholder="请输入网站地址"
+            <n-input
+                v-if="isEditingCompanyInfo"
+                v-model:value="companyInfo.website"
+                size="small"
+                style="width: 200px;"
+                placeholder="请输入网站地址"
             />
             <Text v-else :size="16" color="#808080">
               {{ companyInfo.website || '暂无数据' }}
@@ -518,12 +518,12 @@ onMounted(async () => {
             <Text :size="16" color="#808080">
               您的行业
             </Text>
-            <n-input 
-              v-if="isEditingCompanyInfo"
-              v-model:value="companyInfo.industry"
-              size="small"
-              style="width: 200px;"
-              placeholder="请输入行业"
+            <n-input
+                v-if="isEditingCompanyInfo"
+                v-model:value="companyInfo.industry"
+                size="small"
+                style="width: 200px;"
+                placeholder="请输入行业"
             />
             <Text v-else :size="16" color="#808080" style="display: flex;align-items:center;">
               {{ companyInfo.industry || '暂无数据' }}
@@ -533,12 +533,12 @@ onMounted(async () => {
             <Text :size="16" color="#808080">
               贵公司有多少人
             </Text>
-            <n-input 
-              v-if="isEditingCompanyInfo"
-              v-model:value="companyInfo.employeeCount"
-              size="small"
-              style="width: 200px;"
-              placeholder="请输入公司人数"
+            <n-input
+                v-if="isEditingCompanyInfo"
+                v-model:value="companyInfo.employeeCount"
+                size="small"
+                style="width: 200px;"
+                placeholder="请输入公司人数"
             />
             <Text v-else :size="16" color="#808080" style="display: flex;align-items:center;">
               {{ companyInfo.employeeCount || '暂无数据' }}
@@ -548,14 +548,14 @@ onMounted(async () => {
             <Text :size="16" color="#808080">
               描述
             </Text>
-            <n-input 
-              v-if="isEditingCompanyInfo"
-              v-model:value="companyInfo.otherInfo"
-              type="textarea"
-              size="small"
-              style="width: 200px;"
-              placeholder="请输入公司描述"
-              :rows="2"
+            <n-input
+                v-if="isEditingCompanyInfo"
+                v-model:value="companyInfo.otherInfo"
+                type="textarea"
+                size="small"
+                style="width: 200px;"
+                placeholder="请输入公司描述"
+                :rows="2"
             />
             <Text v-else :size="16" color="#808080">
               {{ companyInfo.otherInfo || '暂无数据' }}
@@ -565,12 +565,12 @@ onMounted(async () => {
             <Text :size="16" color="#808080">
               法人信息
             </Text>
-            <n-input 
-              v-if="isEditingCompanyInfo"
-              v-model:value="companyInfo.legalPerson"
-              size="small"
-              style="width: 200px;"
-              placeholder="请输入法人信息"
+            <n-input
+                v-if="isEditingCompanyInfo"
+                v-model:value="companyInfo.legalPerson"
+                size="small"
+                style="width: 200px;"
+                placeholder="请输入法人信息"
             />
             <Text v-else :size="16" color="#808080">
               {{ companyInfo.legalPerson || '暂无数据' }}
@@ -580,13 +580,13 @@ onMounted(async () => {
             <Text :size="16" color="#808080">
               统一社会信用代码 <span style="color: #FF4757;">*</span>
             </Text>
-            <n-input 
-              v-if="isEditingCompanyInfo"
-              v-model:value="companyInfo.creditNo"
-              size="small"
-              style="width: 200px;"
-              placeholder="请输入统一社会信用代码"
-              :status="!companyInfo.creditNo && isEditingCompanyInfo ? 'error' : undefined"
+            <n-input
+                v-if="isEditingCompanyInfo"
+                v-model:value="companyInfo.creditNo"
+                size="small"
+                style="width: 200px;"
+                placeholder="请输入统一社会信用代码"
+                :status="!companyInfo.creditNo && isEditingCompanyInfo ? 'error' : undefined"
             />
             <Text v-else :size="16" color="#808080">
               {{ companyInfo.creditNo || '暂无数据' }}
@@ -597,14 +597,14 @@ onMounted(async () => {
         </div>
         <div class="easy-view">
           <div class="easy-view-title">营业执照法人</div>
-          <n-upload 
-            :show-file-list="false" 
-            :trigger-style="{cursor:'pointer'}"
-            :custom-request="(options) => handleImageUpload(options.file, 'businessLicensePerson')"
-            :before-upload="(file) => beforeUpload(file, 'businessLicensePerson')"
-            accept="image/*"
-            :max="2"
-            :disabled="!canUploadMore('businessLicensePerson')"
+          <n-upload
+              :show-file-list="false"
+              :trigger-style="{cursor:'pointer'}"
+              :custom-request="(options) => handleImageUpload(options.file, 'businessLicensePerson')"
+              :before-upload="(file) => beforeUpload(file, 'businessLicensePerson')"
+              accept="image/*"
+              :max="2"
+              :disabled="!canUploadMore('businessLicensePerson')"
           >
             <div class="easy-view-icon" :class="{ 'upload-disabled': !canUploadMore('businessLicensePerson') }">
               <n-icon size="30" :color="canUploadMore('businessLicensePerson') ? '#58968B' : '#CCCCCC'">
@@ -626,11 +626,11 @@ onMounted(async () => {
           <div v-if="companyImages.businessLicensePersonImages.length > 0" class="uploaded-images">
             <div v-for="(image, index) in companyImages.businessLicensePersonImages" :key="index" class="image-item">
               <img :src="image" alt="营业执照法人" style="width: 100px; height: 100px; object-fit: cover;" />
-              <n-button 
-                size="small" 
-                type="error" 
-                @click="removeImage(index, 'businessLicensePerson')"
-                style="margin-left: 10px;"
+              <n-button
+                  size="small"
+                  type="error"
+                  @click="removeImage(index, 'businessLicensePerson')"
+                  style="margin-left: 10px;"
               >
                 删除
               </n-button>
@@ -657,14 +657,14 @@ onMounted(async () => {
 
         <div class="easy-view">
           <div class="easy-view-title">上传营业执照</div>
-          <n-upload 
-            :show-file-list="false" 
-            :trigger-style="{cursor:'pointer'}"
-            :custom-request="(options) => handleImageUpload(options.file, 'businessLicense')"
-            :before-upload="(file) => beforeUpload(file, 'businessLicense')"
-            accept="image/*"
-            :max="2"
-            :disabled="!canUploadMore('businessLicense')"
+          <n-upload
+              :show-file-list="false"
+              :trigger-style="{cursor:'pointer'}"
+              :custom-request="(options) => handleImageUpload(options.file, 'businessLicense')"
+              :before-upload="(file) => beforeUpload(file, 'businessLicense')"
+              accept="image/*"
+              :max="2"
+              :disabled="!canUploadMore('businessLicense')"
           >
             <div class="easy-view-icon" :class="{ 'upload-disabled': !canUploadMore('businessLicense') }">
               <n-icon size="30" :color="canUploadMore('businessLicense') ? '#58968B' : '#CCCCCC'">
@@ -686,11 +686,11 @@ onMounted(async () => {
           <div v-if="companyImages.businessLicenseImages.length > 0" class="uploaded-images">
             <div v-for="(image, index) in companyImages.businessLicenseImages" :key="index" class="image-item">
               <img :src="image" alt="营业执照" style="width: 100px; height: 100px; object-fit: cover;" />
-              <n-button 
-                size="small" 
-                type="error" 
-                @click="removeImage(index, 'businessLicense')"
-                style="margin-left: 10px;"
+              <n-button
+                  size="small"
+                  type="error"
+                  @click="removeImage(index, 'businessLicense')"
+                  style="margin-left: 10px;"
               >
                 删除
               </n-button>
@@ -720,12 +720,12 @@ onMounted(async () => {
         <n-flex align="center" justify="space-between">
           <Text color="#333333" :size="24">公司联系方式</Text>
           <n-flex :size="12">
-            <n-button 
-              v-if="!isEditingCompanyContact" 
-              type="primary" 
-              size="small" 
-              @click="startEditCompanyContact"
-              style="background: #58968B; border-color: #58968B;"
+            <n-button
+                v-if="!isEditingCompanyContact"
+                type="primary"
+                size="small"
+                @click="startEditCompanyContact"
+                style="background: #58968B; border-color: #58968B;"
             >
               <template #icon>
                 <n-icon><CreateOutline /></n-icon>
@@ -733,22 +733,22 @@ onMounted(async () => {
               修改
             </n-button>
             <template v-else>
-              <n-button 
-                type="primary" 
-                size="small" 
-                @click="saveCompanyContact"
-                :loading="isSaving"
-                style="background: #58968B; border-color: #58968B;"
+              <n-button
+                  type="primary"
+                  size="small"
+                  @click="saveCompanyContact"
+                  :loading="isSaving"
+                  style="background: #58968B; border-color: #58968B;"
               >
                 <template #icon>
                   <n-icon><SaveOutline /></n-icon>
                 </template>
                 保存
               </n-button>
-              <n-button 
-                size="small" 
-                @click="cancelEdit"
-                :disabled="isSaving"
+              <n-button
+                  size="small"
+                  @click="cancelEdit"
+                  :disabled="isSaving"
               >
                 取消
               </n-button>
@@ -760,12 +760,12 @@ onMounted(async () => {
             <Text :size="16" color="#808080">
               联系人姓名
             </Text>
-            <n-input 
-              v-if="isEditingCompanyContact"
-              v-model:value="companyContact.contactName"
-              size="small"
-              style="width: 200px;"
-              placeholder="请输入联系人姓名"
+            <n-input
+                v-if="isEditingCompanyContact"
+                v-model:value="companyContact.contactName"
+                size="small"
+                style="width: 200px;"
+                placeholder="请输入联系人姓名"
             />
             <Text v-else :size="16" color="#808080">
               {{ companyContact.contactName || '暂无数据' }}
@@ -775,12 +775,12 @@ onMounted(async () => {
             <Text :size="16" color="#808080">
               联系电话
             </Text>
-            <n-input 
-              v-if="isEditingCompanyContact"
-              v-model:value="companyContact.contactPhone"
-              size="small"
-              style="width: 200px;"
-              placeholder="请输入联系电话"
+            <n-input
+                v-if="isEditingCompanyContact"
+                v-model:value="companyContact.contactPhone"
+                size="small"
+                style="width: 200px;"
+                placeholder="请输入联系电话"
             />
             <Text v-else :size="16" color="#808080">
               {{ companyContact.contactPhone || '暂无数据' }}
@@ -790,12 +790,12 @@ onMounted(async () => {
             <Text :size="16" color="#808080">
               税务登记号
             </Text>
-            <n-input 
-              v-if="isEditingCompanyContact"
-              v-model:value="companyContact.taxNumber"
-              size="small"
-              style="width: 200px;"
-              placeholder="请输入税务登记号"
+            <n-input
+                v-if="isEditingCompanyContact"
+                v-model:value="companyContact.taxNumber"
+                size="small"
+                style="width: 200px;"
+                placeholder="请输入税务登记号"
             />
             <Text v-else :size="16" color="#808080">
               {{ companyContact.taxNumber || '暂无数据' }}
@@ -805,12 +805,12 @@ onMounted(async () => {
             <Text :size="16" color="#808080">
               联系地址
             </Text>
-            <n-input 
-              v-if="isEditingCompanyContact"
-              v-model:value="companyContact.contactAddress"
-              size="small"
-              style="width: 200px;"
-              placeholder="请输入联系地址"
+            <n-input
+                v-if="isEditingCompanyContact"
+                v-model:value="companyContact.contactAddress"
+                size="small"
+                style="width: 200px;"
+                placeholder="请输入联系地址"
             />
             <Text v-else :size="16" color="#808080">
               {{ companyContact.contactAddress || '暂无数据' }}

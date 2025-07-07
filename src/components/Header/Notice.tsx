@@ -139,6 +139,17 @@ export function renderCustomHeader(avatar: string, userInfo: object, onAvatarCli
                             },
                             {default: () => userInfo.name},
                         ),
+                        h(
+                            NRate,
+                            {
+                                value: userInfo.score,
+                                readonly: true,
+                                allowHalf: true,
+                                sitemStyle: {
+                                    marginRight: '2px'
+                                }
+                            }
+                        ),
                     ],
                 ),
                 h('div',
@@ -184,9 +195,18 @@ export function renderCustomHeader(avatar: string, userInfo: object, onAvatarCli
 }
 
 export const renderCustomIcons = defineComponent({
-    setup() {
+    emits: ['logout'],
+    setup(_, {emit}) {
         const router = useRouter()
         const themeValue = ref('普通')
+        const onClickLogout = () => {
+            emit('logout')
+            // if (window.confirm('确认注销吗？')) {
+            //     router.push('/login')
+            // }
+
+
+        };
         const themeOptions = [
             {
                 label: '普通',
@@ -201,13 +221,6 @@ export const renderCustomIcons = defineComponent({
                 value: '跟随系统切换'
             },
         ]
-        const onClickLogout = () => {
-            if (window.confirm('确认注销吗？')) {
-                router.push('/login')
-            }
-
-
-        };
         const handleChange = async (value: boolean) => {
             await updateUserMatchOrConsulting({
                 userId: localStorage.getItem('userId'),
@@ -278,9 +291,9 @@ export const renderCustomIcons = defineComponent({
                     统计数据和趋势
                 </NFlex>
             </RouterLink>
-            <NFlex alignItems="center" class="CustomIcons-item" size={5} style={{margin: '5px 0'}}>
-                <NRate readonly default-value="5"/> 5
-            </NFlex>
+            {/*<NFlex alignItems="center" class="CustomIcons-item" size={5} style={{margin: '5px 0'}}>*/}
+            {/*    <NRate readonly default-value="5"/> 5*/}
+            {/*</NFlex>*/}
             <RouterLink to="/member">
                 <NFlex alignItems="center" class="CustomIcons-item" size={5} style={{marginBottom: '15px'}}>
                     <RenderIcon icon={IconHuiyuanquanyi} size={16} fill="#808080"></RenderIcon>
@@ -311,7 +324,7 @@ export const renderCustomIcons = defineComponent({
             </NPopselect>
 
             <NFlex alignItems="center" class="CustomIcons-item" size={5} style={{marginBottom: '15px'}}
-                   onClick={() => this.onClickLogout()}>
+                   onClick={this.onClickLogout}>
                 <RenderIcon icon={IconZhuxiao} size={16} fill="#808080"></RenderIcon>
                 注销
             </NFlex>

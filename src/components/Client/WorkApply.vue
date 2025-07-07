@@ -213,7 +213,7 @@ function handleUpdateValue() {
               <RenderIcon icon="icon-jiangpai" fill="#808080" size="30"/>
               <n-flex vertical>
                 <div class="type-item-title">{{ ['入门级', '中级', '专家'][item.experienceLevel - 1] }}</div>
-                <div>{{ item.preferredQualification }}</div>
+                <div class="ellipsis-text" :title="item.preferredQualification">{{ item.preferredQualification }}</div>
               </n-flex>
             </div>
           </n-flex>
@@ -224,6 +224,13 @@ function handleUpdateValue() {
 </template>
 
 <style scoped lang="scss">
+.ellipsis-text {
+  width: 170px; /* 可根据父容器控制宽度 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .application {
   height: $container-height;
   background-color: $BackColor;

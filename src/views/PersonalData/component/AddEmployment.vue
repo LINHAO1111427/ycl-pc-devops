@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {Text} from '@/components'
 import {onMounted, ref} from "vue";
-import {workInfo,updateUserWork,saveUserWork} from '@/api/home'
+import {workInfo, updateUserWork, saveUserWork} from '@/api/home'
 
 const emit = defineEmits(['update:show'])
 import {useMessage} from 'naive-ui'
@@ -23,6 +23,11 @@ const workExperience = ref({
   endData: null,   // 结束时间
   jobDescription: ""           // 工作内容
 });
+// 计算属性：结束时间的最小值 = 起始时间
+const endMinDate = computed(() => workExperience.value.startData || null)
+
+// 计算属性：起始时间的最大值 = 结束时间
+const startMaxDate = computed(() => workExperience.value.endData || null)
 const isInit = ref(false)
 const id = ref(props.EmploymentId)
 const save = async () => {
@@ -40,6 +45,30 @@ const save = async () => {
     message.error(res.msg || '操作失败')
   }
 }
+
+// 禁用“结束日期”小于“开始日期”的情况
+function disableEndDate(ts) {
+  const start = workExperience.value.startData
+  return start ? ts < start : false
+}
+
+// 禁用“起始日期”大于“结束日期”的情况
+function disableStartDate(ts) {
+  const end = workExperience.value.endData
+  return end ? ts > end : false
+}
+
+watch(
+    () => workExperience.value,
+    (val) => {
+      console.log('start:', val.startData, typeof val.startData)
+      console.log('end:', val.endData, typeof val.endData)
+      if (val.startData && val.endData && val.endData < val.startData) {
+        workExperience.value.endData = null
+      }
+    },
+    {deep: true}
+)
 onMounted(async () => {
   console.log(id.value)
   if (id.value !== null) {
@@ -82,10 +111,19 @@ onMounted(async () => {
               <n-input placeholder="请输入标题" v-model:value="workExperience.position"/>
             </n-form-item-gi>
             <n-form-item-gi :span="6" label="起始年月" path="inputValue">
-              <n-date-picker placeholder="请选择日期" v-model:value="workExperience.startData"/>
+              <n-date-picker
+                  v-model:value="workExperience.startData"
+                  placeholder="请选择日期"
+                  :is-date-disabled="disableStartDate"
+              />
             </n-form-item-gi>
+
             <n-form-item-gi :span="6" label="结束年月" path="inputValue">
-              <n-date-picker placeholder="请选择日期" v-model:value="workExperience.endData"/>
+              <n-date-picker
+                  v-model:value="workExperience.endData"
+                  placeholder="请选择日期"
+                  :is-date-disabled="disableEndDate"
+              />
             </n-form-item-gi>
             <n-form-item-gi :span="24" label="工作内容" path="inputValue">
               <n-input placeholder="请输入标题" type="textarea" v-model:value="workExperience.jobDescription"/>

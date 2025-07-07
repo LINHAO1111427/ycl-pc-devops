@@ -50,6 +50,22 @@ export function uploadCompanyImages(params) {
 export function userFilter(params) {
     return request.get('/app-api/member/boss-filter/user-filter', {params})
 }
+
+// 修改公司信息 - POST接口
+export function updateEmployerCompanyInfo(params) {
+    return request.post('/app-api/xinyu/employer-company-info/addOrUpdate', params)
+}
+
+// 提交保存公司联系方式 - PUT接口
+export function updateCompanyContact(params) {
+    return request.put('/app-api/xinyu/employer-company-info/contact/update', params)
+}
+
+// 上传图片到阿里云
+export function uploadCompanyImages(params) {
+    return request.post('/app-api/common/addOrUpdate', params)
+}
+
 //急速匹配
 export function userRqpid(params) {
     return request.get('/app-api/member/boss-filter/user-rqpid', {params})

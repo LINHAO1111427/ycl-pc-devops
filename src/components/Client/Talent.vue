@@ -67,7 +67,7 @@
         <h1 class="client-form-h1">最佳人才推荐</h1>
         <el-scrollbar>
           <div class="talent-view">
-            <div class="talent-item" v-for="(item,index) in userList" :key="index" @click="open_member()">
+            <div class="talent-item" v-for="(item,index) in userList" :key="index" @click="open_member(item)">
               <div class="talent-houcang">
                 <i class="icon-shoucang iconfont"></i>
               </div>
@@ -116,7 +116,7 @@
           <!--          <n-button size="small" type="primary" ghost @click="onClickUrl">在新窗口中打开个人资料</n-button>-->
         </n-flex>
       </template>
-      <IndexMember/>
+      <IndexMember :userId="userId"/>
     </n-drawer-content>
   </n-drawer>
 </template>
@@ -177,7 +177,12 @@ const IndexMember = defineAsyncComponent(() => import('@/components/Client/Index
 const open_index_member = ref(false)
 const userList = ref([])
 const userList1 = ref([])
-const open_member = () => {
+const userId = ref()
+const open_member = (item) => {
+  if (item) {
+    userId.value = item.userId
+  }
+
   open_index_member.value = !open_index_member.value
 }
 

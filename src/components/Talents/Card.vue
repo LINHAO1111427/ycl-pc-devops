@@ -58,7 +58,7 @@ const collect = async (item) => {
 </script>
 
 <template>
-  <div class="cart-container" v-for="(item,index) in list" @click="emit('click')">
+  <div class="cart-container" v-for="(item,index) in list" @click="emit('click',item)">
     <div class="cart-container-left">
       <n-flex align="center">
         <div class="cart-header-title">
