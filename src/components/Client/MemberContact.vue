@@ -90,6 +90,7 @@ try {
 const originalCompanyContact = ref(localContact)
 
 
+
 const showEditAccount = ref(false)
 
 const showAddAddress = ref(false)
@@ -404,14 +405,7 @@ const handleUpload1 = (options) => {
   }
 }
 const showEditAvatar = ref(false)
-onMounted(async () => {
-  const res = await getUser()
-  userInfo.value = res.data
-  const res1 = await getEmployerCompanyInfo()
-  EmployerCompany.value = res1.data
-  const res2 = await getContact()
-  contact.value = res2.data
-})
+
 const openUploadDialog = (type) => {
   if (type === 0) {
     uploadRef.value?.openOpenFileDialog()
@@ -438,6 +432,8 @@ onMounted(async () => {
       initCompanyContact({})
       initCompanyImages({})
     }
+
+
   } catch (error) {
     console.error('初始化数据失败:', error)
     message.error('加载数据失败，请刷新页面重试')
@@ -687,11 +683,10 @@ onMounted(async () => {
                 :show-trigger="false"
                 accept="image/*"
                 :action="uploadUrl"
-                :on-finish="(file, event, fileList)=>{handleUploadFinish(file, event, fileList,1)}"
+
                 :headers="uploadHeaders"
                 list-type="image-card"
                 v-model:file-list="fileList"
-                @remove="handleRemove"
                 @change="handleUpload"
             >
             </n-upload>
@@ -717,11 +712,10 @@ onMounted(async () => {
                 :show-trigger="false"
                 accept="image/*"
                 :action="uploadUrl"
-                :on-finish="(file, event, fileList1)=>{handleUploadFinish(file, event, fileList1,1)}"
+
                 :headers="uploadHeaders"
                 list-type="image-card"
                 v-model:file-list="fileList1"
-                @remove="handleRemove"
                 @change="handleUpload1"
             >
             </n-upload>
@@ -846,8 +840,10 @@ onMounted(async () => {
           </n-flex>
         </div>
       </div>
+
     </div>
   </div>
+
   <EditAvatar v-model:show="showEditAvatar" @success="success"/>
 </template>
 
@@ -1009,6 +1005,41 @@ onMounted(async () => {
   .upload-disabled {
     opacity: 0.5;
     cursor: not-allowed !important;
+  }
+
+  // 地址管理样式
+  .address-content {
+    margin-top: 20px;
+  }
+
+  .company-address-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .address-card {
+    background: #f8f8f8;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e8e8e8;
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: #58968B;
+      box-shadow: 0 2px 8px rgba(89, 150, 139, 0.1);
+    }
+  }
+
+  .address-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 0;
   }
 }
 </style>

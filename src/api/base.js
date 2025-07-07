@@ -66,6 +66,63 @@ export function uploadCompanyImages(params) {
     return request.post('/app-api/common/addOrUpdate', params)
 }
 
+// 保存营业执照图片
+export function saveLicenseImages(params) {
+    return request.post('/app-api/xinyu/employer-company-info/license-images/save', params)
+}
+
+// 查询营业执照图片
+export function getLicenseImages(params) {
+    return request.get('/app-api/xinyu/employer-company-info/license-images/get', {params})
+}
+
+// 个人地址接口
+// 保存个人地址
+export function savePersonalAddress(params) {
+    return request.post('/app-api/xinyu/employer-company-info/personal-address/save', params)
+}
+
+// 获取个人地址
+export function getPersonalAddress(params) {
+    return request.get('/app-api/xinyu/employer-company-info/personal-address/get', {params})
+}
+
+// 企业地址接口
+// 获取企业地址列表
+export function getCompanyAddressList(params) {
+    return request.get('/app-api/member/company-address/list', {params})
+}
+
+// 获取企业地址详情
+export function getCompanyAddress(params) {
+    return request.get('/app-api/member/company-address/get', {params})
+}
+
+// 创建企业地址
+export function createCompanyAddress(params) {
+    return request.post('/app-api/member/company-address/create', params)
+}
+
+// 更新企业地址
+export function updateCompanyAddress(params) {
+    return request.put('/app-api/member/company-address/update', params)
+}
+
+// 删除企业地址
+export function deleteCompanyAddress(params) {
+    return request.delete('/app-api/member/company-address/delete', {params})
+}
+
+// 设置默认企业地址
+export function setDefaultCompanyAddress(params) {
+    return request.put('/app-api/member/company-address/set-default', {params})
+}
+
+//更多人才
+export function userFilter(params) {
+    return request.get('/app-api/member/boss-filter/user-filter', {params})
+}
+
 //急速匹配
 export function userRqpid(params) {
     return request.get('/app-api/member/boss-filter/user-rqpid', {params})

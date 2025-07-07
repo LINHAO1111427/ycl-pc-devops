@@ -2,8 +2,11 @@
 import {RenderIcon, Text} from '@/components'
 import {AddCircle, ArrowForwardSharp} from '@vicons/ionicons5'
 import {friendList} from '@/api/chat'
-import {onMounted} from "vue";
-
+import {onMounted, ref} from "vue";
+const userData = ref(JSON.parse(localStorage.getItem('UserData') || JSON.stringify({
+  userType: 0
+})))
+const  userType=ref(userData.value.userType)
 onMounted(async () => {
   // await friendList()
 })
@@ -11,7 +14,8 @@ onMounted(async () => {
 
 <template>
   <n-modal class="chat-message-modal">
-    <img src="../../assets/img/kf.png" style="width: 500px;">
+    <img src="../../assets/img/zy.png" style="width: 500px;" v-if="userType===1">
+    <img src="../../assets/img/xm.png" style="width: 500px;" v-else>
 <!--    <n-card-->
 <!--        style="width: 70%;"-->
 <!--        size="huge"-->

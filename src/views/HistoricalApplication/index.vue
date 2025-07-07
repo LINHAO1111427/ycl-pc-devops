@@ -18,11 +18,22 @@ const listData = ref([
 ])
 const search = ref()
 const getNowList = ref([])
+const showCalendar = ref(false);
+const data = ref({
+  workerId: localStorage.getItem('userId'), search: '', pageNo: 1, pageSize: 10, startDate: null, endDate: null
+})
 const handleEnter = () => {
   getNow()
 }
 
-function handleUpdateValue() {
+function handleUpdateValue(val) {
+  if (!val || val.length !== 2) {
+    console.log('已清空日期')
+    return
+  }
+  data.value.startDate = val[0] || ''
+  data.value.endDate = val[1] || ''
+  getNow()
   showCalendar.value = false;
 }
 
@@ -34,9 +45,6 @@ function formatTime(timestamp) {
   return date.toLocaleString() // 例如 "2024/7/5 08:00:00"
 }
 
-const data = ref({
-  userId: localStorage.getItem('userId'), search: '', pageNo: 1, pageSize: 10, startDate: null, endDate: null
-})
 const getNow = async () => {
   const res = await getOldApplyItem(data.value)
   if (res.code === -1) {
@@ -51,7 +59,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <HeaderTop  :is-work="false"/>
+  <HeaderTop :is-work="false"/>
   <div class="application">
     <div class="application-container">
       <div class="application-header-title">
