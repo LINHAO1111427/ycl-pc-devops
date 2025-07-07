@@ -65,12 +65,29 @@ const originalCompanyInfo = ref({
   legalPerson: '',
   creditNo: ''
 })
-const originalCompanyContact = ref({
+const defaultContact = {
   contactName: '',
   contactPhone: '',
   taxNumber: '',
   contactAddress: ''
-})
+}
+
+let localContact = {}
+try {
+  const raw = localStorage.getItem('originalCompanyContact')
+  if (raw) {
+    const parsed = JSON.parse(raw)
+    // 只合并已知字段，避免污染数据结构
+    localContact = Object.assign({}, defaultContact, parsed)
+  } else {
+    localContact = defaultContact
+  }
+} catch (e) {
+  console.warn('localStorage originalCompanyContact 解析失败:', e)
+  localContact = defaultContact
+}
+
+const originalCompanyContact = ref(localContact)
 
 
 const showEditAccount = ref(false)
@@ -143,11 +160,13 @@ const slider = [
     to: 'city2',
   }
 ]
-const { getUser} = useUser()
+const {getUser} = useUser()
+
 function onMouseenter(key: string) {
   current.value = key
   window.location.hash = key
 }
+
 const success = () => {
 }
 
@@ -155,7 +174,7 @@ const success = () => {
 const startEditCompanyInfo = () => {
   isEditingCompanyInfo.value = true
   // 备份原始数据
-  originalCompanyInfo.value = { ...companyInfo.value }
+  originalCompanyInfo.value = {...companyInfo.value}
 }
 
 // 保存公司信息
@@ -173,7 +192,7 @@ const saveCompanyInfo = async () => {
       message.success('公司信息保存成功')
       isEditingCompanyInfo.value = false
       // 更新原始数据
-      originalCompanyInfo.value = { ...companyInfo.value }
+      originalCompanyInfo.value = {...companyInfo.value}
     } else {
       message.error(res.msg || '保存失败')
     }
@@ -188,7 +207,7 @@ const saveCompanyInfo = async () => {
 const startEditCompanyContact = () => {
   isEditingCompanyContact.value = true
   // 备份原始数据
-  originalCompanyContact.value = { ...companyContact.value }
+  originalCompanyContact.value = {...companyContact.value}
 }
 
 // 保存公司联系方式
@@ -200,7 +219,8 @@ const saveCompanyContact = async () => {
       message.success('公司联系方式保存成功')
       isEditingCompanyContact.value = false
       // 更新原始数据
-      originalCompanyContact.value = { ...companyContact.value }
+      originalCompanyContact.value = {...companyContact.value}
+      localStorage.setItem('originalCompanyContact', JSON.stringify(originalCompanyContact.value))
     } else {
       message.error(res.msg || '保存失败')
     }
@@ -216,8 +236,8 @@ const cancelEdit = () => {
   isEditingCompanyInfo.value = false
   isEditingCompanyContact.value = false
   // 恢复原始数据
-  companyInfo.value = { ...originalCompanyInfo.value }
-  companyContact.value = { ...originalCompanyContact.value }
+  companyInfo.value = {...originalCompanyInfo.value}
+  companyContact.value = {...originalCompanyContact.value}
 }
 
 // 图片上传处理 - 上传到阿里云
@@ -321,7 +341,7 @@ const initCompanyInfo = (data: any) => {
     legalPerson: data?.legalPerson || '',
     creditNo: data?.creditNo || ''
   }
-  originalCompanyInfo.value = { ...companyInfo.value }
+  originalCompanyInfo.value = {...companyInfo.value}
 }
 
 // 初始化公司联系方式数据
@@ -332,7 +352,7 @@ const initCompanyContact = (data: any) => {
     taxNumber: data?.taxNumber || '',
     contactAddress: data?.contactAddress || ''
   }
-  originalCompanyContact.value = { ...companyContact.value }
+  originalCompanyContact.value = {...companyContact.value}
 }
 
 // 初始化图片数据
@@ -498,7 +518,9 @@ onMounted(async () => {
                 style="background: #58968B; border-color: #58968B;"
             >
               <template #icon>
-                <n-icon><CreateOutline /></n-icon>
+                <n-icon>
+                  <CreateOutline/>
+                </n-icon>
               </template>
               修改
             </n-button>
@@ -511,7 +533,9 @@ onMounted(async () => {
                   style="background: #58968B; border-color: #58968B;"
               >
                 <template #icon>
-                  <n-icon><SaveOutline /></n-icon>
+                  <n-icon>
+                    <SaveOutline/>
+                  </n-icon>
                 </template>
                 保存
               </n-button>
@@ -728,7 +752,9 @@ onMounted(async () => {
                 style="background: #58968B; border-color: #58968B;"
             >
               <template #icon>
-                <n-icon><CreateOutline /></n-icon>
+                <n-icon>
+                  <CreateOutline/>
+                </n-icon>
               </template>
               修改
             </n-button>
@@ -741,7 +767,9 @@ onMounted(async () => {
                   style="background: #58968B; border-color: #58968B;"
               >
                 <template #icon>
-                  <n-icon><SaveOutline /></n-icon>
+                  <n-icon>
+                    <SaveOutline/>
+                  </n-icon>
                 </template>
                 保存
               </n-button>
@@ -832,6 +860,7 @@ onMounted(async () => {
   display: flex;
   width: auto;
 }
+
 .contact-container {
   margin-top: 20px;
   display: flex;
