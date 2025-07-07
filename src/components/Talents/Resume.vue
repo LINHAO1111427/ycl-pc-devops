@@ -69,7 +69,7 @@ watchEffect(async () => {
 <template>
   <div class="resume-container">
     <div style="margin-bottom: 20px;" @click="openVip">
-      <img src="../../assets/img/vip.png"/>
+      <img src="../../assets/img/vip.png" style="cursor: pointer;"/>
     </div>
     <div class="resume-search">
       <n-input placeholder="请输入..." @keyup.enter="search" style="width: 100%" v-model:value='searchContent'>

@@ -8,6 +8,50 @@ function addWithdrawalClick(type){
 	showAddWithdrawal.value = true
 	addWithdrawalType.value = type
 }
+
+import {onMounted} from "vue";
+import {getBankInfo, delBank} from "@/api/bank";
+import {useMessage} from 'naive-ui'
+// 创建 message 实例
+const message = useMessage()
+const bankDataList = ref([])
+const success = () => {
+  getBankInfoFunc()
+}
+const isInit = ref(false)
+const getBankInfoFunc = async () => {
+  const res = await getBankInfo({
+    userId: localStorage.getItem('userId')
+  })
+  if (res.code !== 0) {
+    message.error(res.msg)
+    return
+  }
+  bankDataList.value = res.data
+
+}
+onMounted(async () => {
+  await getBankInfoFunc()
+  isInit.value = true
+})
+
+function onMouseenter(key: string) {
+  current.value = key
+  window.location.hash = key
+}
+
+const handleDelete = async (id) => {
+  const res = await delBank({
+    id: id,
+    userId: localStorage.getItem('userId')
+  })
+  if (res.code !== 0) {
+    message.error(res.msg)
+    return
+  }
+  await getBankInfoFunc()
+  message.success('删除成功')
+}
 </script>
 
 <template>
@@ -28,7 +72,37 @@ function addWithdrawalClick(type){
           </n-flex>
         </n-button>
       </n-flex>
-      <div class="empty-text">
+      <div v-if="bankDataList?.length > 0" style="width: 100%;">
+        <n-flex
+            vertical
+            :size="20"
+            style="width: 100%;"
+        >
+          <n-card
+              v-for="(item, index) in bankDataList"
+              :key="index"
+              style="border: 1px solid #EBEBEB; border-radius: 10px; cursor: pointer;"
+              content-style="padding: 20px 30px; display: flex; align-items: center; justify-content: space-between;"
+          >
+            <div>
+              <div style="font-weight: 500; font-size: 16px;">银行卡</div>
+              <div style="color: #666; margin-top: 4px;">{{ item.branchName }}（{{ item.bankCard }}）</div>
+            </div>
+            <n-popconfirm
+                @positive-click="handleDelete(item.id)"
+                :show-icon="false"
+                positive-text="删除"
+                negative-text="取消"
+            >
+              <template #trigger>
+                <n-button type="error" size="small">删除</n-button>
+              </template>
+              确认删除该银行卡？
+            </n-popconfirm>
+          </n-card>
+        </n-flex>
+      </div>
+      <div v-else class="empty-text" style="text-align: center; color: #999; margin-top: 20px;">
         暂未添加银行卡
       </div>
     </n-flex>
@@ -52,7 +126,7 @@ function addWithdrawalClick(type){
       </n-flex>
     </n-flex> -->
   </div>
-  <AddWithdrawal :addWithdrawalType='addWithdrawalType' v-model:show="showAddWithdrawal" />
+  <AddWithdrawal :addWithdrawalType='addWithdrawalType' v-model:show="showAddWithdrawal" @success="success"/>
 </template>
 
 <style scoped lang="scss">

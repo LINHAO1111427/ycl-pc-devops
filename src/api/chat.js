@@ -2,6 +2,6 @@ import request from '@/utils/request'
 
 
 //获取好友列表
-export function getUserInfoList(params) {
-    return request.post('/app-api/member/online/communication/userInfo', {params})
+export function friendList(params) {
+    return request.get('/app-api/online/service/friend-list', {params})
 }

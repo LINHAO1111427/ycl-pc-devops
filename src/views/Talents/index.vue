@@ -12,6 +12,7 @@ import {useStore} from 'vuex'
 const store = useStore()
 import {useMessage} from 'naive-ui'
 import {useUser} from "@/api/useUser.ts";
+import Pay from "@/views/Member/component/Pay.vue";
 
 // 创建 message 实例
 const message = useMessage()
@@ -31,10 +32,16 @@ onMounted(async () => {
   const res = await getUser()
   userData.value = res.data
 })
-
+const showPay = ref(false)
 // const isInit = ref(false);
 onMounted(async () => {
 })
+const success = () => {
+
+}
+const success1 = () => {
+  showPay.value = true
+}
 </script>
 
 <template>
@@ -57,7 +64,8 @@ onMounted(async () => {
     <ChatMessage v-model:show="charMessageShow"/>
     <Footer></Footer>
   </div>
-  <vip-page v-model="showModal"></vip-page>
+  <vip-page v-model="showModal" @success="success1"></vip-page>
+  <Pay v-model:show="showPay" @success="success"/>
 </template>
 
 <style scoped lang="scss">

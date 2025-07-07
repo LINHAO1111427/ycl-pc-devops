@@ -31,13 +31,13 @@ const submitWithdraw = () => {
       <n-flex class="wallet-amount" justify="space-between">
         <div class="wallet-amount-slider">
           <div class="wallet-amount-slider-title">
-            预期总收入 ¥1000
+            预期总收入 ¥0
           </div>
           <div class="wallet-amount-slider-desc">
-            可提现余额 ¥100
+            可提现余额 ¥0
           </div>
           <div class="wallet-amount-slider-desc">
-            奖励金额 ¥100
+            奖励金额 ¥0
           </div>
           <div class="wallet-amount-slider-desc">
             保证金额 ¥0
@@ -73,9 +73,9 @@ const submitWithdraw = () => {
             </n-button> -->
           </n-flex>
           <n-flex class="wallet-container-details" vertical justify="space-between">
-            <div class="details-title">
-              直拨至本地银行 （CNY） - 账户末尾地址为 4536
-            </div>
+<!--            <div class="details-title">-->
+<!--              直拨至本地银行 （CNY） - 账户末尾地址为 4536-->
+<!--            </div>-->
             <n-button color="#EFFEFA" text-color="#28806F" size="large" block strong type="primary">每周（06-07 下一期）
             </n-button>
           </n-flex>
@@ -94,9 +94,9 @@ const submitWithdraw = () => {
             </n-flex>
           </n-flex>
           <n-flex class="wallet-container-details" vertical justify="space-between">
-            <div class="details-title">
-              ¥47.01 直接到本地银行 （CNY） - 账户以 4536 结尾
-            </div>
+<!--            <div class="details-title">-->
+<!--              ¥47.01 直接到本地银行 （CNY） - 账户以 4536 结尾-->
+<!--            </div>-->
             <n-button color="#EFFEFA" text-color="#28806F" size="large" block strong type="primary">2024-06-22
             </n-button>
           </n-flex>

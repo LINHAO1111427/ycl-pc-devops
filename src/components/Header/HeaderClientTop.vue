@@ -183,7 +183,7 @@ const charMessageShow = ref(false)
     <div class="wrapper">
       <div class="container">
         <div class="container-header-nav">
-          <div class="logo" @click="$router.push('/')">
+          <div class="logo" @click="$router.push('/client/index')">
             <img src="../../assets/img/logo.png" alt=""/>
           </div>
           <div class="header-nav-container">

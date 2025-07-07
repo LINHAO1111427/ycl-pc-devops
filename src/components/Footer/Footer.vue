@@ -1,7 +1,7 @@
 <template>
-  <footer >
+  <footer>
     <div class="wrapper" v-if="false">
-      <div class="container" >
+      <div class="container">
         <div class="footer_nav">
           <ul>
             <li>
@@ -100,7 +100,7 @@
         </div>
         <div class="footer_copy">
           <div class="info">
-            <span>单刻达 © 2024</span><span>京ICO备18053355号-2</span><span>京公网安备</span><span>11001402047559号</span>
+            <span>单刻达 © 2024</span><span>>津ICP备2025033117号-1号</span>
             <RouterLink to="/">版权声明</RouterLink>
             <RouterLink to="/">问题反馈</RouterLink>
             <RouterLink to="/">在线沟通</RouterLink>

@@ -4,7 +4,7 @@
       <n-flex vertical class="vipTitle" align="center" justify="space-evenly">
         <div class="t1">单刻达会员</div>
         <div class="t2">提高您的知名度、薪酬等等！</div>
-        <div class="vbtn" style="margin-top: 10px;">立即开通</div>
+        <div class="vbtn" style="margin-top: 10px;" @click="payment">立即开通</div>
       </n-flex>
       <n-flex class="plans" justify="center">
         <n-flex vertical class="plan" v-for="(item, index) in 3" :key="index" align="center">
@@ -19,7 +19,7 @@
             <li>专属客服</li>
             <li>专属超值积分</li>
           </ul>
-          <div class="vbtn">立即开通</div>
+          <div class="vbtn" @click="payment">立即开通</div>
         </n-flex>
       </n-flex>
       <n-flex vertical class="footerDiv" align="center">
@@ -59,7 +59,7 @@ import {computed} from 'vue';
 const props = defineProps({
   modelValue: Boolean,
 });
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue','success']);
 
 // 计算属性绑定 v-model:show
 const modalVisible = computed({
@@ -70,6 +70,10 @@ const modalVisible = computed({
 const closeModal = () => {
   emit('update:modelValue', false);
 };
+const payment=()=>{
+  emit('success')
+  emit('update:modelValue', false);
+}
 </script>
 
 

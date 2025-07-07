@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import {RenderIcon, Text} from '@/components'
 import {AddCircle, ArrowForwardSharp} from '@vicons/ionicons5'
-import {getUserInfoList} from '@/api/chat'
+import {friendList} from '@/api/chat'
 import {onMounted} from "vue";
 
-// onMounted(async () => {
-//   await getUserInfoList({userId: localStorage.getItem('userId')})
-// })
+onMounted(async () => {
+  await friendList()
+})
 </script>
 
 <template>

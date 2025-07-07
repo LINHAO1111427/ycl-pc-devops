@@ -214,8 +214,8 @@ const userInfo = {
 };
 
 const goToOrders = () => {
-
-  localStorage.setItem('LoginData', JSON.stringify({userType: userType.value, isLogin: true}))
+  //
+  // localStorage.setItem('LoginData', JSON.stringify({userType: userType.value, isLogin: true}))
   if (userType.value === 1) {
     router.push('/talents')
   } else {
@@ -639,8 +639,8 @@ const removeSkill = (index) => {
           <!--            </div>-->
           <!--          </NCard>-->
           <div class="button-group">
-<!--            <NButton type="primary" @click="goToOrders">立即发单</NButton>-->
-            <NButton secondary @click="goToProfile">返回个人中心</NButton>
+            <NButton type="primary" @click="goToOrders">立即发单</NButton>
+<!--            <NButton secondary @click="goToProfile">返回个人中心</NButton>-->
           </div>
         </div>
       </div>
