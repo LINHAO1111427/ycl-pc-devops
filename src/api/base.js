@@ -31,6 +31,21 @@ export function userInfo(params) {
     return request.get('/app-api/member/boss-filter/user-info', {params})
 }
 
+// 修改公司信息 - POST接口
+export function updateEmployerCompanyInfo(params) {
+    return request.post('/app-api/xinyu/employer-company-info/addOrUpdate', params)
+}
+
+// 提交保存公司联系方式 - PUT接口
+export function updateCompanyContact(params) {
+    return request.put('/app-api/xinyu/employer-company-info/contact/update', params)
+}
+
+// 上传图片到阿里云
+export function uploadCompanyImages(params) {
+    return request.post('/app-api/common/addOrUpdate', params)
+}
+
 //更多人才
 export function userFilter(params) {
     return request.get('/app-api/member/boss-filter/user-filter', {params})
@@ -54,8 +69,4 @@ export function deleteWorkerFavor(params) {
 // 公司信息查询
 export function getEmployerCompanyInfo(params) {
     return request.get('/app-api/xinyu/employer-company-info/get', {params})
-}
-//公司联系方式查询
-export function getContact(params) {
-    return request.get('/app-api/xinyu/employer-company-info/contact/get', {params})
 }
