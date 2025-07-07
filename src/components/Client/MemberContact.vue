@@ -23,7 +23,11 @@ const userInfo = ref<any>({})
 const isEditingCompanyInfo = ref(false)
 const isEditingCompanyContact = ref(false)
 const isSaving = ref(false)
-
+const token = localStorage.getItem('token')
+const uploadUrl = `${import.meta.env.VITE_API_BASE_URL}/app-api/common/addOrUpdate`
+const uploadHeaders = {
+  Authorization: `Bearer ${token}`, // 或其他自定义 key，比如 'token': token
+}
 // 公司信息表单数据
 const companyInfo = ref({
   companyName: '',
@@ -146,7 +150,6 @@ function onMouseenter(key: string) {
 }
 const success = () => {
 }
-const showEditAvatar = ref(false)
 
 // 开始编辑公司信息
 const startEditCompanyInfo = () => {
@@ -339,7 +342,63 @@ const initCompanyImages = (data: any) => {
     businessLicenseImages: data?.businessLicenseImages || []
   }
 }
-
+const uploadRef = ref(null)
+const uploadRef1 = ref(null)
+const fileList = ref([])
+const fileList1 = ref([])
+const previewUrl = ref('')
+const previewUrl1 = ref('')
+// 初始化 fileList（预加载图片）
+if (previewUrl.value) {
+  fileList.value = [
+    {
+      id: Date.now(), // 唯一 ID
+      name: '证书图片', // 图片名称
+      status: 'finished', // 表示上传完成
+      url: previewUrl.value // 图片地址
+    }
+  ]
+}
+if (previewUrl1.value) {
+  fileList1.value = [
+    {
+      id: Date.now(), // 唯一 ID
+      name: '证书图片', // 图片名称
+      status: 'finished', // 表示上传完成
+      url: previewUrl1.value // 图片地址
+    }
+  ]
+}
+// 处理上传的图片
+const handleUpload = (options) => {
+  const file = options.file.file
+  if (file) {
+    previewUrl.value = URL.createObjectURL(file) // 生成预览 URL
+  }
+}
+// 处理上传的图片
+const handleUpload1 = (options) => {
+  const file = options.file.file
+  if (file) {
+    previewUrl1.value = URL.createObjectURL(file) // 生成预览 URL
+  }
+}
+const showEditAvatar = ref(false)
+onMounted(async () => {
+  const res = await getUser()
+  userInfo.value = res.data
+  const res1 = await getEmployerCompanyInfo()
+  EmployerCompany.value = res1.data
+  const res2 = await getContact()
+  contact.value = res2.data
+})
+const openUploadDialog = (type) => {
+  if (type === 0) {
+    uploadRef.value?.openOpenFileDialog()
+    return
+  }
+  uploadRef1.value?.openOpenFileDialog()
+}
 onMounted(async () => {
   try {
     const res = await getUser()
@@ -597,123 +656,64 @@ onMounted(async () => {
         </div>
         <div class="easy-view">
           <div class="easy-view-title">营业执照法人</div>
-          <n-upload
-              :show-file-list="false"
-              :trigger-style="{cursor:'pointer'}"
-              :custom-request="(options) => handleImageUpload(options.file, 'businessLicensePerson')"
-              :before-upload="(file) => beforeUpload(file, 'businessLicensePerson')"
-              accept="image/*"
-              :max="2"
-              :disabled="!canUploadMore('businessLicensePerson')"
-          >
-            <div class="easy-view-icon" :class="{ 'upload-disabled': !canUploadMore('businessLicensePerson') }">
-              <n-icon size="30" :color="canUploadMore('businessLicensePerson') ? '#58968B' : '#CCCCCC'">
+          <n-flex style="align-items: center;">
+            <n-upload
+                v-show="fileList.length>0"
+                ref="uploadRef"
+                :show-trigger="false"
+                accept="image/*"
+                :action="uploadUrl"
+                :on-finish="(file, event, fileList)=>{handleUploadFinish(file, event, fileList,1)}"
+                :headers="uploadHeaders"
+                list-type="image-card"
+                v-model:file-list="fileList"
+                @remove="handleRemove"
+                @change="handleUpload"
+            >
+            </n-upload>
+            <div class="easy-view-icon" @click="openUploadDialog(0)" v-if="fileList.length<2">
+              <n-icon size="30" color="#58968B">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                      viewBox="0 0 32 32">
                   <path d="M17 15V8h-2v7H8v2h7v7h2v-7h7v-2z" fill="currentColor"></path>
                 </svg>
               </n-icon>
             </div>
-          </n-upload>
-          <div class="easy-view-text">
-            {{ canUploadMore('businessLicensePerson') ? '点击 营业执照法人正反面' : '已上传满2张图片' }}
-          </div>
-          <div class="easy-view-msg">
-            您最多可以附加2个大小为25 MB的文件。
-            (已上传 {{ companyImages.businessLicensePersonImages.length }}/2)
-          </div>
-          <!-- 已上传的图片展示 -->
-          <div v-if="companyImages.businessLicensePersonImages.length > 0" class="uploaded-images">
-            <div v-for="(image, index) in companyImages.businessLicensePersonImages" :key="index" class="image-item">
-              <img :src="image" alt="营业执照法人" style="width: 100px; height: 100px; object-fit: cover;" />
-              <n-button
-                  size="small"
-                  type="error"
-                  @click="removeImage(index, 'businessLicensePerson')"
-                  style="margin-left: 10px;"
-              >
-                删除
-              </n-button>
-            </div>
+          </n-flex>
+          <div class="easy-view-text">点击 营业执照法人正反面</div>
+          <div class="easy-view-msg">您最多可以附加2个大小为25 MB的文件。
           </div>
         </div>
-
-        <!--                <div class="easy-view">-->
-        <!--                    <div class="easy-view-title">对公账号认证</div>-->
-        <!--                    <n-upload :show-file-list="false" :trigger-style="{cursor:'pointer'}">-->
-        <!--                    <div class="easy-view-icon">-->
-        <!--                        <n-icon size="30" color="#58968B">-->
-        <!--                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"-->
-        <!--                                viewBox="0 0 32 32">-->
-        <!--                                <path d="M17 15V8h-2v7H8v2h7v7h2v-7h7v-2z" fill="currentColor"></path>-->
-        <!--                            </svg>-->
-        <!--                        </n-icon>-->
-        <!--                    </div>-->
-        <!--                    </n-upload>-->
-        <!--                    <div class="easy-view-text">点击 上传项目文件</div>-->
-        <!--                    <div class="easy-view-msg">您最多可以附加10个大小为25 MB的文件。包括工作样本或其他文件来支持你的申请。-->
-        <!--                    </div>-->
-        <!--                </div>-->
-
         <div class="easy-view">
           <div class="easy-view-title">上传营业执照</div>
-          <n-upload
-              :show-file-list="false"
-              :trigger-style="{cursor:'pointer'}"
-              :custom-request="(options) => handleImageUpload(options.file, 'businessLicense')"
-              :before-upload="(file) => beforeUpload(file, 'businessLicense')"
-              accept="image/*"
-              :max="2"
-              :disabled="!canUploadMore('businessLicense')"
-          >
-            <div class="easy-view-icon" :class="{ 'upload-disabled': !canUploadMore('businessLicense') }">
-              <n-icon size="30" :color="canUploadMore('businessLicense') ? '#58968B' : '#CCCCCC'">
+          <n-flex style="align-items: center;">
+            <n-upload
+                ref="uploadRef1"
+                v-show="fileList1.length>0"
+                :show-trigger="false"
+                accept="image/*"
+                :action="uploadUrl"
+                :on-finish="(file, event, fileList1)=>{handleUploadFinish(file, event, fileList1,1)}"
+                :headers="uploadHeaders"
+                list-type="image-card"
+                v-model:file-list="fileList1"
+                @remove="handleRemove"
+                @change="handleUpload1"
+            >
+            </n-upload>
+            <div class="easy-view-icon" @click="openUploadDialog(1)" v-if="fileList1.length<2">
+              <n-icon size="30" color="#58968B">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                      viewBox="0 0 32 32">
                   <path d="M17 15V8h-2v7H8v2h7v7h2v-7h7v-2z" fill="currentColor"></path>
                 </svg>
               </n-icon>
             </div>
-          </n-upload>
-          <div class="easy-view-text">
-            {{ canUploadMore('businessLicense') ? '点击 上传营业执照' : '已上传满2张图片' }}
-          </div>
-          <div class="easy-view-msg">
-            您最多可以附加2个大小为25 MB的文件。
-            (已上传 {{ companyImages.businessLicenseImages.length }}/2)
-          </div>
-          <!-- 已上传的图片展示 -->
-          <div v-if="companyImages.businessLicenseImages.length > 0" class="uploaded-images">
-            <div v-for="(image, index) in companyImages.businessLicenseImages" :key="index" class="image-item">
-              <img :src="image" alt="营业执照" style="width: 100px; height: 100px; object-fit: cover;" />
-              <n-button
-                  size="small"
-                  type="error"
-                  @click="removeImage(index, 'businessLicense')"
-                  style="margin-left: 10px;"
-              >
-                删除
-              </n-button>
-            </div>
+          </n-flex>
+          <div class="easy-view-text">点击 上传营业执照</div>
+          <div class="easy-view-msg">您最多可以附加2个大小为25 MB的文件。
           </div>
         </div>
-
-        <!--                <div class="easy-view">-->
-        <!--                    <div class="easy-view-title">企业邮箱认证</div>-->
-        <!--                    <n-upload :show-file-list="false" :trigger-style="{cursor:'pointer'}">-->
-        <!--                    <div class="easy-view-icon">-->
-        <!--                        <n-icon size="30" color="#58968B">-->
-        <!--                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"-->
-        <!--                                viewBox="0 0 32 32">-->
-        <!--                                <path d="M17 15V8h-2v7H8v2h7v7h2v-7h7v-2z" fill="currentColor"></path>-->
-        <!--                            </svg>-->
-        <!--                        </n-icon>-->
-        <!--                    </div>-->
-        <!--                    </n-upload>-->
-        <!--                    <div class="easy-view-text">点击 上传项目文件</div>-->
-        <!--                    <div class="easy-view-msg">您最多可以附加10个大小为25 MB的文件。包括工作样本或其他文件来支持你的申请。-->
-        <!--                    </div>-->
-        <!--                </div>-->
       </div>
 
       <div class="user-contact-container" id="city2">
@@ -824,6 +824,14 @@ onMounted(async () => {
 </template>
 
 <style lang="scss" scoped>
+::v-deep(.n-upload-file-list.n-upload-file-list--grid) {
+  display: flex
+}
+
+::v-deep(.n-upload ) {
+  display: flex;
+  width: auto;
+}
 .contact-container {
   margin-top: 20px;
   display: flex;
