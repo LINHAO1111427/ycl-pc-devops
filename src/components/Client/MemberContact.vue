@@ -8,7 +8,7 @@ import EditAvatar from './EditAvatar.vue'
 import {useStore} from 'vuex'
 import {computed} from 'vue'
 import {useUser} from "@/api/useUser.ts";
-import {getEmployerCompanyInfo} from '@/api/base'
+import {getContact, getEmployerCompanyInfo} from '@/api/base'
 
 const store = useStore()
 const avatar = ref(localStorage.getItem('avatar') || '')
@@ -88,18 +88,25 @@ const slider = [
     to: 'city2',
   }
 ]
-const { getUser} = useUser()
+const {getUser} = useUser()
+const EmployerCompany = ref({})
+const contact = ref({})
+
 function onMouseenter(key: string) {
   current.value = key
   window.location.hash = key
 }
+
 const success = () => {
 }
 const showEditAvatar = ref(false)
 onMounted(async () => {
   const res = await getUser()
   userInfo.value = res.data
-  const res1=await getEmployerCompanyInfo()
+  const res1 = await getEmployerCompanyInfo()
+  EmployerCompany.value = res1.data
+  const res2 = await getContact()
+  contact.value = res2.data
 
 })
 </script>
@@ -175,7 +182,7 @@ onMounted(async () => {
               公司名称
             </Text>
             <Text :size="16" color="#808080">
-              郑盈
+              {{ EmployerCompany.companyName }}
             </Text>
           </n-flex>
           <n-flex justify="space-between" align="center" class="contact-container-item">
@@ -183,7 +190,7 @@ onMounted(async () => {
               所在地区
             </Text>
             <Text :size="16" color="#808080">
-              新疆维吾尔自治区乌鲁木齐市沙依巴克区仓房沟片区
+              {{ EmployerCompany.companyAddress }}
             </Text>
           </n-flex>
 
@@ -192,7 +199,7 @@ onMounted(async () => {
               网站
             </Text>
             <Text :size="16" color="#808080">
-              街道4单元50室
+              {{ EmployerCompany.bankAccountUrl }}
             </Text>
           </n-flex>
           <n-flex justify="space-between" align="center" class="contact-container-item">
@@ -200,7 +207,7 @@ onMounted(async () => {
               您的行业
             </Text>
             <Text :size="16" color="#808080" style="display: flex;align-items:center;">
-              IT
+              {{ EmployerCompany.industry }}
             </Text>
           </n-flex>
           <n-flex justify="space-between" align="center" class="contact-container-item">
@@ -208,7 +215,7 @@ onMounted(async () => {
               贵公司有多少人
             </Text>
             <Text :size="16" color="#808080" style="display: flex;align-items:center;">
-              100
+              {{ EmployerCompany.employeeCount }}
             </Text>
           </n-flex>
           <n-flex justify="space-between" align="center" class="contact-container-item">
@@ -224,7 +231,7 @@ onMounted(async () => {
               描述
             </Text>
             <Text :size="16" color="#808080">
-
+              {{ EmployerCompany.otherInfo }}
             </Text>
           </n-flex>
 
@@ -309,7 +316,7 @@ onMounted(async () => {
               名字
             </Text>
             <Text :size="16" color="#808080">
-              郑盈
+              {{ contact.contactName }}
             </Text>
           </n-flex>
           <n-flex justify="space-between" align="center" class="contact-container-item">
@@ -317,7 +324,7 @@ onMounted(async () => {
               手机号码
             </Text>
             <Text :size="16" color="#808080">
-              15179893205
+              {{ contact.contactPhone }}
             </Text>
           </n-flex>
           <n-flex justify="space-between" align="center" class="contact-container-item">
@@ -325,7 +332,7 @@ onMounted(async () => {
               增值税号
             </Text>
             <Text :size="16" color="#808080">
-              jasonzha
+              {{ contact.taxNumber }}
             </Text>
           </n-flex>
           <n-flex justify="space-between" align="center" class="contact-container-item">
@@ -333,7 +340,7 @@ onMounted(async () => {
               地址
             </Text>
             <Text :size="16" color="#808080">
-              天津
+              {{ contact.contactAddress }}
             </Text>
           </n-flex>
         </div>

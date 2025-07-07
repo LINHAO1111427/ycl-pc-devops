@@ -7,7 +7,7 @@
 </script>
 
 <template>
-	<HeaderTop :is-work="true" :is-login="true"></HeaderTop>
+	<HeaderTop :is-work="true" ></HeaderTop>
 
 	<div class="contact">
 		<div class="contact-banner">

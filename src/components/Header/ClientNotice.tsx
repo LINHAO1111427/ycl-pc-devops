@@ -21,33 +21,7 @@ import {useRouter} from 'vue-router'
 export const Notice = defineComponent({
     setup() {
         const router = useRouter()
-        const msgList = [
-            {
-                title: '恭喜您，已成功发送offer，谢谢',
-                url: '',
-                date: '昨天 14:40'
-            },
-            {
-                title: '恭喜您 XXX，您发布的项目已审核通过，请在“生效的工作”查看更多详情',
-                url: '',
-                date: '昨天 14:40'
-            },
-            {
-                title: '您的头像已生效，请在个人详情页查看',
-                url: '',
-                date: '昨天 14:40'
-            },
-            {
-                title: '您的头像审核未通过，请在个人详情页重新上传，谢谢',
-                url: '',
-                date: '昨天 14:40'
-            },
-            {
-                title: '成功发送项目邀请简历',
-                url: '',
-                date: '昨天 14:40'
-            },
-        ]
+        const msgList = []
         const onClickMsg = (item: string) => {
             if (item.url) {
                 router.push(item.url)
@@ -57,6 +31,9 @@ export const Notice = defineComponent({
     },
 
     render() {
+        if (!this.msgList || this.msgList.length === 0) {
+            return null; // 或者 return <div></div>
+        }
         return <NScrollbar style="max-height: 277px;">
             <div class="notice-container">
                 {

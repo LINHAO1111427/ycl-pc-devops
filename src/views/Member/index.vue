@@ -69,10 +69,14 @@ const descOptions = [
     desc: '专属客服回复更快<br/> &nbsp;',
   },
 ]
+const charMessageShow = ref(false)
+const success = () => {
+  charMessageShow.value = true
+}
 </script>
 
 <template>
-  <HeaderTop :is-login="false" :is-work="false"/>
+  <HeaderTop :is-work="false"/>
   <div class="member-pages">
     <div class="member-pages_container">
       <div class="member-pages-header-title">单刻达会员</div>
@@ -118,14 +122,14 @@ const descOptions = [
                 <div class="member-pages-price-numbers">{{ item.price }}</div>
               </div>
             </n-flex>
-<!--            <n-flex align="flex-end" justify="center" :size="5">-->
-<!--              <div class="member-pages-price">-->
-<!--                <div class="member-pages-price-symbol mini"></div>-->
-<!--                <div class="member-pages-price-numbers mini">-->
-<!--                  {{ item.price1 }}-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </n-flex>-->
+            <!--            <n-flex align="flex-end" justify="center" :size="5">-->
+            <!--              <div class="member-pages-price">-->
+            <!--                <div class="member-pages-price-symbol mini"></div>-->
+            <!--                <div class="member-pages-price-numbers mini">-->
+            <!--                  {{ item.price1 }}-->
+            <!--                </div>-->
+            <!--              </div>-->
+            <!--            </n-flex>-->
           </n-flex>
         </n-flex>
         <n-flex vertical class="button-footer" justify="center">
@@ -188,7 +192,8 @@ const descOptions = [
     </div>
     <Footer/>
   </div>
-  <Pay v-model:show="showPay"/>
+  <Pay v-model:show="showPay" @success="success"/>
+  <ChatMessage v-model:show="charMessageShow"/>
 </template>
 
 <style scoped lang="scss">

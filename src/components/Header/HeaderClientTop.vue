@@ -269,9 +269,9 @@ const charMessageShow = ref(false)
                 <n-flex align="center" :size="30" style="margin-left: 30px">
                   <RenderIcon size="24" fill="#808080" :icon="IconService" @click="charMessageShow = true"/>
                   <n-dropdown trigger="hover" :options="noticeOptions" show-arrow placement="bottom-end">
-                    <n-badge :offset="[-4,2]" color="red" dot>
+<!--                    <n-badge :offset="[-4,2]" color="red" dot>-->
                       <RenderIcon size="24" fill="#808080" :icon="IconRemind"/>
-                    </n-badge>
+<!--                    </n-badge>-->
                   </n-dropdown>
                   <n-dropdown trigger="hover" :options="avatarOptions" show-arrow style="width:245px">
                     <n-avatar round size="large" :src="avatar"/>

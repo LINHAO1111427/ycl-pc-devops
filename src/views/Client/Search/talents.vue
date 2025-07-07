@@ -15,7 +15,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <HeaderClientTop :is-login="false" :is-client="true" :is-work="false" />
+  <HeaderClientTop  :is-client="true" :is-work="false" />
     <div class="talents">
         <div class="easy-search">
             <div class="easy-search-view">

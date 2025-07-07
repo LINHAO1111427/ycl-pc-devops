@@ -22,7 +22,7 @@ function onClickSelect(value) {
 </script>
 
 <template>
-  <HeaderTop :is-work="false" :is-login="false" />
+  <HeaderTop :is-work="false"  />
 
   <div class="search-joi-container">
     <div class="search-joi-container-body">

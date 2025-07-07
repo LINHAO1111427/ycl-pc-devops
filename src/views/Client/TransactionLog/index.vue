@@ -3,66 +3,64 @@
 	import Layout from '@/components/Layout/Layout.vue'
 	import { ref, h } from 'vue'
 
-	const columns = [
-		{
-			title: '日期',
-			key: 'date',
-		},
-		// {
-		// 	title: '类型',
-		// 	key: 'type',
-		// 	className: 'hui'
-		// },
-		{
-			title: '描述',
-			key: 'description',
-			className: 'hui'
-		},
-		// {
-		// 	title: '客户',
-		// 	key: 'customer',
-		// },
-		{
-			title: '数量',
-			key: 'num',
-			className: 'hui'
-		},
-		// {
-		// 	title: 'ID',
-		// 	key: 'id',
-		// 	className: 'lv'
-		// },
-	]
+  import {pageUserCount} from "@/api/home";
+  import {useMessage} from 'naive-ui'
+  // 创建 message 实例
+  const message = useMessage()
 
-	const data = ref([{
-		date: '2024-05-20',
-		type: '提现税费',
-		description: '提款手续费-直接到当地银行转账',
-		customer: '乔安娜',
-		num: '-¥12.00',
-		id: '43567127',
-	}, {
-		date: '2024-05-20',
-		type: '提现税费',
-		description: '提款手续费-直接到当地银行转账',
-		customer: '乔安娜',
-		num: '-¥12.00',
-		id: '43567127',
-	}, {
-		date: '2024-05-20',
-		type: '提现税费',
-		description: '提款手续费-直接到当地银行转账',
-		customer: '乔安娜',
-		num: '-¥12.00',
-		id: '43567127',
-	}, {
-		date: '2024-05-20',
-		type: '提现税费',
-		description: '提款手续费-直接到当地银行转账',
-		customer: '乔安娜',
-		num: '-¥12.00',
-		id: '43567127',
-	}])
+  function formatTime(timestamp) {
+    const date = new Date(timestamp)
+    return date.toLocaleString() // 例如 "2024/7/5 08:00:00"
+  }
+
+  const columns = [
+    {
+      title: '日期',
+      key: 'transactionTime',
+    },
+    {
+      title: '类型',
+      key: 'transactionType',
+      className: 'hui'
+    },
+    {
+      title: '描述',
+      key: 'description',
+      className: 'hui'
+    },
+    {
+      title: '客户',
+      key: 'client',
+    },
+    {
+      title: '金额',
+      key: 'amount',
+      className: 'hui'
+    },
+    {
+      title: 'ID',
+      key: 'id',
+      className: 'lv'
+    },
+  ]
+
+  const data = ref([])
+  const transactionData = ref({})
+  onMounted(async () => {
+    const res = await pageUserCount({
+      userId: localStorage.getItem('userId'),
+      pageNo: 1,
+      pageSize: 10
+    })
+    if (res.code !== 0) {
+      message.error(res.msg)
+      return
+    }
+    data.value = res.data.list.map(item => {
+      item.transactionTime = formatTime(item.transactionTime)
+      return item
+    })
+  })
 </script>
 
 <template>

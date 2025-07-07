@@ -38,7 +38,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <HeaderClientTop :is-login="false" :is-work="false"/>
+  <HeaderClientTop  :is-work="false"/>
   <div class="talents" v-if="isInit">
     <Index :userData="userData"/>
     <Footer></Footer>

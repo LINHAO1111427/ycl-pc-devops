@@ -11,81 +11,82 @@ import {onMounted} from "vue";
 
 <template>
   <n-modal class="chat-message-modal">
-    <n-card
-        style="width: 70%;"
-        size="huge"
-        :bordered="false"
-        content-style="background-color: #EAE9EC"
-    >
-      <n-flex class="char-message" :wrap="false">
-        <n-flex class="char-message-slider" vertical :size="30">
-          <n-flex :wrap="false" align="center" v-for="item in 3">
-            <n-avatar round style="flex-shrink: 0" size="large"/>
-            <n-flex vertical style="width: 100%" :size="5">
-              <n-flex justify="space-between" align="center">
-                <Text :size="16">
-                  乔安娜
-                </Text>
-                <Text class="secondary-color-text-1">
-                  10:32
-                </Text>
-              </n-flex>
-              <Text class="secondary-color-text-1">
-                您好
-              </Text>
-            </n-flex>
-          </n-flex>
-        </n-flex>
-        <n-flex class="char-message-container" vertical>
-          <div class="char-message-container-header">
-            <Text :size="20">乔安娜</Text>
-          </div>
-          <div class="char-message-container-char">
-            <div class="char-message-container-char-item">
-              <n-flex class="char-item-container" :wrap="false" align="center">
-                <n-flex align="center" justify="center" class="char-item-container-slider left" vertical>
-                  <n-avatar round></n-avatar>
-                  <Text class="secondary-color-text-1">12:22</Text>
-                </n-flex>
-                <Text class="text-content">
-                  追随者内容规模掩码重复重新组织设备追随者创建。粗体ipsum箭头滚动减去多边形。
-                </Text>
-              </n-flex>
-            </div>
-            <div class="char-message-container-char-item right">
-              <n-flex class="char-item-container right" :wrap="false" align="center" reverse>
-                <n-flex align="center" justify="center" class="char-item-container-slider right" vertical>
-                  <n-avatar round></n-avatar>
-                  <Text class="secondary-color-text-1">12:22</Text>
-                </n-flex>
-                <Text class="text-content">
-                  不透明度星形滚动草稿像素分布。水平选择缩略图下划线figjam滚动布尔社区。变体字体删除线项目符号。
-                </Text>
-              </n-flex>
-            </div>
-          </div>
-          <n-flex vertical class="char-message-container-footer">
-            <div class="char-message-input">
-              <n-icon :size="22" color="#605F62">
-                <AddCircle></AddCircle>
-              </n-icon>
-              <div class="char-border"></div>
-              <n-input placeholder="请输入消息..."/>
-              <div class="char-border"></div>
-              <n-icon :size="22" color="#605F62">
-                <ArrowForwardSharp></ArrowForwardSharp>
-              </n-icon>
-            </div>
-            <n-space class="char-icons" :size="30">
-              <RenderIcon class="cursor-pointer-style" icon="icon-biaoqing-xue" :size="20"/>
-              <RenderIcon class="cursor-pointer-style" icon="icon-tupian" :size="20"/>
-              <RenderIcon class="cursor-pointer-style" icon="icon-wenjian" :size="20"/>
-              <RenderIcon class="cursor-pointer-style" icon="icon-dianhua" :size="20"/>
-            </n-space>
-          </n-flex>
-        </n-flex>
-      </n-flex>
-    </n-card>
+    <img src="../../assets/img/kf.png" style="width: 500px;">
+<!--    <n-card-->
+<!--        style="width: 70%;"-->
+<!--        size="huge"-->
+<!--        :bordered="false"-->
+<!--        content-style="background-color: #EAE9EC"-->
+<!--    >-->
+<!--      <n-flex class="char-message" :wrap="false">-->
+<!--        <n-flex class="char-message-slider" vertical :size="30">-->
+<!--          <n-flex :wrap="false" align="center" v-for="item in 3">-->
+<!--            <n-avatar round style="flex-shrink: 0" size="large"/>-->
+<!--            <n-flex vertical style="width: 100%" :size="5">-->
+<!--              <n-flex justify="space-between" align="center">-->
+<!--                <Text :size="16">-->
+<!--                  乔安娜-->
+<!--                </Text>-->
+<!--                <Text class="secondary-color-text-1">-->
+<!--                  10:32-->
+<!--                </Text>-->
+<!--              </n-flex>-->
+<!--              <Text class="secondary-color-text-1">-->
+<!--                您好-->
+<!--              </Text>-->
+<!--            </n-flex>-->
+<!--          </n-flex>-->
+<!--        </n-flex>-->
+<!--        <n-flex class="char-message-container" vertical>-->
+<!--          <div class="char-message-container-header">-->
+<!--            <Text :size="20">乔安娜</Text>-->
+<!--          </div>-->
+<!--          <div class="char-message-container-char">-->
+<!--            <div class="char-message-container-char-item">-->
+<!--              <n-flex class="char-item-container" :wrap="false" align="center">-->
+<!--                <n-flex align="center" justify="center" class="char-item-container-slider left" vertical>-->
+<!--                  <n-avatar round></n-avatar>-->
+<!--                  <Text class="secondary-color-text-1">12:22</Text>-->
+<!--                </n-flex>-->
+<!--                <Text class="text-content">-->
+<!--                  追随者内容规模掩码重复重新组织设备追随者创建。粗体ipsum箭头滚动减去多边形。-->
+<!--                </Text>-->
+<!--              </n-flex>-->
+<!--            </div>-->
+<!--            <div class="char-message-container-char-item right">-->
+<!--              <n-flex class="char-item-container right" :wrap="false" align="center" reverse>-->
+<!--                <n-flex align="center" justify="center" class="char-item-container-slider right" vertical>-->
+<!--                  <n-avatar round></n-avatar>-->
+<!--                  <Text class="secondary-color-text-1">12:22</Text>-->
+<!--                </n-flex>-->
+<!--                <Text class="text-content">-->
+<!--                  不透明度星形滚动草稿像素分布。水平选择缩略图下划线figjam滚动布尔社区。变体字体删除线项目符号。-->
+<!--                </Text>-->
+<!--              </n-flex>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <n-flex vertical class="char-message-container-footer">-->
+<!--            <div class="char-message-input">-->
+<!--              <n-icon :size="22" color="#605F62">-->
+<!--                <AddCircle></AddCircle>-->
+<!--              </n-icon>-->
+<!--              <div class="char-border"></div>-->
+<!--              <n-input placeholder="请输入消息..."/>-->
+<!--              <div class="char-border"></div>-->
+<!--              <n-icon :size="22" color="#605F62">-->
+<!--                <ArrowForwardSharp></ArrowForwardSharp>-->
+<!--              </n-icon>-->
+<!--            </div>-->
+<!--            <n-space class="char-icons" :size="30">-->
+<!--              <RenderIcon class="cursor-pointer-style" icon="icon-biaoqing-xue" :size="20"/>-->
+<!--              <RenderIcon class="cursor-pointer-style" icon="icon-tupian" :size="20"/>-->
+<!--              <RenderIcon class="cursor-pointer-style" icon="icon-wenjian" :size="20"/>-->
+<!--              <RenderIcon class="cursor-pointer-style" icon="icon-dianhua" :size="20"/>-->
+<!--            </n-space>-->
+<!--          </n-flex>-->
+<!--        </n-flex>-->
+<!--      </n-flex>-->
+<!--    </n-card>-->
   </n-modal>
 </template>
 

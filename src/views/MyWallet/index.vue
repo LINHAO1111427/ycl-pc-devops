@@ -22,7 +22,7 @@ const submitWithdraw = () => {
 </script>
 
 <template>
-  <HeaderTop :is-work="false" :is-login="false"></HeaderTop>
+  <HeaderTop :is-work="false" ></HeaderTop>
   <div class="my-wallet">
     <div class="wallet">
       <div class="wallet-header-title">

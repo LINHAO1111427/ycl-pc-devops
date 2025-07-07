@@ -52,7 +52,7 @@ function click(value: string) {
 </script>
 
 <template>
-  <HeaderClientTop :is-work="false" :is-login="false"></HeaderClientTop>
+  <HeaderClientTop  :is-login="false"></HeaderClientTop>
   <Layout>
     <div class="user-set-container">
       <div class="user-header-title">

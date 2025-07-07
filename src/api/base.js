@@ -55,4 +55,7 @@ export function deleteWorkerFavor(params) {
 export function getEmployerCompanyInfo(params) {
     return request.get('/app-api/xinyu/employer-company-info/get', {params})
 }
-
+//公司联系方式查询
+export function getContact(params) {
+    return request.get('/app-api/xinyu/employer-company-info/contact/get', {params})
+}

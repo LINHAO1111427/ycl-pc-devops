@@ -32,7 +32,7 @@ onMounted(async () => {
 
 <template>
   <div class="submit-proposals">
-    <Header :is-header-nav="false" :is-work="false" :is-login="false" />
+    <Header :is-header-nav="false" :is-work="false"  />
     <div class="container">
       <div class="slider-avatar">
         <n-flex :size="20">

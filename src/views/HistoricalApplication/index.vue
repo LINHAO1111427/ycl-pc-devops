@@ -51,7 +51,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <HeaderTop :is-login="false" :is-work="false"/>
+  <HeaderTop  :is-work="false"/>
   <div class="application">
     <div class="application-container">
       <div class="application-header-title">
