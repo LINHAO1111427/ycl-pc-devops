@@ -195,9 +195,18 @@ export function renderCustomHeader(avatar: string, userInfo: object, onAvatarCli
 }
 
 export const renderCustomIcons = defineComponent({
-    setup() {
+    emits: ['logout'],
+    setup(_, {emit}) {
         const router = useRouter()
         const themeValue = ref('普通')
+        const onClickLogout = () => {
+            emit('logout')
+            // if (window.confirm('确认注销吗？')) {
+            //     router.push('/login')
+            // }
+
+
+        };
         const themeOptions = [
             {
                 label: '普通',
@@ -212,13 +221,6 @@ export const renderCustomIcons = defineComponent({
                 value: '跟随系统切换'
             },
         ]
-        const onClickLogout = () => {
-            if (window.confirm('确认注销吗？')) {
-                router.push('/login')
-            }
-
-
-        };
         const handleChange = async (value: boolean) => {
             await updateUserMatchOrConsulting({
                 userId: localStorage.getItem('userId'),
@@ -322,7 +324,7 @@ export const renderCustomIcons = defineComponent({
             </NPopselect>
 
             <NFlex alignItems="center" class="CustomIcons-item" size={5} style={{marginBottom: '15px'}}
-                   onClick={() => this.onClickLogout()}>
+                   onClick={this.onClickLogout}>
                 <RenderIcon icon={IconZhuxiao} size={16} fill="#808080"></RenderIcon>
                 注销
             </NFlex>

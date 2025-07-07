@@ -75,6 +75,7 @@ const noticeOptions = ref([
 
 const showChangeAccount = ref(false)
 const showEditAvatar = ref(false)
+const showLoggout = ref(false)
 const avatarOptions = ref([
   {
     key: 'header',
@@ -95,7 +96,9 @@ const avatarOptions = ref([
         if (clickedElement.classList.contains('showChangeAccount')) {
           showChangeAccount.value = true
         }
-      },
+      }, onLogout: (event) => {
+        showLoggout.value = true
+      }
     }),
   },
 ])
@@ -334,6 +337,7 @@ const charMessageShow = ref(false)
     </HeaderModal>
   </div>
   <ChatMessage v-model:show="charMessageShow"/>
+
   <ChangeAccount v-model:show="showChangeAccount" v-if="showChangeAccount"/>
   <EditAvatar v-model:show="showEditAvatar"/>
 </template>
