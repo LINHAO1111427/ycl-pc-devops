@@ -201,10 +201,9 @@ export const renderCustomIcons = defineComponent({
         const themeValue = ref('普通')
         const onClickLogout = () => {
             emit('logout')
-            // if (window.confirm('确认注销吗？')) {
-            //     router.push('/login')
-            // }
-
+            if (window.confirm('确认注销吗？')) {
+                router.push('/login')
+            }
 
         };
         const themeOptions = [
@@ -326,7 +325,7 @@ export const renderCustomIcons = defineComponent({
             <NFlex alignItems="center" class="CustomIcons-item" size={5} style={{marginBottom: '15px'}}
                    onClick={this.onClickLogout}>
                 <RenderIcon icon={IconZhuxiao} size={16} fill="#808080"></RenderIcon>
-                注销
+                退出
             </NFlex>
         </div>
     },

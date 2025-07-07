@@ -75,3 +75,8 @@ export function getEmployerCompanyInfo(params) {
 export function getContact(params) {
     return request.get('/app-api/xinyu/employer-company-info/contact/get', {params})
 }
+//获取中国所有城市
+export function allCity(params) {
+    return request.get('/app-api/system/area/all-city', {params})
+}
+
