@@ -1,14 +1,22 @@
 <script setup lang="ts">
 import { RenderIcon, Text } from '@/components'
 import { CreateOutline } from '@vicons/ionicons5'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useMessage } from 'naive-ui'
 import EditPersonalInfo from '@/views/UserSet/Identity/component/EditPersonalInfo.vue'
+import { getPersonalInfo } from '@/api/base'
 
+const message = useMessage()
 const current = ref('account')
 
 const showModal = ref(false)
-
 const showEditPersonalInfo = ref(false)
+
+// 个人信息数据
+const personalInfo = ref({
+  personalName: '',
+  personalIdCard: ''
+})
 
 const slider = [
   {
@@ -21,11 +29,38 @@ const slider = [
   },
 ]
 
-
 function onMouseenter(key: string) {
   current.value = key
   window.location.hash = key
 }
+
+// 加载个人信息
+const loadPersonalInfo = async () => {
+  try {
+    const res = await getPersonalInfo()
+    if (res.code === 0 && res.data) {
+      personalInfo.value = res.data
+    }
+  } catch (error) {
+    console.error('获取个人信息失败:', error)
+  }
+}
+
+// 编辑个人信息
+const handleEditPersonalInfo = () => {
+  showEditPersonalInfo.value = true
+}
+
+// 个人信息保存成功回调
+const handlePersonalInfoSaved = (data: any) => {
+  personalInfo.value = data
+  loadPersonalInfo() // 重新加载数据
+}
+
+// 页面初始化
+onMounted(() => {
+  loadPersonalInfo()
+})
 </script>
 
 <template>
@@ -43,25 +78,25 @@ function onMouseenter(key: string) {
             <div class="user-contact-container" id="account">
                 <n-flex align="center" justify="space-between">
                     <Text color="#333333" :size="24">个人信息</Text>
-                    <n-icon :size="22" class="cursor-pointer-style main-color-size" @click="showEditPersonalInfo = true">
+                    <n-icon :size="22" class="cursor-pointer-style main-color-size" @click="handleEditPersonalInfo">
                         <CreateOutline />
                     </n-icon>
                 </n-flex>
                 <div class="contact-container-cell">
                     <n-flex justify="space-between" align="center" class="contact-container-item">
                         <Text :size="16" color="#808080">
-                            名字
+                            姓名
                         </Text>
-                        <Text :size="16" color="#808080">
-                            郑盈
+                        <Text :size="16" color="#333333">
+                            {{ personalInfo.personalName || '暂无数据' }}
                         </Text>
                     </n-flex>
                     <n-flex justify="space-between" align="center" class="contact-container-item">
                         <Text :size="16" color="#808080">
                             身份证
                         </Text>
-                        <Text :size="16" color="#808080">
-                            12345678900000000
+                        <Text :size="16" color="#333333">
+                            {{ personalInfo.personalIdCard || '暂无数据' }}
                         </Text>
                     </n-flex>
                 </div>
@@ -69,9 +104,6 @@ function onMouseenter(key: string) {
             <div class="user-contact-container" id="city">
                 <n-flex align="center" justify="space-between">
                     <Text color="#333333" :size="24">身份证验证</Text>
-                    <!--  <n-icon :size="22" class="cursor-pointer-style main-color-size">
-            <CreateOutline />
-          </n-icon> -->
                 </n-flex>
                 <n-flex :wrap="false" align="center" justify="center" style="margin: 40px 0" :size="40">
                     <n-flex class="user-identity" vertical align="center">
@@ -100,7 +132,14 @@ function onMouseenter(key: string) {
             </div>
         </div>
     </div>
-    <EditPersonalInfo v-model:show="showEditPersonalInfo"></EditPersonalInfo>
+    
+    <!-- 编辑个人信息弹窗 -->
+    <EditPersonalInfo 
+        v-model:show="showEditPersonalInfo"
+        :personal-data="personalInfo"
+        :is-edit="true"
+        @on-saved="handlePersonalInfoSaved"
+    />
 </template>
 
 <style scoped lang="scss">

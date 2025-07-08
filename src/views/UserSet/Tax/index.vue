@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RenderIcon, Text } from '@/components'
-import { CreateOutline, Add, ChevronForward } from '@vicons/ionicons5'
+import { CreateOutline, Add, ChevronForward, SaveOutline } from '@vicons/ionicons5'
 import { ref, onMounted } from 'vue'
 import { useMessage } from 'naive-ui'
 import AddInvoice from './component/AddInvoice.vue'
@@ -11,7 +11,9 @@ import {
   createCompanyAddress,
   updateCompanyAddress,
   deleteCompanyAddress,
-  setDefaultCompanyAddress
+  setDefaultCompanyAddress,
+  savePersonalInfo,
+  getEmployerCompanyInfo
 } from '@/api/base'
 
 const message = useMessage()
@@ -76,9 +78,23 @@ const originalPersonalAddress = ref({
 
 // 状态管理
 const isEditingPersonalAddress = ref(false)
+const isEditingPersonalInfo = ref(false)
 const showAddInvoice = ref(false)
 const addInvoiceType = ref(1)
 const isSaving = ref(false)
+
+// 个人信息数据
+const personalInfo = ref({
+  personalName: '',
+  personalIdCard: ''
+})
+
+// 当前用户信息
+const userInfo = ref({
+  userId: '',
+  name: '',
+  mobile: ''
+})
 
 function onMouseenter(key: string) {
   current.value = key
@@ -87,6 +103,83 @@ function onMouseenter(key: string) {
 
 function onClickClose(value) {
   tagOptions.value = tagOptions.value.filter(item => item !== value)
+}
+
+// ===== 个人信息管理函数 =====
+// 加载个人信息
+const loadPersonalInfo = async () => {
+  try {
+    const res = await getEmployerCompanyInfo()
+    if (res.code === 0 && res.data) {
+      // 从公司信息接口中提取个人信息
+      personalInfo.value = {
+        personalName: res.data.personalName || '',
+        personalIdCard: res.data.personalIdCard || ''
+      }
+    }
+  } catch (error) {
+    console.error('获取个人信息失败:', error)
+  }
+}
+
+// 开始编辑个人信息
+const startEditPersonalInfo = () => {
+  isEditingPersonalInfo.value = true
+}
+
+// 保存个人信息
+const savePersonalInfoData = async () => {
+  if (!personalInfo.value.personalName) {
+    message.error('请输入姓名')
+    return
+  }
+  if (!personalInfo.value.personalIdCard) {
+    message.error('请输入身份证号码')
+    return
+  }
+  
+  // 身份证号格式验证
+  const idCardRegex = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+  if (!idCardRegex.test(personalInfo.value.personalIdCard)) {
+    message.error('请输入正确的身份证号码格式')
+    return
+  }
+
+  isSaving.value = true
+  try {
+    const res = await savePersonalInfo(personalInfo.value)
+    if (res.code === 0) {
+      message.success('个人信息保存成功')
+      isEditingPersonalInfo.value = false
+      await loadPersonalInfo() // 重新加载数据
+    } else {
+      message.error(res.msg || '保存失败')
+    }
+  } catch (error) {
+    message.error('保存失败，请重试')
+    console.error('保存个人信息失败:', error)
+  } finally {
+    isSaving.value = false
+  }
+}
+
+// 取消编辑个人信息
+const cancelEditPersonalInfo = () => {
+  isEditingPersonalInfo.value = false
+  loadPersonalInfo() // 重新加载数据，恢复原始值
+}
+
+// 获取用户基本信息
+const loadUserInfo = () => {
+  // 从localStorage获取用户信息
+  const userId = localStorage.getItem('userId') || ''
+  const userData = JSON.parse(localStorage.getItem('UserData') || '{}')
+  
+  userInfo.value = {
+    userId: userId,
+    name: userData.name || '未设置',
+    mobile: userData.mobile || '未绑定'
+  }
 }
 
 // ===== 个人地址管理函数 =====
@@ -272,6 +365,8 @@ const handleModalSave = async (addressData: any, isEdit: boolean) => {
 // 初始化数据
 onMounted(async () => {
   try {
+    loadUserInfo()
+    await loadPersonalInfo()
     await loadPersonalAddress()
     await loadCompanyAddressList()
   } catch (error) {
@@ -303,6 +398,45 @@ onMounted(async () => {
       <div class="user-contact-container" id="account">
         <n-flex align="center" justify="space-between">
           <Text color="#333333" :size="24">账户信息</Text>
+          <n-flex :size="12">
+            <n-button
+              v-if="!isEditingPersonalInfo"
+              type="primary"
+              size="small"
+              @click="startEditPersonalInfo"
+              style="background: #58968B; border-color: #58968B;"
+            >
+              <template #icon>
+                <n-icon>
+                  <CreateOutline />
+                </n-icon>
+              </template>
+              修改个人信息
+            </n-button>
+            <template v-else>
+              <n-button
+                type="primary"
+                size="small"
+                @click="savePersonalInfoData"
+                :loading="isSaving"
+                style="background: #58968B; border-color: #58968B;"
+              >
+                <template #icon>
+                  <n-icon>
+                    <SaveOutline />
+                  </n-icon>
+                </template>
+                保存
+              </n-button>
+              <n-button
+                size="small"
+                @click="cancelEditPersonalInfo"
+                :disabled="isSaving"
+              >
+                取消
+              </n-button>
+            </template>
+          </n-flex>
         </n-flex>
         <div class="contact-container-cell">
           <n-flex justify="space-between" align="center" class="contact-container-item">
@@ -310,15 +444,22 @@ onMounted(async () => {
               用户ID
             </Text>
             <Text :size="16" color="#808080">
-              jasonzha
+              {{ userInfo.userId }}
             </Text>
           </n-flex>
           <n-flex justify="space-between" align="center" class="contact-container-item">
             <Text :size="16" color="#808080">
               名字
             </Text>
-            <Text :size="16" color="#808080">
-              郑盈
+            <n-input
+              v-if="isEditingPersonalInfo"
+              v-model:value="personalInfo.personalName"
+              size="small"
+              style="width: 200px;"
+              placeholder="请输入姓名"
+            />
+            <Text v-else :size="16" color="#808080">
+              {{ personalInfo.personalName || userInfo.name }}
             </Text>
           </n-flex>
 
@@ -327,17 +468,39 @@ onMounted(async () => {
               手机号码
             </Text>
             <Text :size="16" color="#808080">
-              15179893205
+              {{ userInfo.mobile }}
             </Text>
           </n-flex>
+          
           <n-flex justify="space-between" align="center" class="contact-container-item">
+            <Text :size="16" color="#808080">
+              身份证号码
+            </Text>
+            <n-input
+              v-if="isEditingPersonalInfo"
+              v-model:value="personalInfo.personalIdCard"
+              size="small"
+              style="width: 200px;"
+              placeholder="请输入身份证号码"
+              maxlength="18"
+            />
+            <Text v-else :size="16" color="#808080">
+              {{ personalInfo.personalIdCard ? 
+                personalInfo.personalIdCard.replace(/(\d{6})\d{8}(\d{4})/, '$1********$2') : 
+                '未设置' 
+              }}
+            </Text>
+          </n-flex>
+          
+          <!-- 邮箱字段已临时隐藏 -->
+          <!-- <n-flex justify="space-between" align="center" class="contact-container-item">
             <Text :size="16" color="#808080">
               邮箱
             </Text>
             <Text :size="16" color="#808080">
               lishihai@sina.com
             </Text>
-          </n-flex>
+          </n-flex> -->
         </div>
       </div>
 
@@ -371,6 +534,7 @@ onMounted(async () => {
             </n-flex>
           </n-flex>
 
+
           <n-flex justify="space-between" align="center" class="contact-container-item">
             <Text :size="14" color="#808080">姓名</Text>
             <n-input
@@ -398,6 +562,7 @@ onMounted(async () => {
               {{ personalAddress.personalArea || '暂无数据' }}
             </Text>
           </n-flex>
+
 
           <n-flex justify="space-between" align="center" class="contact-container-item">
             <Text :size="14" color="#808080">地址</Text>
@@ -562,6 +727,155 @@ onMounted(async () => {
               <Text :size="14" color="#808080">{{ address.companyEmail || '暂无数据' }}</Text>
             </n-flex>
           </div>
+          <n-flex justify="space-between" align="center" class="contact-container-item">
+            <Text :size="14" color="#808080">联系电话</Text>
+            <n-input
+              v-if="isEditingPersonalAddress"
+              v-model:value="personalAddress.personalPhone"
+              size="small"
+              style="width: 200px;"
+              placeholder="请输入联系电话"
+            />
+            <Text v-else :size="14" color="#808080">
+              {{ personalAddress.personalPhone || '暂无数据' }}
+            </Text>
+          </n-flex>
+
+          <n-flex justify="space-between" align="center" class="contact-container-item">
+            <Text :size="14" color="#808080">税号</Text>
+            <n-input
+              v-if="isEditingPersonalAddress"
+              v-model:value="personalAddress.personalTaxNumber"
+              size="small"
+              style="width: 200px;"
+              placeholder="请输入税号"
+            />
+            <Text v-else :size="14" color="#808080">
+              {{ personalAddress.personalTaxNumber || '暂无数据' }}
+            </Text>
+          </n-flex>
+
+          <n-flex justify="space-between" align="center" class="contact-container-item">
+            <Text :size="14" color="#808080">开户银行</Text>
+            <n-input
+              v-if="isEditingPersonalAddress"
+              v-model:value="personalAddress.personalBankName"
+              size="small"
+              style="width: 200px;"
+              placeholder="请输入开户银行"
+            />
+            <Text v-else :size="14" color="#808080">
+              {{ personalAddress.personalBankName || '暂无数据' }}
+            </Text>
+          </n-flex>
+
+          <n-flex justify="space-between" align="center" class="contact-container-item">
+            <Text :size="14" color="#808080">银行账号</Text>
+            <n-input
+              v-if="isEditingPersonalAddress"
+              v-model:value="personalAddress.personalBankAccount"
+              size="small"
+              style="width: 200px;"
+              placeholder="请输入银行账号"
+            />
+            <Text v-else :size="14" color="#808080">
+              {{ personalAddress.personalBankAccount || '暂无数据' }}
+            </Text>
+          </n-flex>
+
+          <n-flex justify="space-between" align="center" class="contact-container-item">
+            <Text :size="14" color="#808080">邮箱</Text>
+            <n-input
+              v-if="isEditingPersonalAddress"
+              v-model:value="personalAddress.personalEmail"
+              size="small"
+              style="width: 200px;"
+              placeholder="请输入邮箱"
+            />
+            <Text v-else :size="14" color="#808080">
+              {{ personalAddress.personalEmail || '暂无数据' }}
+            </Text>
+          </n-flex>
+        </div>
+
+        <!-- 企业地址列表 -->
+        <div v-else>
+          <div v-if="companyAddressList.length === 0" class="tax-city-container">
+            <n-empty description="暂无企业地址数据">
+              <template #extra>
+                <n-button size="small" @click="addInvoiceClick">
+                  添加企业地址
+                </n-button>
+              </template>
+            </n-empty>
+          </div>
+
+          <div
+            v-for="(address, index) in companyAddressList"
+            :key="address.id"
+            class="tax-city-container"
+            style="margin-bottom: 20px;"
+          >
+            <n-flex class="contact-container-item" justify="space-between" style="margin-bottom: 10px;border: none">
+              <n-flex align="center" :size="12">
+                <Text :size="20">
+                  {{ address.addressName || `企业地址${index + 1}` }}
+                </Text>
+                <n-tag v-if="address.isDefault" type="success" size="small">默认</n-tag>
+              </n-flex>
+              <n-flex :size="8">
+                <n-button v-if="!address.isDefault" type="info" size="small" @click="setDefaultCompanyAddressData(address.id)">
+                  设为默认
+                </n-button>
+                <n-button type="primary" size="small" @click="editCompanyAddress(address)">
+                  编辑
+                </n-button>
+                <n-button type="error" size="small" @click="deleteCompanyAddressData(address.id)">
+                  删除
+                </n-button>
+              </n-flex>
+            </n-flex>
+
+            <n-flex justify="space-between" align="center" class="contact-container-item">
+              <Text :size="14" color="#808080">公司名称</Text>
+              <Text :size="14" color="#808080">{{ address.companyName || '暂无数据' }}</Text>
+            </n-flex>
+
+            <n-flex justify="space-between" align="center" class="contact-container-item">
+              <Text :size="14" color="#808080">所在地区</Text>
+              <Text :size="14" color="#808080">{{ address.companyArea || '暂无数据' }}</Text>
+            </n-flex>
+
+            <n-flex justify="space-between" align="center" class="contact-container-item">
+              <Text :size="14" color="#808080">地址</Text>
+              <Text :size="14" color="#808080">{{ address.companyAddress || '暂无数据' }}</Text>
+            </n-flex>
+
+            <n-flex justify="space-between" align="center" class="contact-container-item">
+              <Text :size="14" color="#808080">注册电话</Text>
+              <Text :size="14" color="#808080">{{ address.companyPhone || '暂无数据' }}</Text>
+            </n-flex>
+
+            <n-flex justify="space-between" align="center" class="contact-container-item">
+              <Text :size="14" color="#808080">单位税号</Text>
+              <Text :size="14" color="#808080">{{ address.companyTaxNumber || '暂无数据' }}</Text>
+            </n-flex>
+
+            <n-flex justify="space-between" align="center" class="contact-container-item">
+              <Text :size="14" color="#808080">开户银行</Text>
+              <Text :size="14" color="#808080">{{ address.companyBankName || '暂无数据' }}</Text>
+            </n-flex>
+
+            <n-flex justify="space-between" align="center" class="contact-container-item">
+              <Text :size="14" color="#808080">银行账号</Text>
+              <Text :size="14" color="#808080">{{ address.companyBankAccount || '暂无数据' }}</Text>
+            </n-flex>
+
+            <n-flex justify="space-between" align="center" class="contact-container-item">
+              <Text :size="14" color="#808080">邮箱</Text>
+              <Text :size="14" color="#808080">{{ address.companyEmail || '暂无数据' }}</Text>
+            </n-flex>
+          </div>
         </div>
       </div>
 
@@ -639,6 +953,13 @@ onMounted(async () => {
       :is-editing="currentCompanyAddress.id !== null"
       v-model:show="showAddInvoice"
       @save="handleModalSave"
+  />
+  <AddInvoice
+    :type="addInvoiceType"
+    :address-data="currentCompanyAddress"
+    :is-editing="currentCompanyAddress.id !== null"
+    v-model:show="showAddInvoice"
+    @save="handleModalSave"
   />
 </template>
 

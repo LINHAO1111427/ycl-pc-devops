@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import HeaderTop from '@/components/Header/HeaderTop.vue'
 import {Footer, IconStart, RenderIcon, IconFaxiangmu} from '@/components'
-import {onMounted, ref} from 'vue'
+import {onMounted, ref, h} from 'vue'
 import {createDiscreteApi} from 'naive-ui'
 import {useRouter} from 'vue-router'
 import {getProject, cancelProject} from '@/api/base'
@@ -13,7 +13,7 @@ import {useMessage} from 'naive-ui'
 // 创建 message 实例
 const message = useMessage()
 const router = useRouter()
-const projectData = ref([])
+const projectData = ref<any[]>([])
 const props = defineProps({
   status: {
     type: Number,
@@ -24,11 +24,22 @@ const props = defineProps({
     default: '所有工作',
   },
 })
+// 格式化日期
+const formatDate = (dateTime: string) => {
+  if (!dateTime) return ''
+  return new Date(dateTime).toLocaleDateString('zh-CN')
+}
+
+// 格式化金额（分转元）
+const formatPrice = (price: number) => {
+  return (price / 100).toFixed(2)
+}
+
 onMounted(() => {
   getProjectFunc()
 })
 const getProjectFunc = async () => {
-  const param = {
+  const param: any = {
     pageNo: 1,
     pageSize: 10
   }
@@ -165,7 +176,7 @@ function handleUpdateValue() {
       </n-flex>
       <!-- @click.stop="$router.push('/client/submit-consult')" -->
       <n-flex class="application-list" vertical :size="20">
-        <div class="application-list-item" @click="$router.push('/client/order-details')"
+        <div class="application-list-item" @click="$router.push(`/client/order-details?id=${item.id}`)"
              v-for="(item,index) in projectData">
 
           <n-flex class="application-item-tag" align="center" justify="center">
@@ -184,7 +195,7 @@ function handleUpdateValue() {
           <n-flex justify="space-between">
             <n-space class="secondary-color-text-1"
                      style="position: absolute;right: 40px;top:20px;line-height:40px">
-              <span>2024-07-10</span>
+              <span>{{ formatDate(item.createTime) }}</span>
             </n-space>
           </n-flex>
 
@@ -204,7 +215,7 @@ function handleUpdateValue() {
             <div class="details_type-item">
               <RenderIcon icon="icon-yusuanzonge" fill="#808080" size="30"/>
               <n-flex vertical>
-                <div class="type-item-title">￥{{ item.totalBudget }}</div>
+                <div class="type-item-title">￥{{ formatPrice(item.totalBudget || 0) }}</div>
                 <div>总预算</div>
               </n-flex>
             </div>

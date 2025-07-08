@@ -492,14 +492,15 @@ onMounted(async () => {
               {{ userInfo?.mobile || '' }}
             </Text>
           </n-flex>
-          <n-flex justify="space-between" align="center" class="contact-container-item">
+          <!-- 邮箱字段已临时隐藏 -->
+          <!-- <n-flex justify="space-between" align="center" class="contact-container-item">
             <Text :size="16" color="#808080">
               邮箱
             </Text>
             <Text :size="16" color="#808080">
               lishihai@sina.com
             </Text>
-          </n-flex>
+          </n-flex> -->
         </div>
       </div>
       <div class="user-contact-container" id="city">

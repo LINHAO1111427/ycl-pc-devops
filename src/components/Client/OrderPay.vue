@@ -1,49 +1,147 @@
 <template>
     <div class="easy">
-        <div class="talents-container">
-            <h1>订单详情</h1>
+        <!-- 加载状态 -->
+        <div class="talents-container" v-if="loading" style="display: flex; justify-content: center; align-items: center; height: 400px;">
+            <n-spin size="large" />
+        </div>
+        
+        <!-- 项目详情内容 -->
+        <div class="talents-container" v-else-if="projectDetail.id">
+            <div class="page-header">
+                <h1>订单详情</h1>
+                <div class="header-decoration"></div>
+            </div>
 
-            <div class="client-form-view">
-                <div class="item-title">
-                    <span>工作名称：</span>
-                    <p>演示自由职业者工作:超过 20 张幻灯片的中英译本</p>
+            <div class="order-summary-card">
+                <div class="summary-header">
+                    <div class="summary-icon">
+                        📋
+                    </div>
+                    <div class="summary-title">项目信息概览</div>
                 </div>
-                <div class="item-title1">
-                    <span>工作详情：</span>
-                    <div>
-                        我们正在寻找一位技术娴熟，一丝不苟的基于Web和Word的中文演示文榜编辑加入我们充满活力的日队。理想的候选人将具备强大的中文能力和出色的辑技能，在创建、和优化网络内容和基于单词的演示文稿方面拥有丰富的经验，这个角色需要的不仅仅是语言能力:候选人必须对中国文化有深入的了解，以确保内容不仅在语言上准确，而且在文化上具有相关性和吸引力。将文化畑微差别无缝整合到内容中的能力至关重要，因为这将与我们的目标受众产生共鸣并保持真实性。
-                        成功的候选人将展示对中国文化习俗、传统和社会规范的根深蒂团的了解。这种文化洞察力对于制作适合上下文和吸引人的内容至关重要，无论是理解惯用语、识别文化参考，还是使内容与文化事件和趋势保持一致，候选人的文化背景都将在他们的编辑职中发挥至关重要的作用。此外，选人必须善于驾驭中文交流中特有的语气和风格的复杂性，确保所有内容都符合我们的品牌声音，同时具有文化敏感性和吸引力。这种全面的文化意识，加上卓越的编辑技巧，将成为候选人为我们团队做出贡献的基石。
+                
+                <div class="project-main-info">
+                    <div class="project-title">
+                        <span class="title-icon">📝</span>
+                        {{ projectDetail.title || '项目标题' }}
+                    </div>
+                    
+                    <div class="budget-display">
+                        <span class="budget-label">项目预算</span>
+                        <span class="budget-amount">￥{{ formatPrice(projectDetail.totalBudget) }}</span>
                     </div>
                 </div>
             </div>
 
-            <div class="btns">
-                <n-button quaternary type="primary">
-                    已付款
-                </n-button>
-                <n-button type="primary" style="padding:0 70px" @click="showModal = !showModal">
-                    确认支付
-                </n-button>
+            <div class="project-details-grid">
+                <div class="detail-card">
+                    <div class="detail-header">
+                        <span class="detail-icon">⚡</span>
+                        <span class="detail-label">项目类型</span>
+                    </div>
+                    <div class="detail-value">{{ projectDetail.deliveryType === 10 ? '一次性项目' : '里程碑项目' }}</div>
+                </div>
+
+                <div class="detail-card">
+                    <div class="detail-header">
+                        <span class="detail-icon">📅</span>
+                        <span class="detail-label">发布时间</span>
+                    </div>
+                    <div class="detail-value">{{ formatDate(projectDetail.createTime) }}</div>
+                </div>
+
+                <div class="detail-card">
+                    <div class="detail-header">
+                        <span class="detail-icon">📍</span>
+                        <span class="detail-label">项目地区</span>
+                    </div>
+                    <div class="detail-value">{{ projectDetail.district || '全国' }}</div>
+                </div>
             </div>
+
+            <div class="project-description-card">
+                <div class="description-header">
+                    <span class="description-icon">📄</span>
+                    <span class="description-title">项目详情</span>
+                </div>
+                <div class="description-content">
+                    {{ projectDetail.description || '项目描述信息' }}
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <div class="button-container">
+                    <n-button 
+                        size="large" 
+                        quaternary 
+                        type="primary" 
+                        class="paid-button"
+                        @click="handleAlreadyPaid"
+                    >
+                        已付款
+                    </n-button>
+                    <n-button 
+                        size="large" 
+                        type="primary" 
+                        class="pay-button"
+                        @click="showModal = !showModal"
+                    >
+                        确认支付
+                    </n-button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 项目不存在状态 -->
+        <div class="talents-container" v-else style="display: flex; justify-content: center; align-items: center; height: 400px;">
+            <n-empty description="项目不存在或已删除">
+                <template #extra>
+                    <n-button @click="$router.back()">返回</n-button>
+                </template>
+            </n-empty>
         </div>
     </div>
 
 
     <n-modal v-model:show="showModal">
-        <n-card style="width: 600px" :bordered="false" size="huge" role="dialog" aria-modal="true">
-            <div class="header-title">
-                请您尽快付款
+        <n-card class="payment-modal" :bordered="false" size="huge" role="dialog" aria-modal="true">
+            <div class="payment-header">
+                <div class="payment-title">
+                    💳 请您尽快付款
+                </div>
+                <div class="payment-subtitle">
+                    为了您的项目能够顺利进行，请及时完成付款
+                </div>
             </div>
-            <div class="header-icon"></div>
-            <div class="header-p">扫描二维码付款</div>
-            <div class="header-span">支持微信支付、支付宝支付、信用卡支付</div>
+            
+            <div class="qr-container">
+                <div class="qr-code">
+                    <div class="qr-placeholder">
+                        📱
+                        <span>二维码</span>
+                    </div>
+                </div>
+                <div class="scan-text">扫描二维码付款</div>
+                <div class="support-text">支持微信支付、支付宝支付、信用卡支付</div>
+            </div>
 
             <template #footer>
-                <div class="btns1">
-                    <n-button quaternary type="primary" @click="showModal = false">
+                <div class="payment-buttons">
+                    <n-button 
+                        size="large" 
+                        quaternary 
+                        type="primary" 
+                        @click="showModal = false"
+                        class="cancel-btn"
+                    >
                         取消
                     </n-button>
-                    <n-button type="primary" @click="showModal = false">
+                    <n-button 
+                        size="large" 
+                        type="primary" 
+                        @click="handlePaymentComplete"
+                        class="confirm-btn"
+                    >
                         已完成付款
                     </n-button>
                 </div>
@@ -52,148 +150,534 @@
     </n-modal>
 </template>
 <script setup>
-import { ref } from 'vue'
-const showModal = ref(false)
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useMessage } from 'naive-ui'
+import { getProject } from '@/api/home'
 
+const showModal = ref(false)
+const projectDetail = ref({})
+const loading = ref(false)
+const route = useRoute()
+const router = useRouter()
+const message = useMessage()
+
+// 格式化金额（分转元）
+const formatPrice = (price) => {
+    if (!price) return '0.00'
+    return (price / 100).toFixed(2)
+}
+
+// 格式化日期
+const formatDate = (dateTime) => {
+    if (!dateTime) return ''
+    return new Date(dateTime).toLocaleDateString('zh-CN')
+}
+
+// 获取项目详情
+const getProjectDetail = async () => {
+    const projectId = route.query.id
+    if (!projectId) {
+        message.error('缺少项目ID参数')
+        return
+    }
+
+    loading.value = true
+    try {
+        const res = await getProject({ id: projectId })
+        if (res.code !== 0) {
+            message.error(res.msg || '获取项目详情失败')
+            return
+        }
+        projectDetail.value = res.data
+    } catch (error) {
+        message.error('网络错误，请重试')
+        console.error('获取项目详情失败:', error)
+    } finally {
+        loading.value = false
+    }
+}
+
+// 处理付款完成
+const handlePaymentComplete = () => {
+    showModal.value = false
+    // 显示成功消息
+    message.success('付款完成！正在跳转到生效的工作页面...')
+    // 延迟跳转以显示消息
+    setTimeout(() => {
+        router.push('/client/work-ing')
+    }, 1500)
+}
+
+// 处理已付款状态
+const handleAlreadyPaid = () => {
+    message.info('正在跳转到生效的工作页面...')
+    setTimeout(() => {
+        router.push('/client/work-ing')
+    }, 1000)
+}
+
+// 页面加载时获取项目详情
+onMounted(() => {
+    getProjectDetail()
+})
 </script>
 <style scoped>
 .easy {
     width: 100%;
-    background-color: white;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
     position: relative;
 }
 
 .talents-container {
     width: 1360px;
     margin: 0 auto;
-    padding: 20px 0;
+    padding: 40px 20px;
     max-width: 100%;
 }
 
 @media screen and (max-width: 1360px) {
-
-    /* 在此处添加适用于宽度小于1360像素的设备的样式 */
     .talents-container {
         width: 1200px;
         margin: 0 auto;
-        padding: 20px 0;
+        padding: 40px 20px;
         max-width: 100%;
     }
 }
 
-
-h1 {
-    font-weight: 300;
-    font-size: 32px;
-    color: #333333;
-    padding: 10px 0 20px 0;
+/* 页面头部 */
+.page-header {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
 }
 
-.client-form-view {
-    padding: 40px;
-    width: 100%;
-    background-color: #FFFFFF;
-    border-radius: 16px 16px 16px 16px;
-    border: 1px solid #EDEDED;
-    margin-bottom: 20px;
+.page-header h1 {
+    font-weight: 600;
+    font-size: 36px;
+    color: #2c3e50;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.item-title {
+.header-decoration {
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #58968B, #4a7c59);
+    margin: 16px auto;
+    border-radius: 2px;
+}
+
+/* 订单概览卡片 */
+.order-summary-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 32px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border: 1px solid rgba(88, 150, 139, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.order-summary-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #58968B, #4a7c59);
+}
+
+.summary-header {
     display: flex;
     align-items: center;
-    padding: 0 0 20px 0;
+    margin-bottom: 24px;
 }
 
-.item-title1 {
+.summary-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #58968B, #4a7c59);
+    border-radius: 12px;
     display: flex;
-    padding: 0 0 20px 0;
-    align-items: baseline;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+    font-size: 18px;
+    color: white;
 }
 
-.item-title span,
-.item-title1 span {
-    width: 70px;
-    font-weight: 500;
-    font-size: 13px;
-    color: #333333;
+.title-icon {
+    font-size: 20px;
+    margin-right: 8px;
 }
 
-.item-title p {
+.detail-icon {
+    font-size: 18px;
+    margin-right: 8px;
+}
+
+.description-icon {
+    font-size: 20px;
+    margin-right: 12px;
+}
+
+.summary-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.project-main-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.project-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
     flex: 1;
-    color: #333333;
-    font-size: 22px;
-    font-weight: 400;
-    line-height: 22px;
-    margin: 0;
+    min-width: 300px;
 }
 
-.item-title1 div {
-    width: calc(100% - 60px);
-    color: #333333;
-    font-size: 12px;
-    line-height: 20px;
+.budget-display {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 }
 
-.btns {
-    text-align: right;
-    padding: 100px 0;
+.budget-label {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-bottom: 4px;
 }
 
-.btns button {
-    margin-left: 100px;
+.budget-amount {
+    font-size: 32px;
+    font-weight: 700;
+    color: #58968B;
+    text-shadow: 0 2px 4px rgba(88, 150, 139, 0.2);
 }
 
-
-.header-title {
-    font-weight: 400;
-    font-size: 27px;
-    color: #000000;
+/* 详情网格 */
+.project-details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
 }
 
-.header-icon {
-    width: 250px;
-    height: 250px;
-    background: #D9D9D9;
-    border-radius: 12px 12px 12px 12px;
-    margin: 0 auto;
-    margin-top: 30px;
+.detail-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    border: 1px solid rgba(88, 150, 139, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
+.detail-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+}
+
+.detail-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #58968B, #4a7c59);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.detail-card:hover::before {
+    transform: scaleX(1);
+}
+
+.detail-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.detail-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #7f8c8d;
+    margin-left: 8px;
+}
+
+.detail-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+/* 项目描述卡片 */
+.project-description-card {
+    background: white;
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border: 1px solid rgba(88, 150, 139, 0.1);
+}
+
+.description-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #f8f9fa;
+}
+
+.description-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-left: 12px;
+}
+
+.description-content {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #5a6c7d;
+    text-align: justify;
+}
+
+/* 按钮区域 */
+.action-buttons {
+    margin-top: 40px;
+    padding: 32px 0;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.paid-button,
+.pay-button {
+    min-width: 180px;
+    height: 50px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.paid-button {
+    background: rgba(88, 150, 139, 0.1);
+    border: 2px solid #58968B;
+    color: #58968B;
+}
+
+.paid-button:hover {
+    background: rgba(88, 150, 139, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(88, 150, 139, 0.3);
+}
+
+.pay-button {
+    background: linear-gradient(135deg, #58968B, #4a7c59);
+    border: none;
+    color: white;
+    box-shadow: 0 8px 25px rgba(88, 150, 139, 0.4);
+}
+
+.pay-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(88, 150, 139, 0.5);
+}
+
+/* 响应式设计 */
 @media screen and (max-width: 768px) {
-    .header-title {
-        font-weight: 400;
-        font-size: 16px;
-        color: #000000;
+    .project-main-info {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .budget-display {
+        align-items: flex-start;
+        width: 100%;
+    }
+    
+    .project-details-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .button-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .paid-button,
+    .pay-button {
+        width: 100%;
+        max-width: 300px;
     }
 }
 
-.header-icon {
-    width: 200px;
-    height: 200px;
-    background: #D9D9D9;
-    border-radius: 12px 12px 12px 12px;
-    margin: 0 auto;
-    margin-top: 30px;
+
+/* 支付模态框样式 */
+.payment-modal {
+    width: 600px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%);
+    border: 1px solid rgba(88, 150, 139, 0.2);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
 }
 
-.header-p {
+.payment-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.payment-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+.payment-subtitle {
     font-size: 14px;
-    color: #000000;
-    text-align: center;
-    padding: 10px 0;
+    color: #7f8c8d;
+    line-height: 1.5;
 }
 
-.header-span {
+.qr-container {
+    text-align: center;
+    margin: 32px 0;
+}
+
+.qr-code {
+    margin-bottom: 20px;
+}
+
+.qr-placeholder {
+    width: 250px;
+    height: 250px;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 16px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #58968B;
+    transition: all 0.3s ease;
+}
+
+.qr-placeholder:hover {
+    background: linear-gradient(135deg, #e9ecef, #dee2e6);
+    transform: scale(1.05);
+}
+
+.qr-placeholder::before {
+    content: '';
+    font-size: 48px;
+    margin-bottom: 8px;
+}
+
+.qr-placeholder span {
+    font-size: 16px;
+    color: #58968B;
+    font-weight: 600;
+}
+
+.scan-text {
+    font-size: 16px;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.support-text {
     font-size: 12px;
-    text-align: center;
-    color: #808080;
+    color: #7f8c8d;
 }
 
-.btns1 {
-    text-align: center;
+.payment-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
 }
 
-.btns1 button {
-    margin: 0 60px;
+.cancel-btn,
+.confirm-btn {
+    min-width: 120px;
+    height: 44px;
+    border-radius: 22px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.cancel-btn {
+    border: 2px solid #58968B;
+    color: #58968B;
+}
+
+.cancel-btn:hover {
+    background: rgba(88, 150, 139, 0.1);
+    transform: translateY(-2px);
+}
+
+.confirm-btn {
+    background: linear-gradient(135deg, #58968B, #4a7c59);
+    border: none;
+    color: white;
+    box-shadow: 0 4px 15px rgba(88, 150, 139, 0.3);
+}
+
+.confirm-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(88, 150, 139, 0.4);
+}
+
+@media screen and (max-width: 768px) {
+    .payment-modal {
+        width: 90vw;
+        max-width: 500px;
+    }
+    
+    .payment-title {
+        font-size: 24px;
+    }
+    
+    .qr-placeholder {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .payment-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .cancel-btn,
+    .confirm-btn {
+        width: 100%;
+        max-width: 200px;
+    }
 }
 </style>

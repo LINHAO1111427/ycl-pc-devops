@@ -8,7 +8,8 @@
         <p @click="handleClick('id4',4)" :class="data.menu == 4 ? 'client-menu-success' : ''">经验等级</p>
         <p @click="handleClick('id5',5)" :class="data.menu == 5 ? 'client-menu-success' : ''">招聘区域</p>
         <p @click="handleClick('id6',6)" :class="data.menu == 6 ? 'client-menu-success' : ''">项目雇佣人数</p>
-        <p @click="handleClick('id7',7)" :class="data.menu == 7 ? 'client-menu-success' : ''">总预算</p>
+        <p @click="handleClick('id8',8)" :class="data.menu == 8 ? 'client-menu-success' : ''">项目时间设置</p>
+        <p @click="handleClick('id7',7)" :class="data.menu == 7 ? 'client-menu-success' : ''">详细配置</p>
       </div>
       <div class="client-form">
         <div class="client-form-view" id="id1">
@@ -121,20 +122,64 @@
           </div>
           <n-select v-model:value="defaultUserForm.headCount" :options="data.n_options" @update:value="xmChange"/>
         </div>
+        
+        <div class="client-form-view" id="id8">
+          <div class="client-form-title">
+            项目时间设置
+          </div>
+          <n-space>
+            <n-date-picker 
+              v-model:value="defaultUserForm.startTime" 
+              type="datetime" 
+              placeholder="选择项目开始时间"
+              clearable
+              style="width: 300px;"
+            />
+            <n-date-picker 
+              v-model:value="defaultUserForm.endTime" 
+              type="datetime" 
+              placeholder="选择项目结束时间（必填）"
+              clearable
+              style="width: 300px;"
+            />
+          </n-space>
+        </div>
+        
         <n-flex style="padding: 20px 40px;margin-left: 20px;">
           <div v-for="item,index in defaultUserForm.projectItems">
             <div :class="job == (index+1) ? 'header-job-success' : 'header-job'" @click="job = (index+1)">
-              自由职业者{{ (index + 1) }}
+              {{ item.freelancerName || `自由职业者${index + 1}` }}
             </div>
           </div>
         </n-flex>
         <div class="client-form-view" id="id7">
           <div class="client-form-title">
-            总预算
+            项目详细配置
           </div>
           <div v-for="item,index in defaultUserForm.projectItems">
             <div v-if="job == (index+1)">
-              <div class="client-form-title-cn">选择工作方式</div>
+              <div class="client-form-title-cn">自由职业者基本信息</div>
+              <n-space vertical :size="15">
+                <n-input 
+                  v-model:value="item.freelancerName" 
+                  placeholder="请输入自由职业者姓名或称呼"
+                  style="width: 400px;"
+                >
+                  <template #prefix>
+                    姓名：
+                  </template>
+                </n-input>
+                
+                <n-input 
+                  v-model:value="item.workDescription" 
+                  type="textarea"
+                  :autosize="{ minRows: 3, maxRows: 5 }"
+                  placeholder="请详细描述该自由职业者的具体工作内容和要求"
+                  style="width: 600px;"
+                />
+              </n-space>
+              
+              <div class="client-form-title-cn" style="margin-top: 30px;">选择工作方式</div>
               <div class="client-form-money">
                 <div :class="item.deliveryType == 20 ? 'client-form-money-item-success':'client-form-money-item'"
                      @click="change_money(20,item)">
@@ -187,7 +232,12 @@
                   </el-col>
                   <el-col :span="6">
                     <n-flex align="center" style="position: relative;">
-                      <n-input placeholder="请输入" style="text-align: right;" v-model:value="item1.budget">
+                      <n-input 
+                        placeholder="请输入" 
+                        style="text-align: right;" 
+                        v-model:value="item1.budget"
+                        @update:value="onMilestoneBudgetChange"
+                      >
                         <template #prefix>
                           <span style="color:#808080">￥</span>
                         </template>
@@ -207,8 +257,22 @@
                 </el-row>
               </div>
               <div class="client-form-money" style="margin-top:30px;">
+                <template v-if="item.deliveryType == 10">
+                  <div class="client-form-title-cn">设置单价</div>
+                  <n-input 
+                    v-model:value="item.unitPrice" 
+                    placeholder="请输入该自由职业者的报酬"
+                    style="width: 300px; margin-bottom: 20px;"
+                    @update:value="onUnitPriceChange"
+                  >
+                    <template #prefix>
+                      ￥
+                    </template>
+                  </n-input>
+                </template>
+                
                 <div class="client-form-end">
-                  项目总价
+                  该自由职业者预算
                 </div>
                 <div class="client-form-end-number">
                   <template v-if="item.deliveryType == 20">
@@ -217,11 +281,7 @@
                     }}
                   </template>
                   <template v-else>
-                    <n-input default-value="200" align="right" v-model:value="item.totalBudget">
-                      <template #prefix>
-                        ￥
-                      </template>
-                    </n-input>
+                    ￥{{ item.unitPrice || 0 }}
                   </template>
                 </div>
               </div>
@@ -230,6 +290,28 @@
 
           <div class="client-form-end-more">
             包括单刻达固定价格保护。
+          </div>
+        </div>
+
+        <!-- 项目总价汇总 -->
+        <div class="client-form-view" style="margin-top: 30px;">
+          <div class="client-form-title">
+            项目总价汇总
+          </div>
+          <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+            <div v-for="(item, index) in defaultUserForm.projectItems" :key="index" 
+                 style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+              <span>{{ item.freelancerName || `自由职业者${index + 1}` }}：</span>
+              <span>￥{{ item.deliveryType === 10 ? (item.unitPrice || 0) : 
+                item.projectMilestones.reduce((sum, milestone) => sum + parseInt(milestone.budget || 0), 0) }}
+              </span>
+            </div>
+            <div style="border-top: 1px solid #ddd; padding-top: 10px; margin-top: 15px; font-weight: bold; font-size: 18px;">
+              <div style="display: flex; justify-content: space-between;">
+                <span>项目总预算：</span>
+                <span style="color: #58968B;">￥{{ defaultUserForm.totalBudget }}</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -242,7 +324,7 @@
 </template>
 
 <script setup>
-import {reactive, onMounted, onUnmounted, ref} from 'vue';
+import {reactive, onMounted, onUnmounted, ref, h} from 'vue';
 import {createDiscreteApi} from 'naive-ui'
 import {useRoute, useRouter} from 'vue-router'
 import {CloseCircleOutline} from '@vicons/ionicons5'
@@ -283,25 +365,22 @@ const defaultUserForm = ref({
   experienceLevel: 1,
   district: "",
   headCount: 0,
-  deliveryType: 20,
   totalBudget: 0,
-  projectSkills: [
-    {id: 1, name: "英文翻译"},
-    {id: 2, name: "中文翻译"}
-  ],
+  startTime: null,  // 项目开始时间
+  endTime: null,    // 项目结束时间
+  projectSkills: [],
   projectItems: [
     {
       sequence: 1,
+      freelancerName: "",    // 自由职业者姓名
       deliveryType: 20,
+      totalBudget: 0,
+      unitPrice: 0,          // 单价
+      workDescription: "",   // 工作描述
       projectMilestones: [
         {description: "里程碑1", budget: 0, endTime: null},
         {description: "里程碑2", budget: 0, endTime: null}
       ]
-    },
-    {
-      sequence: 2,
-      deliveryType: 10,
-      totalBudget: 0
     }
   ]
 });
@@ -393,11 +472,17 @@ function xmChange(value) {
   defaultUserForm.value.projectItems = []
   for (let i = 0; i < value; i++) {
     defaultUserForm.value.projectItems.push({
-      deliveryType: 20,
+      sequence: i + 1,
+      freelancerName: `自由职业者${i + 1}`,
+      deliveryType: 10,  // 默认一次性工作
+      totalBudget: 0,
+      unitPrice: 0,
+      workDescription: "",
       projectMilestones: [{description: "里程碑", budget: 0, endTime: new Date()}]
     })
   }
-  // defaultUserForm.value.headCount=value
+  // 计算总价
+  calculateTotalBudget()
   console.log('你选择了：', value)
 }
 
@@ -411,13 +496,47 @@ const change_level = (level) => {
 const change_money = (index, item) => {
   item.deliveryType = index
   if (index === 10) {
-    item.totalBudget = 0
+    // 一次性工作：清空里程碑，设置单价
+    item.projectMilestones = []
+    item.unitPrice = item.unitPrice || 0
+  } else {
+    // 里程碑项目：清空单价，确保有至少一个里程碑
+    item.unitPrice = 0
+    if (item.projectMilestones.length === 0) {
+      item.projectMilestones = [{description: "里程碑1", budget: 0, endTime: new Date()}]
+    }
   }
+  calculateTotalBudget()
 }
 
 const add_list = (item) => {
   let obj = {description: "里程碑", budget: 0, endTime: new Date()}
   item.projectMilestones.push(obj)
+}
+
+// 计算项目总价
+const calculateTotalBudget = () => {
+  defaultUserForm.value.totalBudget = defaultUserForm.value.projectItems.reduce((sum, item) => {
+    if (item.deliveryType === 10) {
+      // 一次性工作：使用单价
+      return sum + parseInt(item.unitPrice || 0)
+    } else {
+      // 里程碑项目：汇总所有里程碑的预算
+      const milestoneSum = item.projectMilestones.reduce((mSum, milestone) => 
+        mSum + parseInt(milestone.budget || 0), 0)
+      return sum + milestoneSum
+    }
+  }, 0)
+}
+
+// 当单价改变时重新计算总价
+const onUnitPriceChange = () => {
+  calculateTotalBudget()
+}
+
+// 当里程碑预算改变时重新计算总价
+const onMilestoneBudgetChange = () => {
+  calculateTotalBudget()
 }
 
 const handleClick = (targetId, index) => {
@@ -429,20 +548,70 @@ const handleClick = (targetId, index) => {
 }
 
 const success_add = async () => {
-  defaultUserForm.value.projectSkills = data.tag
-      .filter(item => item.checked)               // 筛选出 checked 为 true 的项
-      .map(item => ({id: item.id, name: item.name})); // 映射为只含 id 和 name 的对象
-  console.log(defaultUserForm.value)
-  const res = await createProject(defaultUserForm.value)
+  // 验证必填字段
+  if (!defaultUserForm.value.title) {
+    message.error('请填写工作名称')
+    return
+  }
+  if (!defaultUserForm.value.endTime) {
+    message.error('请选择项目结束时间')
+    return
+  }
+  
+  // 验证每个自由职业者的信息
+  for (let i = 0; i < defaultUserForm.value.projectItems.length; i++) {
+    const item = defaultUserForm.value.projectItems[i]
+    if (!item.freelancerName) {
+      message.error(`请填写自由职业者${i + 1}的姓名`)
+      return
+    }
+    if (!item.workDescription) {
+      message.error(`请填写自由职业者${i + 1}的工作描述`)
+      return
+    }
+    if (item.deliveryType === 10 && (!item.unitPrice || item.unitPrice <= 0)) {
+      message.error(`请设置自由职业者${i + 1}的单价`)
+      return
+    }
+  }
+  
+  // 准备提交数据
+  const submitData = {
+    ...defaultUserForm.value,
+    projectSkills: data.tag
+        .filter(item => item.checked)
+        .map(item => ({id: item.id, name: item.name})),
+    // 转换时间格式
+    startTime: defaultUserForm.value.startTime ? new Date(defaultUserForm.value.startTime).toISOString() : null,
+    endTime: defaultUserForm.value.endTime ? new Date(defaultUserForm.value.endTime).toISOString() : null,
+    // 转换金额为分（后端要求）
+    totalBudget: parseInt(defaultUserForm.value.totalBudget * 100),
+    projectItems: defaultUserForm.value.projectItems.map(item => ({
+      ...item,
+      totalBudget: item.deliveryType === 10 ? 
+        parseInt(item.unitPrice * 100) : 
+        parseInt(item.projectMilestones.reduce((sum, milestone) => sum + parseInt(milestone.budget || 0), 0) * 100),
+      unitPrice: parseInt((item.unitPrice || 0) * 100),
+      projectMilestones: item.projectMilestones.map(milestone => ({
+        ...milestone,
+        budget: parseInt((milestone.budget || 0) * 100),
+        endTime: milestone.endTime ? new Date(milestone.endTime).toISOString() : null
+      }))
+    }))
+  }
+  
+  console.log('提交数据：', submitData)
+  const res = await createProject(submitData)
   if (res.code !== 0) {
     message.error(res.msg)
     return
   }
+  
   dialog.warning({
     actionClass: 'naiveui-dialog-action',
     showIcon: false,
     closable: false,
-    title: '您的项目已发布成功，请在“审核中的工作”查看更多详情',
+    title: '您的项目已发布成功，请在"审核中的工作"查看更多详情',
     content: () => h('div', {}, [
       h('p',
           {
@@ -450,7 +619,7 @@ const success_add = async () => {
               cursor: 'pointer',
             },
             onClick() {
-              console.log("11111")
+              console.log("项目发布成功")
             },
           },
           {default: () => ''}),
@@ -465,7 +634,6 @@ const success_add = async () => {
       router.push('/client/work-apply')
     }
   })
-
 }
 onMounted(async () => {
   const res = await getUserSkill({classification: 3})

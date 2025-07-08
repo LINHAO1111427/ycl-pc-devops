@@ -46,26 +46,6 @@ export function uploadCompanyImages(params) {
     return request.post('/app-api/common/addOrUpdate', params)
 }
 
-//更多人才
-export function userFilter(params) {
-    return request.get('/app-api/member/boss-filter/user-filter', {params})
-}
-
-// 修改公司信息 - POST接口
-export function updateEmployerCompanyInfo(params) {
-    return request.post('/app-api/xinyu/employer-company-info/addOrUpdate', params)
-}
-
-// 提交保存公司联系方式 - PUT接口
-export function updateCompanyContact(params) {
-    return request.put('/app-api/xinyu/employer-company-info/contact/update', params)
-}
-
-// 上传图片到阿里云
-export function uploadCompanyImages(params) {
-    return request.post('/app-api/common/addOrUpdate', params)
-}
-
 // 保存营业执照图片
 export function saveLicenseImages(params) {
     return request.post('/app-api/xinyu/employer-company-info/license-images/save', params)
@@ -146,6 +126,38 @@ export function getEmployerCompanyInfo(params) {
 //公司联系方式查询
 export function getContact(params) {
     return request.get('/app-api/xinyu/employer-company-info/contact/get', {params})
+}
+
+// ===== 个人信息管理接口 =====
+// 保存个人信息
+export function savePersonalInfo(params) {
+    return request.post('/app-api/xinyu/employer-company-info/personal-info/save', params)
+}
+
+// 修改个人信息
+export function updatePersonalInfo(params) {
+    return request.put('/app-api/xinyu/employer-company-info/personal-info/update', params)
+}
+
+// 获取个人信息
+export function getPersonalInfo(params) {
+    return request.get('/app-api/xinyu/employer-company-info/personal-info/get', {params})
+}
+
+// 删除个人信息
+export function deletePersonalInfo(params) {
+    return request.delete('/app-api/xinyu/employer-company-info/personal-info/delete', {params})
+}
+
+// ===== 身份证验证接口 =====
+// 保存身份证验证信息
+export function saveIdCardInfo(params) {
+    return request.post('/app-api/xinyu/employer-company-info/id-card/save', params)
+}
+
+// 获取身份证验证信息
+export function getIdCardInfo(params) {
+    return request.get('/app-api/xinyu/employer-company-info/id-card/get', {params})
 }
 //获取中国所有城市
 export function allCity(params) {

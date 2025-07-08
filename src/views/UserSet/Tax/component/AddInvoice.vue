@@ -184,6 +184,47 @@ const modalTitle = computed(() => {
                 <n-input v-model:value="formData.personalEmail" placeholder="请输入邮箱" />
               </n-form-item-gi>
             </template>
+            <n-form-item-gi :span="12" label="地址" path="personalAddress">
+              <n-input v-model:value="formData.personalAddress" placeholder="请输入详细地址" />
+            </n-form-item-gi>
+
+            <!-- 个人地址的额外字段 -->
+            <template v-if="type === 1">
+              <n-form-item-gi :span="12" label="联系电话" path="personalPhone">
+                <n-input v-model:value="formData.personalPhone" placeholder="请输入联系电话" />
+              </n-form-item-gi>
+              <n-form-item-gi :span="12" label="税号" path="personalTaxNumber">
+                <n-input v-model:value="formData.personalTaxNumber" placeholder="请输入税号" />
+              </n-form-item-gi>
+              <n-form-item-gi :span="12" label="开户银行" path="personalBankName">
+                <n-input v-model:value="formData.personalBankName" placeholder="请输入开户银行" />
+              </n-form-item-gi>
+              <n-form-item-gi :span="12" label="银行账号" path="personalBankAccount">
+                <n-input v-model:value="formData.personalBankAccount" placeholder="请输入银行账号" />
+              </n-form-item-gi>
+              <n-form-item-gi :span="12" label="邮箱" path="personalEmail">
+                <n-input v-model:value="formData.personalEmail" placeholder="请输入邮箱" />
+              </n-form-item-gi>
+            </template>
+
+            <!-- 企业地址的额外字段 -->
+            <template v-if="type === 2">
+              <n-form-item-gi :span="12" label="注册电话" path="personalPhone">
+                <n-input v-model:value="formData.personalPhone" placeholder="请输入注册电话" />
+              </n-form-item-gi>
+              <n-form-item-gi :span="12" label="单位税号" path="personalTaxNumber">
+                <n-input v-model:value="formData.personalTaxNumber" placeholder="请输入单位税号" />
+              </n-form-item-gi>
+              <n-form-item-gi :span="12" label="开户银行" path="personalBankName">
+                <n-input v-model:value="formData.personalBankName" placeholder="请输入开户银行" />
+              </n-form-item-gi>
+              <n-form-item-gi :span="12" label="银行账号" path="personalBankAccount">
+                <n-input v-model:value="formData.personalBankAccount" placeholder="请输入银行账号" />
+              </n-form-item-gi>
+              <n-form-item-gi :span="12" label="邮箱" path="personalEmail">
+                <n-input v-model:value="formData.personalEmail" placeholder="请输入邮箱" />
+              </n-form-item-gi>
+            </template>
           </n-grid>
         </n-form>
         <n-flex justify="flex-end" :size="50">

@@ -1,15 +1,100 @@
 <script setup lang="ts">
 	import HeaderTop from '@/components/Header/HeaderTop.vue'
 	import { Footer, IconStart, RenderIcon, IconFaxiangmu } from '@/components'
-	import { ref } from 'vue'
-	import { createDiscreteApi } from 'naive-ui'
-	import { useRouter } from 'vue-router'
+	import { ref, onMounted, h, computed } from 'vue'
+	import { createDiscreteApi, useMessage } from 'naive-ui'
+	import { useRouter, useRoute } from 'vue-router'
+	import { getProject, getOldApplyItem } from '@/api/home'
 
 	const isCollection = ref(false)
+	const projectDetail = ref<any>({})
+	const loading = ref(false)
+	const historyApplyList = ref<any[]>([])
+	const historyLoading = ref(false)
 
 	const { dialog } = createDiscreteApi(['dialog'])
-
+	const message = useMessage()
 	const router = useRouter()
+	const route = useRoute()
+
+	// 格式化金额（分转元）
+	const formatPrice = (price: number) => {
+		return (price / 100).toFixed(2)
+	}
+
+	// 格式化日期
+	const formatDate = (dateTime: string) => {
+		if (!dateTime) return ''
+		return new Date(dateTime).toLocaleDateString('zh-CN')
+	}
+
+	// 项目状态映射
+	const statusMap: Record<number, string> = {
+		2: '项目提交中',
+		0: '审核通过',
+		1: '审核未通过', 
+		99: '已取消'
+	}
+
+	// 经验等级映射
+	const experienceLevelMap: Record<number, string> = {
+		1: '入门级',
+		2: '中级',
+		3: '专家'
+	}
+
+	// 获取项目详情
+	const getProjectDetail = async () => {
+		const projectId = route.query.id
+		if (!projectId) {
+			message.error('缺少项目ID参数')
+			return
+		}
+
+		loading.value = true
+		try {
+			const res = await getProject({ id: projectId })
+			if (res.code !== 0) {
+				message.error(res.msg || '获取项目详情失败')
+				return
+			}
+			projectDetail.value = res.data
+		} catch (error) {
+			message.error('网络错误，请重试')
+			console.error('获取项目详情失败:', error)
+		} finally {
+			loading.value = false
+		}
+	}
+
+	// 获取历史申请项目列表
+	const getHistoryApplyList = async () => {
+		historyLoading.value = true
+		try {
+			const userId = localStorage.getItem('userId')
+			if (!userId) {
+				console.warn('用户未登录，无法获取历史申请项目')
+				return
+			}
+
+			const res = await getOldApplyItem({ 
+				workerId: userId,
+				pageNo: 1,
+				pageSize: 20
+			})
+			
+			if (res.code !== 0) {
+				console.error('获取历史申请项目失败:', res.msg)
+				return
+			}
+			
+			historyApplyList.value = res.data?.list || []
+		} catch (error) {
+			console.error('获取历史申请项目网络错误:', error)
+		} finally {
+			historyLoading.value = false
+		}
+	}
 
 	function onClickCancel() {
 		dialog.warning({
@@ -98,35 +183,59 @@
 		window.open(routerPath, '_blank')
 	}
 	const isShow = ref(false)
+
+	// 计算显示的历史申请项目列表
+	const displayHistoryList = computed(() => {
+		if (historyApplyList.value.length === 0) return []
+		return isShow.value ? historyApplyList.value : historyApplyList.value.slice(0, 5)
+	})
+
+	// 格式化时间范围
+	const formatTimeRange = (startTime: string, endTime: string) => {
+		if (!startTime || !endTime) return ''
+		const start = new Date(startTime).toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit' })
+		const end = new Date(endTime).toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit' })
+		return `${start} - ${end}`
+	}
+
+	// 页面加载时获取项目详情和历史申请项目
+	onMounted(() => {
+		getProjectDetail()
+		getHistoryApplyList()
+	})
 </script>
 <template>
     <div class="easy">
-        <div class="talents-container">
+        <!-- 加载状态 -->
+        <div class="talents-container" v-if="loading" style="display: flex; justify-content: center; align-items: center; height: 400px;">
+            <n-spin size="large" />
+        </div>
+        <!-- 项目详情内容 -->
+        <div class="talents-container" v-else-if="projectDetail.id">
             <div class="order-top">
-                <div class="order-top-title">演示自由职业者工作:超过 20 张幻灯片的中英译本</div>
+                <div class="order-top-title">{{ projectDetail.title || '项目标题' }}</div>
                 <div class="order-top-btns">
                     <n-button type="primary" ghost @click="$router.push('/client/addclient')">
                         工作编辑
                     </n-button>
-                    <n-button type="primary" @click="$router.push('/client/order-pay')">
+                    <n-button type="primary" @click="$router.push(`/client/order-pay?id=${projectDetail.id}`)">
                         确认为该项目付款
                     </n-button>
                 </div>
             </div>
             <div class="order-time">
-                <span>2024-07-10</span>
-                <span>北京</span>
+                <span>{{ formatDate(projectDetail.createTime) }}</span>
+                <span>{{ projectDetail.district || '全国' }}</span>
             </div>
             <div class="order-cn">
-                我们正在寻找一位技术娴熟，一丝不苟的基于Web和Word的中文演示文榜编辑加入我们充满活力的日队。理想的候选人将具备强大的中文能力和出色的辑技能，在创建、和优化网络内容和基于单词的演示文稿方面拥有丰富的经验，这个角色需要的不仅仅是语言能力:候选人必须对中国文化有深入的了解，以确保内容不仅在语言上准确，而且在文化上具有相关性和吸引力。将文化畑微差别无缝整合到内容中的能力至关重要，因为这将与我们的目标受众产生共鸣并保持真实性。
-                成功的候选人将展示对中国文化习俗、传统和社会规范的根深蒂团的了解。这种文化洞察力对于制作适合上下文和吸引人的内容至关重要，无论是理解惯用语、识别文化参考，还是使内容与文化事件和趋势保持一致，候选人的文化背景都将在他们的编辑职中发挥至关重要的作用。此外，选人必须善于驾驭中文交流中特有的语气和风格的复杂性，确保所有内容都符合我们的品牌声音，同时具有文化敏感性和吸引力。这种全面的文化意识，加上卓越的编辑技巧，将成为候选人为我们团队做出贡献的基石。
+                {{ projectDetail.description || '项目描述信息' }}
             </div>
 
             <n-flex class="positions-details_type" align="center" justify="space-evenly" :wrap="false">
                 <div class="details_type-item">
                     <RenderIcon :icon="IconFaxiangmu" fill="#808080" size="30" />
                     <n-flex vertical>
-                        <div class="type-item-title">一次性项目</div>
+                        <div class="type-item-title">{{ projectDetail.deliveryType === 10 ? '一次性项目' : '里程碑项目' }}</div>
                         <div>项目类型</div>
                     </n-flex>
                 </div>
@@ -134,7 +243,7 @@
                 <div class="details_type-item">
                     <RenderIcon icon="icon-yusuanzonge" fill="#808080" size="30" />
                     <n-flex vertical>
-                        <div class="type-item-title">￥1500.00</div>
+                        <div class="type-item-title">￥{{ formatPrice(projectDetail.totalBudget || 0) }}</div>
                         <div>总预算</div>
                     </n-flex>
                 </div>
@@ -142,48 +251,89 @@
                 <div class="details_type-item">
                     <RenderIcon icon="icon-jiangpai" fill="#808080" size="30" />
                     <n-flex vertical>
-                        <div class="type-item-title">入门级</div>
-                        <div>我正在寻找无经验/经验不太足的自由职业者</div>
+                        <div class="type-item-title">{{ experienceLevelMap[projectDetail.experienceLevel] || '入门级' }}</div>
+                        <div class="ellipsis-text" :title="projectDetail.preferredQualification">
+                            {{ projectDetail.preferredQualification || '项目资格要求' }}
+                        </div>
                     </n-flex>
                 </div>
             </n-flex>
             <div class="more-title">技能和专业知识</div>
             <div class="more-btns">
-                <n-tag :color="{textColor:'#808080',borderColor:'#E9E9E9',color:'#EDEDED'}" round>电子商务营销</n-tag>
-                <n-tag :color="{textColor:'#808080',borderColor:'#E9E9E9',color:'#EDEDED'}" round>电子邮件营销</n-tag>
-                <n-tag :color="{textColor:'#808080',borderColor:'#E9E9E9',color:'#EDEDED'}" round>搜索营销</n-tag>
-                <n-tag :color="{textColor:'#808080',borderColor:'#E9E9E9',color:'#EDEDED'}" round>社交媒体营销</n-tag>
+                <n-tag 
+                    v-for="skill in projectDetail.projectSkills" 
+                    :key="skill.skillId"
+                    :color="{textColor:'#808080',borderColor:'#E9E9E9',color:'#EDEDED'}" 
+                    round
+                >
+                    {{ skill.skillName }}
+                </n-tag>
+                <n-tag 
+                    v-if="!projectDetail.projectSkills?.length"
+                    :color="{textColor:'#808080',borderColor:'#E9E9E9',color:'#EDEDED'}" 
+                    round
+                >
+                    暂无技能要求
+                </n-tag>
             </div>
             <div class="more-cn">
                 历史工作发布统计
                 <span @click="$router.push('/client/work-ing')">进行中的工作</span>
             </div>
 
-            <div class="more-item" v-for="item,index in (isShow ? 14 : 5)" :key="index">
-                <div class="more-item-left">
-                    <div class="more-item-left-title" @click="onClickUrl">
-                        我们的远程工作需要以中文为母语的人和作家
-                    </div>
-                    <div class="more-item-left-rate">
-                        <n-rate readonly size="large" :default-value="5" />
-                        <span>5</span>
-                    </div>
-                    <div class="more-item-left-member">
-                        <span>发布者:</span>
-                        <span class="more-item-left-member-name">南司富</span>
-                        <span class="more-item-end" v-if="index < 2">
-                            <n-rate readonly :default-value="5" />
-                            <span>5</span>
-                        </span>
-                        <span v-else class="more-item-end-cn">暂无发布者评分</span>
-                    </div>
-                </div>
-                <div class="more-item-right">
-                    <div class="more-item-right-time">2024-07 - 2024-09</div>
-                    <div class="more-item-right-money">固定价格￥280.00</div>
-                </div>
+            <!-- 历史申请项目加载状态 -->
+            <div v-if="historyLoading" style="text-align: center; padding: 40px 0;">
+                <n-spin size="medium" />
+                <div style="margin-top: 10px; color: #808080;">加载历史申请项目...</div>
             </div>
-            <a href="javascipt:;" class="more-a" @click="isShow = !isShow">{{ !isShow ? '查看全部(14)' : '收起' }}</a>
+
+            <!-- 历史申请项目列表 -->
+            <div v-else-if="historyApplyList.length > 0">
+                <div class="more-item" v-for="(item, index) in displayHistoryList" :key="item.id || index">
+                    <div class="more-item-left">
+                        <div class="more-item-left-title" @click="onClickUrl">
+                            {{ item.title || '项目标题' }}
+                        </div>
+                        <div class="more-item-left-rate">
+                            <n-rate readonly size="large" :default-value="item.rating || 5" />
+                            <span>{{ item.rating || 5 }}</span>
+                        </div>
+                        <div class="more-item-left-member">
+                            <span>发布者:</span>
+                            <span class="more-item-left-member-name">{{ item.publisherName || '发布者' }}</span>
+                            <span class="more-item-end" v-if="item.publisherRating">
+                                <n-rate readonly :default-value="item.publisherRating" />
+                                <span>{{ item.publisherRating }}</span>
+                            </span>
+                            <span v-else class="more-item-end-cn">暂无发布者评分</span>
+                        </div>
+                    </div>
+                    <div class="more-item-right">
+                        <div class="more-item-right-time">
+                            {{ formatTimeRange(item.startTime, item.endTime) || formatDate(item.createTime) }}
+                        </div>
+                        <div class="more-item-right-money">
+                            固定价格￥{{ formatPrice(item.totalBudget || item.price || 0) }}
+                        </div>
+                    </div>
+                </div>
+                <a href="javascipt:;" class="more-a" @click="isShow = !isShow" v-if="historyApplyList.length > 5">
+                    {{ !isShow ? `查看全部(${historyApplyList.length})` : '收起' }}
+                </a>
+            </div>
+
+            <!-- 暂无历史申请项目 -->
+            <div v-else style="text-align: center; padding: 40px 0; color: #808080;">
+                暂无历史申请项目
+            </div>
+        </div>
+        <!-- 项目不存在状态 -->
+        <div class="talents-container" v-else style="display: flex; justify-content: center; align-items: center; height: 400px;">
+            <n-empty description="项目不存在或已删除">
+                <template #extra>
+                    <n-button @click="$router.back()">返回</n-button>
+                </template>
+            </n-empty>
         </div>
     </div>
 </template>
@@ -372,6 +522,15 @@
     font-size: 12px;
     color: #333333;
     text-decoration: underline;
+}
+
+.ellipsis-text {
+    width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+    color: #808080;
 }
 
 ::v-deep(.n-base-icon svg),
